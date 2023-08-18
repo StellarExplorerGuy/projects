@@ -1,0 +1,24 @@
+{
+  "name": "Faster PR",
+  "action": {},
+  "manifest_version": 3,
+  "version": "0.1",
+  "description": "Customize and copy branch name / commit / PR desc",
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
