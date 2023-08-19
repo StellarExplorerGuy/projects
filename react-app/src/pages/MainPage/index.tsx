@@ -1,4 +1,5 @@
 import { AccordionContent, AccordionHeader } from 'components/AccordionList'
+import MessageBox from 'components/MessageBox'
 import ModeToggle from 'components/ModeToggle'
 import PreviewMD from 'components/PreviewMD'
 import ProfilesSelector from 'components/ProfilesSelector'
@@ -28,7 +29,7 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import { CssVarsProvider } from '@mui/joy/styles'
 import * as Accordion from '@radix-ui/react-accordion'
-import MessageBox from 'components/MessageBox'
+import RemovableItems from 'components/RemovableItems'
 
 const save = () => {
   window.localStorage.setItem('faster-pr-config', 'OK')
@@ -209,6 +210,11 @@ function MainPage() {
                           </FormControl>
                         </Grid>
                       </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid xs={12}>
+                      <RemovableItems />
                     </Grid>
                   </Grid>
                 </AccordionContent>
