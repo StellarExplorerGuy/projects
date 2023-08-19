@@ -4,8 +4,8 @@ import React, { useEffect } from 'react'
 
 import type { DraggableSyntheticListeners } from '@dnd-kit/core'
 import type { Transform } from '@dnd-kit/utilities'
+import Box from '@mui/joy/Box'
 import Card from '@mui/joy/Card'
-import IconButton from '@mui/joy/IconButton'
 
 import styles from './Item.module.scss'
 import { Handle, Remove } from './components'
@@ -132,22 +132,14 @@ export const Item = React.memo(
             {...props}
             tabIndex={!handle ? 0 : undefined}
           >
-            <Card variant="outlined" sx={{ width: 320 }}>
+            <Card variant="outlined" sx={{ width: 320}}>
               {value}
-              <div>
-                <IconButton
-                  aria-label="bookmark Bahamas Islands"
-                  variant="plain"
-                  color="neutral"
-                  size="sm"
-                  sx={{ position: 'absolute', top: '0.875rem', right: '0.5rem' }}
-                >
-                  <span className={styles.Actions}>
-                    {onRemove ? <Remove className={styles.Remove} onClick={onRemove} /> : null}
-                    {handle ? <Handle {...handleProps} {...listeners} /> : null}
-                  </span>
-                </IconButton>
-              </div>
+              <Box sx={{ position: 'absolute', top: '0.875rem', right: '0.5rem' }}>
+                <span className={styles.Actions}>
+                  {onRemove ? <Remove className={styles.Remove} onClick={onRemove} /> : null}
+                  {handle ? <Handle {...handleProps} {...listeners} /> : null}
+                </span>
+              </Box>
             </Card>
           </div>
         </li>

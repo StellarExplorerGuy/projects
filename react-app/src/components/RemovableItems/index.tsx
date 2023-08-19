@@ -6,11 +6,11 @@ import { AnimateLayoutChanges, defaultAnimateLayoutChanges, horizontalListSortin
 import { List } from './List'
 import { Sortable, Props as SortableProps } from './Sortable'
 
-const itemCount = 50
 const baseStyles: React.CSSProperties = {
-  height: 150,
-  width: 150,
+  height: 55,
+  width: 140,
 }
+const itemCount = 50
 
 const props: Partial<SortableProps> = {
   Container: (props: any) => <List horizontal {...props} />,
@@ -21,7 +21,11 @@ const props: Partial<SortableProps> = {
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) => defaultAnimateLayoutChanges({ ...args, wasDragging: true })
 
-export default function RemovableItems() {
+type RemovableItemsProps = {
+  items: string[]
+}
+
+export default function RemovableItems({ items }: RemovableItemsProps) {
   return (
     <Sortable
       {...props}
@@ -29,6 +33,7 @@ export default function RemovableItems() {
       measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}
       removable
       handle
+      items={items}
     />
   )
 }

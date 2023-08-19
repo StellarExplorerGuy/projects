@@ -3,6 +3,7 @@ import MessageBox from 'components/MessageBox'
 import ModeToggle from 'components/ModeToggle'
 import PreviewMD from 'components/PreviewMD'
 import ProfilesSelector from 'components/ProfilesSelector'
+import RemovableItems from 'components/RemovableItems'
 import SwitchButton from 'components/SwitchButton'
 import DeleteProfile from 'components/modals/DeleteProfile'
 import EditProfile from 'components/modals/EditProfile'
@@ -29,12 +30,12 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import { CssVarsProvider } from '@mui/joy/styles'
 import * as Accordion from '@radix-ui/react-accordion'
-import RemovableItems from 'components/RemovableItems'
 
 const save = () => {
   window.localStorage.setItem('faster-pr-config', 'OK')
 }
 
+const list = ['1', '2', '3']
 const markdownVal = `# title\n\nHello World!\n\n`
 const DEFAULT_PROFILE = 'default'
 // const CONFIG_PROFILE_KEY = 'FASTER_PR'
@@ -85,6 +86,8 @@ function MainPage() {
   }, [dialogValue])
 
   const isProfileEnabled = dialogValue.title === DEFAULT_PROFILE
+
+  
   return (
     <>
       {openNewProfile && (
@@ -214,7 +217,7 @@ function MainPage() {
                   </Grid>
                   <Grid container>
                     <Grid xs={12}>
-                      <RemovableItems />
+                      <RemovableItems items={list} />
                     </Grid>
                   </Grid>
                 </AccordionContent>

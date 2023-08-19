@@ -40,9 +40,6 @@ export const AccordionHeader = ({
         width: '100%',
         color: 'text.secondary',
         fontWeight: 'md',
-        '&:hover': {
-          bgcolor: 'background.surface',
-        },
         ...(isFirst && {
           borderTopLeftRadius: '3px',
           borderTopRightRadius: '3px',
