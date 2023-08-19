@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { MeasuringStrategy } from '@dnd-kit/core'
+import { MeasuringStrategy, UniqueIdentifier } from '@dnd-kit/core'
 import { AnimateLayoutChanges, defaultAnimateLayoutChanges, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 
 import { List } from './List'
@@ -10,11 +10,9 @@ const baseStyles: React.CSSProperties = {
   height: 55,
   width: 140,
 }
-const itemCount = 50
 
 const props: Partial<SortableProps> = {
   Container: (props: any) => <List horizontal {...props} />,
-  itemCount,
   getItemStyles: () => baseStyles,
   strategy: horizontalListSortingStrategy,
 }
@@ -22,10 +20,11 @@ const props: Partial<SortableProps> = {
 const animateLayoutChanges: AnimateLayoutChanges = (args) => defaultAnimateLayoutChanges({ ...args, wasDragging: true })
 
 type RemovableItemsProps = {
-  items: string[]
+  items: UniqueIdentifier[]
+  setItems: React.Dispatch<React.SetStateAction<UniqueIdentifier[]>>
 }
 
-export default function RemovableItems({ items }: RemovableItemsProps) {
+export default function RemovableItems({ items, setItems }: RemovableItemsProps) {
   return (
     <Sortable
       {...props}
@@ -34,6 +33,7 @@ export default function RemovableItems({ items }: RemovableItemsProps) {
       removable
       handle
       items={items}
+      setItems={setItems}
     />
   )
 }

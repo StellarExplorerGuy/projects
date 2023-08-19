@@ -47,8 +47,7 @@ export interface Props {
   dropAnimation?: DropAnimation | null
   getNewIndex?: NewIndexGetter
   handle?: boolean
-  itemCount?: number
-  items?: UniqueIdentifier[]
+  items: UniqueIdentifier[]
   measuring?: MeasuringConfiguration
   modifiers?: Modifiers
   renderItem?: any
@@ -72,6 +71,7 @@ export interface Props {
     id: UniqueIdentifier
   }): React.CSSProperties
   isDisabled?(id: UniqueIdentifier): boolean
+  setItems: React.Dispatch<React.SetStateAction<UniqueIdentifier[]>>
 }
 const dropAnimationConfig: DropAnimation = {
   sideEffects: defaultDropAnimationSideEffects({
@@ -89,12 +89,6 @@ const screenReaderInstructions: ScreenReaderInstructions = {
       While sorting, use the arrow keys to move the item.
       Press space again to drop the item in its new position, or press escape to cancel.
     `,
-}
-
-const defaultInitializer = (index: number) => index
-
-function createRange<T = number>(length: number, initializer: (index: number) => any = defaultInitializer): T[] {
-  return [...new Array(length)].map((_, index) => initializer(index))
 }
 
 interface SortableItemProps {
@@ -190,8 +184,8 @@ export function Sortable({
   getItemStyles = () => ({}),
   getNewIndex,
   handle = false,
-  itemCount = 16,
-  items: initialItems,
+  items,
+  setItems,
   isDisabled = () => false,
   measuring,
   modifiers,
@@ -203,9 +197,7 @@ export function Sortable({
   useDragOverlay = true,
   wrapperStyle = () => ({}),
 }: Props) {
-  const [items, setItems] = useState<UniqueIdentifier[]>(
-    () => initialItems ?? createRange<UniqueIdentifier>(itemCount, (index) => index + 1),
-  )
+
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
   const sensors = useSensors(
     useSensor(MouseSensor, {

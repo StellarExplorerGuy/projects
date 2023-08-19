@@ -30,12 +30,19 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import { CssVarsProvider } from '@mui/joy/styles'
 import * as Accordion from '@radix-ui/react-accordion'
+import { UniqueIdentifier } from '@dnd-kit/core'
 
 const save = () => {
   window.localStorage.setItem('faster-pr-config', 'OK')
 }
 
-const list = ['1', '2', '3']
+const defaultInitializer = (index: number) => index
+function createRange<T = number>(length: number, initializer: (index: number) => any = defaultInitializer): T[] {
+  return [...new Array(length)].map((_, index) => initializer(index))
+}
+
+
+const initialItems = ['1', '2', '3']
 const markdownVal = `# title\n\nHello World!\n\n`
 const DEFAULT_PROFILE = 'default'
 // const CONFIG_PROFILE_KEY = 'FASTER_PR'
@@ -87,7 +94,9 @@ function MainPage() {
 
   const isProfileEnabled = dialogValue.title === DEFAULT_PROFILE
 
-  
+  const [items, setItems] = useState<UniqueIdentifier[]>(
+    () => initialItems ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
+  )
   return (
     <>
       {openNewProfile && (
@@ -217,7 +226,7 @@ function MainPage() {
                   </Grid>
                   <Grid container>
                     <Grid xs={12}>
-                      <RemovableItems items={list} />
+                      <RemovableItems items={items} setItems={setItems} />
                     </Grid>
                   </Grid>
                 </AccordionContent>
