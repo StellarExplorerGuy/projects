@@ -1,6 +1,7 @@
 import * as React from 'react'
 
-import Button from '@mui/joy/Button'
+import DarkMode from '@mui/icons-material/DarkMode'
+import Switch from '@mui/joy/Switch'
 import { useColorScheme } from '@mui/joy/styles'
 
 function ModeToggle() {
@@ -15,16 +16,22 @@ function ModeToggle() {
   }
 
   return (
-    <Button
-      variant="soft"
+    <Switch
+      checked={mode === 'dark'}
+      slotProps={{
+        input: { 'aria-label': mode },
+        thumb: {
+          children: <DarkMode />,
+        },
+      }}
+      sx={{
+        '--Switch-thumbSize': '28px',
+      }}
       onClick={() => {
         setMode(mode === 'light' ? 'dark' : 'light')
       }}
-    >
-      {mode === 'light' ? 'Turn dark' : 'Turn light'}
-    </Button>
+    />
   )
 }
-
 
 export default ModeToggle
