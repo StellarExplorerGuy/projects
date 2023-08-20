@@ -1,5 +1,6 @@
 export type ItemType = {
   profile: string
+  branchSeparator: string
   signature: string
 }
 

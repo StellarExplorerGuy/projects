@@ -66,11 +66,14 @@ function MainPage() {
 
   const [commitText, setCommitText] = useState('')
   const [prText, setPRText] = useState('')
+  const [items, setItems] = useState<UniqueIdentifier[]>(
+    () => INITIAL_ITEMS ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
+  )
 
   const [dialogValue, setDialogValue] = useState<ItemType>(() => {
     const localValue = localStorage.getItem(FASTER_PR_PROFILE)
-    if (localValue == null) return { profile: DEFAULT_PROFILE, signature: '' }
-    return { profile: JSON.parse(localValue), signature: '' }
+    if (localValue == null) return { profile: DEFAULT_PROFILE, signature: '', branchSeparator: '' }
+    return { profile: JSON.parse(localValue), signature: '', branchSeparator: '/' }
   })
 
   useEffect(() => {
@@ -98,9 +101,6 @@ function MainPage() {
 
   const isProfileEnabled = dialogValue.profile === DEFAULT_PROFILE
 
-  const [items, setItems] = useState<UniqueIdentifier[]>(
-    () => INITIAL_ITEMS ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
-  )
   return (
     <>
       {openNewProfile && (
@@ -186,7 +186,7 @@ function MainPage() {
             </Grid>
           </Grid>
         </div>
-        <MessageBox message="You can switch profile, create new or use default. Configs are stored to you browser storage." />
+        <MessageBox message="You can switch profile, create new or use default. Configs are stored to your browser storage. Please, press 'save' to apply the changes." />
         <CssVarsProvider>
           <CssBaseline />
           <Sheet>
@@ -245,7 +245,10 @@ function MainPage() {
                         <FormItem text="Demo view" />
                       </Box>
                       <InfoIconButton text="Dynamic preview of the branch that is shown as example." />
-                      <Box sx={{ pt: 1 }}>feat/my-amazing-branch-name</Box>
+                      <Box sx={{ pt: 1 }}>
+                        <b>feat{dialogValue.branchSeparator ? dialogValue.branchSeparator : '/'}</b>
+                        my-amazing-branch-name
+                      </Box>
                     </Grid>
                     <Grid xs={0.5}>
                       <Button
@@ -265,7 +268,14 @@ function MainPage() {
                         <Grid xs={5}>
                           <FormControl>
                             <FormLabel>Define branch separator</FormLabel>
-                            <Input name="separator" type="text" placeholder="e.g. '/', ':'" />
+                            <Input
+                              name="separator"
+                              type="text"
+                              placeholder="e.g. '/', ':'"
+                              onChange={(event) =>
+                                setDialogValue({ ...dialogValue, branchSeparator: event.target.value.trim() })
+                              }
+                            />
                           </FormControl>
                         </Grid>
                       </Grid>
