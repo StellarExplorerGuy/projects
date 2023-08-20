@@ -20,7 +20,7 @@ function ProfilesSelector({ dialogValue, data, setDialogValue }: ProfilesSelecto
          {data.length} {data.length > 1 ? 'profiles' : 'profile'}
         </Chip>
       }
-      sx={{ width: 500 }}
+      sx={{ width: '100%' }}
       onChange={(e, newValue) => setDialogValue({ ...dialogValue, title: newValue })}
     >
       {data.map((item) => (

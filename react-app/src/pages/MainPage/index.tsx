@@ -1,11 +1,13 @@
 import { AccordionContent, AccordionHeader } from 'components/AccordionList'
+import FormItem from 'components/FormItem'
+import InfoIconButton from 'components/InfoIcon'
 import MessageBox from 'components/MessageBox'
 import ModeToggle from 'components/ModeToggle'
 import PreviewMD from 'components/PreviewMD'
 import ProfilesSelector from 'components/ProfilesSelector'
-import RemovableItems from 'components/RemovableItems'
 import SwitchButton from 'components/SwitchButton'
 import DeleteProfile from 'components/modals/DeleteProfile'
+import EditBranch from 'components/modals/EditBranch'
 import EditProfile from 'components/modals/EditProfile'
 import NewProfile from 'components/modals/NewProfile'
 import { ItemType } from 'types'
@@ -13,6 +15,7 @@ import { getCommit, getPR } from 'utils/data'
 
 import { useEffect, useState } from 'react'
 
+import { UniqueIdentifier } from '@dnd-kit/core'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import ModeIcon from '@mui/icons-material/Mode'
@@ -30,7 +33,6 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import { CssVarsProvider } from '@mui/joy/styles'
 import * as Accordion from '@radix-ui/react-accordion'
-import { UniqueIdentifier } from '@dnd-kit/core'
 
 const save = () => {
   window.localStorage.setItem('faster-pr-config', 'OK')
@@ -41,9 +43,7 @@ function createRange<T = number>(length: number, initializer: (index: number) =>
   return [...new Array(length)].map((_, index) => initializer(index))
 }
 
-
 const initialItems = ['1', '2', '3']
-const markdownVal = `# title\n\nHello World!\n\n`
 const DEFAULT_PROFILE = 'default'
 // const CONFIG_PROFILE_KEY = 'FASTER_PR'
 const FASTER_PR_PROFILE = 'FASTER_PR_PROFILE'
@@ -53,15 +53,17 @@ const TEMPLATE_KEY = {
   ISSUE: 'ISSUE',
   REPO_ORG: 'REPO_ORG',
   REPO_NAME: 'REPO_NAME',
-  USER_NAME: 'USER_NAME',
+  SIGNATURE: 'SIGNATURE',
 }
 
 function MainPage() {
   const [openNewProfile, setOpenNewProfile] = useState(false)
   const [openEditProfile, setOpeEditProfile] = useState(false)
   const [openDeleteProfile, setOpenDeleteProfile] = useState(false)
-  const [commitText, setCommitText] = useState(markdownVal)
-  const [prText, setPRText] = useState(markdownVal)
+  const [openEditBranch, setOpenEditBranch] = useState(false)
+
+  const [commitText, setCommitText] = useState('')
+  const [prText, setPRText] = useState('')
 
   const [dialogValue, setDialogValue] = useState<ItemType>(() => {
     const localValue = localStorage.getItem(FASTER_PR_PROFILE)
@@ -78,7 +80,7 @@ function MainPage() {
         issue: TEMPLATE_KEY.ISSUE,
         repoOrg: TEMPLATE_KEY.REPO_ORG,
         repoName: TEMPLATE_KEY.REPO_NAME,
-        user: TEMPLATE_KEY.USER_NAME,
+        user: TEMPLATE_KEY.SIGNATURE,
       }),
     )
     setPRText(
@@ -87,7 +89,7 @@ function MainPage() {
         issue: TEMPLATE_KEY.ISSUE,
         repoOrg: TEMPLATE_KEY.REPO_ORG,
         repoName: TEMPLATE_KEY.REPO_NAME,
-        user: TEMPLATE_KEY.USER_NAME,
+        user: TEMPLATE_KEY.SIGNATURE,
       }),
     )
   }, [dialogValue])
@@ -118,6 +120,9 @@ function MainPage() {
       {openDeleteProfile && (
         <DeleteProfile dialogValue={dialogValue} open={openDeleteProfile} toggleOpen={setOpenDeleteProfile} />
       )}
+      {openEditBranch && (
+        <EditBranch open={openEditBranch} toggleOpen={setOpenEditBranch} items={items} setItems={setItems} />
+      )}
       <Sheet
         sx={{
           mx: 'auto',
@@ -136,15 +141,15 @@ function MainPage() {
           <Typography level="h4" component="h1">
             <b>Customization</b>
           </Typography>
-          <Grid container spacing={0} sx={{ mt: 0.5, flexGrow: 1 }}>
-            <Grid xs={4}>
+          <Grid container spacing={2} sx={{ mt: 0.5 }}>
+            <Grid xs={3}>
               <ProfilesSelector dialogValue={dialogValue} data={['default', '1']} setDialogValue={setDialogValue} />
             </Grid>
-            <Grid xs={7}>
+            <Grid xs={8}>
               <Stack spacing={1} direction="row">
                 <Button
                   aria-label="new"
-                  variant="soft"
+                  variant="solid"
                   color="primary"
                   size="md"
                   disabled={isProfileEnabled}
@@ -154,7 +159,7 @@ function MainPage() {
                 </Button>
                 <Button
                   aria-label="new"
-                  variant="soft"
+                  variant="solid"
                   color="primary"
                   size="md"
                   disabled={isProfileEnabled}
@@ -164,7 +169,7 @@ function MainPage() {
                 </Button>
                 <Button
                   aria-label="new"
-                  variant="soft"
+                  variant="solid"
                   color="primary"
                   size="md"
                   disabled={isProfileEnabled}
@@ -201,32 +206,35 @@ function MainPage() {
                 <AccordionHeader isFirst>Branch name</AccordionHeader>
                 <AccordionContent>
                   <Grid container>
-                    <Grid xs={2}>
-                      <FormControl>
-                        <FormLabel>Demo view</FormLabel>
-                        <Box sx={{ pt: 1 }}>feat/my-amazing-branch-name</Box>
-                      </FormControl>
+                    <Grid xs={3}>
+                      <Box sx={{ float: 'left', pt: 0.5 }}>
+                        <FormItem text="Demo view" />
+                      </Box>
+                      <InfoIconButton text="Dynamic preview of the branch that is shown as example." />
+                      <Box sx={{ pt: 1 }}>feat/my-amazing-branch-name</Box>
                     </Grid>
                     <Divider sx={{ mr: 4 }} orientation="vertical" />
-                    <Grid xs={9}>
+                    <Grid xs={4}>
                       <Grid container spacing={2}>
                         <Grid xs={2}>
                           <FormControl>
-                            <FormLabel>Branch prefix</FormLabel>
-                            <Input name="prefix" type="text" placeholder="feat/" />
-                          </FormControl>
-                        </Grid>
-                        <Grid xs={1}>
-                          <FormControl sx={{ pt: 4 }}>
-                            <SwitchButton />
+                            <FormLabel>Define branch separator</FormLabel>
+                            <Input name="separator" type="text" placeholder="e.g. '/', ':'" />
                           </FormControl>
                         </Grid>
                       </Grid>
                     </Grid>
-                  </Grid>
-                  <Grid container>
-                    <Grid xs={12}>
-                      <RemovableItems items={items} setItems={setItems} />
+                    <Divider sx={{ mr: 4 }} orientation="vertical" />
+                    <Grid sx={{ mt: 3 }} xs={4}>
+                      <Button
+                        aria-label="new"
+                        variant="solid"
+                        color="primary"
+                        size="md"
+                        onClick={() => setOpenEditBranch(true)}
+                      >
+                        <ModeIcon />
+                      </Button>
                     </Grid>
                   </Grid>
                 </AccordionContent>
@@ -237,10 +245,11 @@ function MainPage() {
                 <AccordionContent>
                   <Grid container>
                     <Grid xs={8}>
-                      <FormControl>
-                        <FormLabel>Demo view</FormLabel>
-                        <PreviewMD text={commitText} setMarkdown={setCommitText} />
-                      </FormControl>
+                      <Box sx={{ float: 'left', pt: 0.5 }}>
+                        <FormItem text="Demo view" />
+                      </Box>
+                      <InfoIconButton text="Commit body where uppercase text is used to be update with actual value. Dynamic keys: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE." />
+                      <PreviewMD text={commitText} setMarkdown={setCommitText} />
                     </Grid>
                     <Divider sx={{ ml: 2, mr: 4 }} orientation="vertical" />
                     <Grid xs={3}>
@@ -269,10 +278,11 @@ function MainPage() {
                 <AccordionContent isLast>
                   <Grid container>
                     <Grid xs={8}>
-                      <FormControl>
-                        <FormLabel>Demo view</FormLabel>
-                        <PreviewMD text={prText} setMarkdown={setPRText} />
-                      </FormControl>
+                      <Box sx={{ float: 'left', pt: 0.5 }}>
+                        <FormItem text="Demo view" />
+                      </Box>
+                      <InfoIconButton text="PR body where uppercase text is used to be update with actual value. Dynamic keys: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE." />
+                      <PreviewMD text={prText} setMarkdown={setPRText} />
                     </Grid>
                     <Divider sx={{ ml: 2, mr: 4 }} orientation="vertical" />
                     <Grid xs={3}>
