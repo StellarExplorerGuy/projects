@@ -202,8 +202,29 @@ function MainPage() {
                 '--focus-outline-offset': '-2px',
               }}
             >
+              <Accordion.Item value="item-0">
+                <AccordionHeader isFirst>Common</AccordionHeader>
+                <AccordionContent>
+                  <Grid container spacing={2}>
+                    <Grid xs={3}>
+                      <FormControl>
+                        <FormLabel>Signature</FormLabel>
+                        <Input name="email" type="email" placeholder="John Doe john.doe@email.com" />
+                      </FormControl>
+                    </Grid>
+                    <Grid xs={2}>
+                      <FormControl>
+                        <FormLabel>Use default signature</FormLabel>
+                        <Box sx={{ float: 'left', mt: 0.5 }}>
+                          <SwitchButton />
+                        </Box>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                </AccordionContent>
+              </Accordion.Item>
               <Accordion.Item value="item-1">
-                <AccordionHeader isFirst>Branch name</AccordionHeader>
+                <AccordionHeader>Branch name</AccordionHeader>
                 <AccordionContent>
                   <Grid container>
                     <Grid xs={3}>
@@ -213,20 +234,9 @@ function MainPage() {
                       <InfoIconButton text="Dynamic preview of the branch that is shown as example." />
                       <Box sx={{ pt: 1 }}>feat/my-amazing-branch-name</Box>
                     </Grid>
-                    <Divider sx={{ mr: 4 }} orientation="vertical" />
-                    <Grid xs={4}>
-                      <Grid container spacing={2}>
-                        <Grid xs={2}>
-                          <FormControl>
-                            <FormLabel>Define branch separator</FormLabel>
-                            <Input name="separator" type="text" placeholder="e.g. '/', ':'" />
-                          </FormControl>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                    <Divider sx={{ mr: 4 }} orientation="vertical" />
-                    <Grid sx={{ mt: 3 }} xs={4}>
+                    <Grid xs={0.5}>
                       <Button
+                        sx={{ mt: 3 }}
                         aria-label="new"
                         variant="solid"
                         color="primary"
@@ -236,6 +246,17 @@ function MainPage() {
                         <ModeIcon />
                       </Button>
                     </Grid>
+                    <Divider sx={{ mr: 4 }} orientation="vertical" />
+                    <Grid xs={4}>
+                      <Grid container spacing={2}>
+                        <Grid xs={5}>
+                          <FormControl>
+                            <FormLabel>Define branch separator</FormLabel>
+                            <Input name="separator" type="text" placeholder="e.g. '/', ':'" />
+                          </FormControl>
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </AccordionContent>
               </Accordion.Item>
@@ -244,28 +265,12 @@ function MainPage() {
                 <AccordionHeader>Commit body</AccordionHeader>
                 <AccordionContent>
                   <Grid container>
-                    <Grid xs={8}>
+                    <Grid xs={12}>
                       <Box sx={{ float: 'left', pt: 0.5 }}>
                         <FormItem text="Demo view" />
                       </Box>
                       <InfoIconButton text="Commit body where uppercase text is used to be update with actual value. Dynamic keys: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE." />
                       <PreviewMD text={commitText} setMarkdown={setCommitText} />
-                    </Grid>
-                    <Divider sx={{ ml: 2, mr: 4 }} orientation="vertical" />
-                    <Grid xs={3}>
-                      <Grid container spacing={2}>
-                        <Grid xs={2}>
-                          <FormControl>
-                            <FormLabel>Signature</FormLabel>
-                            <Input name="email" type="email" placeholder="John Doe john.doe@email.com" />
-                          </FormControl>
-                        </Grid>
-                        <Grid xs={1}>
-                          <FormControl sx={{ pt: 4 }}>
-                            <SwitchButton />
-                          </FormControl>
-                        </Grid>
-                      </Grid>
                     </Grid>
                   </Grid>
                 </AccordionContent>
@@ -277,28 +282,12 @@ function MainPage() {
                 <AccordionHeader isLast>Pull request body</AccordionHeader>
                 <AccordionContent isLast>
                   <Grid container>
-                    <Grid xs={8}>
+                    <Grid xs={12}>
                       <Box sx={{ float: 'left', pt: 0.5 }}>
                         <FormItem text="Demo view" />
                       </Box>
                       <InfoIconButton text="PR body where uppercase text is used to be update with actual value. Dynamic keys: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE." />
                       <PreviewMD text={prText} setMarkdown={setPRText} />
-                    </Grid>
-                    <Divider sx={{ ml: 2, mr: 4 }} orientation="vertical" />
-                    <Grid xs={3}>
-                      <Grid container spacing={2}>
-                        <Grid xs={2}>
-                          <FormControl>
-                            <FormLabel>Signature</FormLabel>
-                            <Input name="email" type="email" placeholder="John Doe john.doe@email.com" />
-                          </FormControl>
-                        </Grid>
-                        <Grid xs={1}>
-                          <FormControl sx={{ pt: 4 }}>
-                            <SwitchButton />
-                          </FormControl>
-                        </Grid>
-                      </Grid>
                     </Grid>
                   </Grid>
                 </AccordionContent>
