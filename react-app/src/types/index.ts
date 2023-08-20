@@ -1,6 +1,6 @@
 export type ItemType = {
-//   inputValue?: string
-  title: string
+  profile: string
+  signature: string
 }
 
 export type ItemProfile = {

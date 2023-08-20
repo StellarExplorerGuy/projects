@@ -26,14 +26,22 @@ type RemovableItemsProps = {
 
 export default function RemovableItems({ items, setItems }: RemovableItemsProps) {
   return (
-    <Sortable
-      {...props}
-      animateLayoutChanges={animateLayoutChanges}
-      measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}
-      removable
-      handle
-      items={items}
-      setItems={setItems}
-    />
+    <div
+      style={{
+        width: '50vw',
+        margin: '0 auto',
+        overflow: 'auto',
+      }}
+    >
+      <Sortable
+        {...props}
+        animateLayoutChanges={animateLayoutChanges}
+        measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}
+        removable
+        handle
+        items={items}
+        setItems={setItems}
+      />
+    </div>
   )
 }

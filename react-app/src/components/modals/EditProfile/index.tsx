@@ -33,7 +33,7 @@ function EditProfile({ open, toggleOpen, dialogValue, setDialogValue }: ItemProf
             Edit a profile
           </Typography>
           <Typography id="basic-modal-dialog-description" mt={0.5} mb={2} textColor="text.tertiary">
-            Edit profile name {dialogValue.title}
+            Edit profile name {dialogValue.profile}
           </Typography>
           <Stack spacing={2}>
             <FormControl id="name">
@@ -48,11 +48,11 @@ function EditProfile({ open, toggleOpen, dialogValue, setDialogValue }: ItemProf
                 type="text"
                 variant="outlined"
                 color="primary"
-                value={dialogValue.title}
+                value={dialogValue.profile}
                 onChange={(event) =>
                   setDialogValue({
                     ...dialogValue,
-                    title: event.target.value,
+                    profile: event.target.value,
                   })
                 }
               />

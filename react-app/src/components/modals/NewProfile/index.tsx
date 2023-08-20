@@ -53,7 +53,7 @@ function NewProfile({ open, toggleOpen, dialogValue, setDialogValue }: ItemProfi
                 onChange={(event) =>
                   setDialogValue({
                     ...dialogValue,
-                    title: event.target.value,
+                    profile: event.target.value,
                   })
                 }
               />

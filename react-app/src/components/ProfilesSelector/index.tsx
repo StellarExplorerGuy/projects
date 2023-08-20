@@ -13,7 +13,7 @@ function ProfilesSelector({ dialogValue, data, setDialogValue }: ProfilesSelecto
   return (
     <Select
       placeholder="Select a profile"
-      value={dialogValue.title}
+      value={dialogValue.profile}
       startDecorator={<AccountCircleIcon />}
       endDecorator={
         <Chip size="sm" color="primary" variant="soft">
@@ -21,7 +21,7 @@ function ProfilesSelector({ dialogValue, data, setDialogValue }: ProfilesSelecto
         </Chip>
       }
       sx={{ width: '100%' }}
-      onChange={(e, newValue) => setDialogValue({ ...dialogValue, title: newValue })}
+      onChange={(e, newValue) => setDialogValue({ ...dialogValue, profile: newValue })}
     >
       {data.map((item) => (
         <Option key={item} value={item}>

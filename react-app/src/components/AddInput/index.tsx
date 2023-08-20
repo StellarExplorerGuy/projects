@@ -1,58 +1,63 @@
-import * as React from 'react'
-
-import Button from '@mui/joy/Button'
-import FormControl from '@mui/joy/FormControl'
-import Input from '@mui/joy/Input'
 import FormItem from 'components/FormItem'
 
-function AddInput() {
+import * as React from 'react'
+
+import { UniqueIdentifier } from '@dnd-kit/core'
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
+import Button from '@mui/joy/Button'
+import FormControl from '@mui/joy/FormControl'
+import IconButton from '@mui/joy/IconButton'
+import Input from '@mui/joy/Input'
+
+type AddInputProps = {
+  items: UniqueIdentifier[]
+  setItems: React.Dispatch<React.SetStateAction<UniqueIdentifier[]>>
+}
+
+function AddInput({ items, setItems }: AddInputProps) {
   const [data, setData] = React.useState<{
-    email: string
+    input: string
     status: 'initial' | 'loading' | 'failure' | 'sent'
   }>({
-    email: '',
+    input: '',
     status: 'initial',
   })
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setData((current) => ({ ...current, status: 'loading' }))
-    try {
-      // Replace timeout with real backend operation
-      setTimeout(() => {
-        setData({ email: '', status: 'sent' })
-      }, 1500)
-    } catch (error) {
-      setData((current) => ({ ...current, status: 'failure' }))
-    }
+  const handleSubmit = () => {
+    if(!data.input.trim().length) return
+    setItems([data.input, ...items])
+    setData({ input: '', status: 'initial' })
   }
 
   return (
-    <form onSubmit={handleSubmit} id="demo">
-      <FormControl>
-        <FormItem text='Branch prefix' />
-        <Input
-          sx={{ '--Input-decoratorChildHeight': '45px' }}
-          placeholder="feat/"
-          type="text"
-          required
-          value={data.email}
-          onChange={(event) => setData({ email: event.target.value, status: 'initial' })}
-          error={data.status === 'failure'}
-          endDecorator={
+    <FormControl>
+      <FormItem text="Branch prefix" />
+      <Input
+        sx={{ '--Input-decoratorChildHeight': '45px' }}
+        placeholder="feat/"
+        type="text"
+        required
+        value={data.input}
+        onChange={(event) => setData({ input: event.target.value, status: 'initial' })}
+        error={data.status === 'failure'}
+        endDecorator={
+          <>
+            <IconButton onClick={() => setData({ input: '', status: 'initial' })}>
+              <ClearOutlinedIcon color="info" fontSize="small" />
+            </IconButton>
             <Button
               variant="solid"
               color="primary"
               loading={data.status === 'loading'}
-              type="submit"
-              sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+              onClick={handleSubmit}
+              sx={{ ml: 1.5, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
             >
               Add
             </Button>
-          }
-        />
-      </FormControl>
-    </form>
+          </>
+        }
+      />
+    </FormControl>
   )
 }
 

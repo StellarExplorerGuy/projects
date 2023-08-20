@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react'
 
 import { UniqueIdentifier } from '@dnd-kit/core'
 import AddIcon from '@mui/icons-material/Add'
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import ModeIcon from '@mui/icons-material/Mode'
 import { Box, Divider } from '@mui/joy'
@@ -25,6 +26,7 @@ import CssBaseline from '@mui/joy/CssBaseline'
 import FormControl from '@mui/joy/FormControl'
 import FormLabel from '@mui/joy/FormLabel'
 import Grid from '@mui/joy/Grid'
+import IconButton from '@mui/joy/IconButton'
 import Input from '@mui/joy/Input'
 import List from '@mui/joy/List'
 import ListDivider from '@mui/joy/ListDivider'
@@ -43,7 +45,7 @@ function createRange<T = number>(length: number, initializer: (index: number) =>
   return [...new Array(length)].map((_, index) => initializer(index))
 }
 
-const initialItems = ['1', '2', '3']
+const INITIAL_ITEMS = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore']
 const DEFAULT_PROFILE = 'default'
 // const CONFIG_PROFILE_KEY = 'FASTER_PR'
 const FASTER_PR_PROFILE = 'FASTER_PR_PROFILE'
@@ -67,12 +69,12 @@ function MainPage() {
 
   const [dialogValue, setDialogValue] = useState<ItemType>(() => {
     const localValue = localStorage.getItem(FASTER_PR_PROFILE)
-    if (localValue == null) return { title: DEFAULT_PROFILE }
-    return { title: JSON.parse(localValue) }
+    if (localValue == null) return { profile: DEFAULT_PROFILE, signature: '' }
+    return { profile: JSON.parse(localValue), signature: '' }
   })
 
   useEffect(() => {
-    localStorage.setItem(FASTER_PR_PROFILE, JSON.stringify(dialogValue.title))
+    localStorage.setItem(FASTER_PR_PROFILE, JSON.stringify(dialogValue.profile))
 
     setCommitText(
       getCommit({
@@ -94,10 +96,10 @@ function MainPage() {
     )
   }, [dialogValue])
 
-  const isProfileEnabled = dialogValue.title === DEFAULT_PROFILE
+  const isProfileEnabled = dialogValue.profile === DEFAULT_PROFILE
 
   const [items, setItems] = useState<UniqueIdentifier[]>(
-    () => initialItems ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
+    () => INITIAL_ITEMS ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
   )
   return (
     <>
@@ -195,7 +197,7 @@ function MainPage() {
               variant="outlined"
               component={Accordion.Root}
               type="multiple"
-              defaultValue={['item-1']}
+              defaultValue={['item-0']}
               sx={{
                 borderRadius: 'xs',
                 '--ListDivider-gap': '0px',
@@ -209,7 +211,18 @@ function MainPage() {
                     <Grid xs={3}>
                       <FormControl>
                         <FormLabel>Signature</FormLabel>
-                        <Input name="email" type="email" placeholder="John Doe john.doe@email.com" />
+                        <Input
+                          value={dialogValue.signature}
+                          name="email"
+                          type="email"
+                          placeholder="John Doe john.doe@email.com"
+                          onChange={(event) => setDialogValue({ ...dialogValue, signature: event.target.value })}
+                          endDecorator={
+                            <IconButton onClick={() => setDialogValue({ ...dialogValue, signature: '' })}>
+                              <ClearOutlinedIcon color="info" fontSize="small" />
+                            </IconButton>
+                          }
+                        />
                       </FormControl>
                     </Grid>
                     <Grid xs={2}>
