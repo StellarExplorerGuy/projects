@@ -3,9 +3,16 @@ import * as React from 'react'
 import Switch from '@mui/joy/Switch'
 import Typography from '@mui/joy/Typography'
 
-function SwitchButton() {
+interface SwitchButtonProps {
+  checked: boolean
+  setChecked: (checked: boolean) => void
+}
+
+function SwitchButton({ checked, setChecked }: SwitchButtonProps) {
   return (
     <Switch
+      checked={checked}
+      onChange={(e) => setChecked(e.target.checked)}
       slotProps={{
         track: {
           children: (

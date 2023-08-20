@@ -72,8 +72,8 @@ function MainPage() {
 
   const [dialogValue, setDialogValue] = useState<ItemType>(() => {
     const localValue = localStorage.getItem(FASTER_PR_PROFILE)
-    if (localValue == null) return { profile: DEFAULT_PROFILE, signature: '', branchSeparator: '' }
-    return { profile: JSON.parse(localValue), signature: '', branchSeparator: '/' }
+    if (localValue == null) return { profile: DEFAULT_PROFILE, signature: '', branchSeparator: '', checked: false }
+    return { profile: JSON.parse(localValue), signature: '', branchSeparator: '/', checked: false }
   })
 
   useEffect(() => {
@@ -213,6 +213,7 @@ function MainPage() {
                         <FormLabel>Signature</FormLabel>
                         <Input
                           value={dialogValue.signature}
+                          disabled={dialogValue.checked}
                           name="email"
                           type="email"
                           placeholder="John Doe john.doe@email.com"
@@ -229,7 +230,10 @@ function MainPage() {
                       <FormControl>
                         <FormLabel>Use default signature</FormLabel>
                         <Box sx={{ float: 'left', mt: 0.5 }}>
-                          <SwitchButton />
+                          <SwitchButton
+                            checked={dialogValue.checked}
+                            setChecked={(value) => setDialogValue({ ...dialogValue, checked: value })}
+                          />
                         </Box>
                       </FormControl>
                     </Grid>
