@@ -11,6 +11,7 @@ import EditBranch from 'components/modals/EditBranch'
 import EditProfile from 'components/modals/EditProfile'
 import NewProfile from 'components/modals/NewProfile'
 import { ItemType } from 'types'
+import { DEFAULT_PROFILE, FASTER_PR_PROFILE, INITIAL_ITEMS, TEMPLATE_KEY } from 'utils/contants'
 import { getCommit, getPR } from 'utils/data'
 
 import { useEffect, useState } from 'react'
@@ -45,19 +46,6 @@ function createRange<T = number>(length: number, initializer: (index: number) =>
   return [...new Array(length)].map((_, index) => initializer(index))
 }
 
-const INITIAL_ITEMS = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore']
-const DEFAULT_PROFILE = 'default'
-// const CONFIG_PROFILE_KEY = 'FASTER_PR'
-const FASTER_PR_PROFILE = 'FASTER_PR_PROFILE'
-
-const TEMPLATE_KEY = {
-  TYPE: 'ISSUE_TYPE',
-  ISSUE: 'ISSUE',
-  REPO_ORG: 'REPO_ORG',
-  REPO_NAME: 'REPO_NAME',
-  SIGNATURE: 'SIGNATURE',
-}
-
 function MainPage() {
   const [openNewProfile, setOpenNewProfile] = useState(false)
   const [openEditProfile, setOpeEditProfile] = useState(false)
@@ -72,8 +60,21 @@ function MainPage() {
 
   const [dialogValue, setDialogValue] = useState<ItemType>(() => {
     const localValue = localStorage.getItem(FASTER_PR_PROFILE)
-    if (localValue == null) return { profile: DEFAULT_PROFILE, signature: '', branchSeparator: '', checked: false }
-    return { profile: JSON.parse(localValue), signature: '', branchSeparator: '/', checked: false }
+    if (localValue == null)
+      return {
+        profiles: [DEFAULT_PROFILE],
+        profile: DEFAULT_PROFILE,
+        signature: '',
+        branchSeparator: '',
+        checked: false,
+      }
+    return {
+      profiles: [DEFAULT_PROFILE],
+      profile: JSON.parse(localValue),
+      signature: '',
+      branchSeparator: '/',
+      checked: true,
+    }
   })
 
   useEffect(() => {
@@ -120,7 +121,12 @@ function MainPage() {
         />
       )}
       {openDeleteProfile && (
-        <DeleteProfile dialogValue={dialogValue} open={openDeleteProfile} toggleOpen={setOpenDeleteProfile} />
+        <DeleteProfile
+          dialogValue={dialogValue}
+          open={openDeleteProfile}
+          toggleOpen={setOpenDeleteProfile}
+          setDialogValue={setDialogValue}
+        />
       )}
       {openEditBranch && (
         <EditBranch open={openEditBranch} toggleOpen={setOpenEditBranch} items={items} setItems={setItems} />
@@ -145,7 +151,7 @@ function MainPage() {
           </Typography>
           <Grid container spacing={2} sx={{ mt: 0.5 }}>
             <Grid xs={3}>
-              <ProfilesSelector dialogValue={dialogValue} data={['default', '1']} setDialogValue={setDialogValue} />
+              <ProfilesSelector dialogValue={dialogValue} data={dialogValue.profiles} setDialogValue={setDialogValue} />
             </Grid>
             <Grid xs={8}>
               <Stack spacing={1} direction="row">
@@ -154,7 +160,6 @@ function MainPage() {
                   variant="solid"
                   color="primary"
                   size="md"
-                  disabled={isProfileEnabled}
                   onClick={() => setOpenNewProfile(true)}
                 >
                   <AddIcon />
