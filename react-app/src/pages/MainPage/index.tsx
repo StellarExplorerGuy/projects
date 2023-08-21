@@ -11,7 +11,7 @@ import EditBranch from 'components/modals/EditBranch'
 import EditProfile from 'components/modals/EditProfile'
 import NewProfile from 'components/modals/NewProfile'
 import { ItemType } from 'types'
-import { DEFAULT_PROFILE, FASTER_PR_PROFILE, INITIAL_ITEMS, TEMPLATE_KEY } from 'utils/contants'
+import { DEFAULT_PROFILE, FASTER_PR_PROFILE, INITIAL_ITEMS, TEMPLATE_KEY } from 'utils/constants'
 import { getCommit, getPR } from 'utils/data'
 
 import { useEffect, useState } from 'react'
@@ -245,6 +245,7 @@ function MainPage() {
                   </Grid>
                 </AccordionContent>
               </Accordion.Item>
+              <ListDivider component="div" />
               <Accordion.Item value="item-1">
                 <AccordionHeader>Branch name</AccordionHeader>
                 <AccordionContent>

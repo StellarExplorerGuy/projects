@@ -5,6 +5,7 @@ import Modal from '@mui/joy/Modal'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
+import { DEFAULT_PROFILE } from 'utils/constants'
 
 interface DeleteProfileProps {
   open: boolean
@@ -26,7 +27,7 @@ function DeleteProfile({ open, dialogValue, toggleOpen, setDialogValue }: Delete
 
     setDialogValue({
       ...dialogValue,
-      profile: 'default',
+      profile: DEFAULT_PROFILE,
     })
     handleClose()
   }
