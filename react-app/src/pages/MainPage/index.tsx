@@ -67,6 +67,7 @@ function MainPage() {
         signature: '',
         branchSeparator: '',
         checked: false,
+        uppercase: false
       }
     return {
       profiles: [DEFAULT_PROFILE],
@@ -74,6 +75,7 @@ function MainPage() {
       signature: '',
       branchSeparator: '/',
       checked: true,
+      uppercase: false
     }
   })
 
@@ -214,8 +216,11 @@ function MainPage() {
                 <AccordionContent>
                   <Grid container spacing={2}>
                     <Grid xs={3}>
+                      <Box sx={{ float: 'left', pt: 0.5 }}>
+                        <FormItem text="Signature" />
+                      </Box>
+                      <InfoIconButton text="Define signature for your commit and PR templates." />
                       <FormControl>
-                        <FormLabel>Signature</FormLabel>
                         <Input
                           value={dialogValue.signature}
                           disabled={dialogValue.checked}
@@ -232,8 +237,11 @@ function MainPage() {
                       </FormControl>
                     </Grid>
                     <Grid xs={2}>
-                      <FormControl>
+                      <Box sx={{ float: 'left', pt: 0.5 }}>
                         <FormLabel>Use default signature</FormLabel>
+                      </Box>
+                      <InfoIconButton text="If enabled, then plugin would try to find your username." />
+                      <FormControl>
                         <Box sx={{ float: 'left', mt: 0.5 }}>
                           <SwitchButton
                             checked={dialogValue.checked}
@@ -256,7 +264,10 @@ function MainPage() {
                       </Box>
                       <InfoIconButton text="Dynamic preview of the branch that is shown as example." />
                       <Box sx={{ pt: 1 }}>
-                        <b>feat{dialogValue.branchSeparator ? dialogValue.branchSeparator : '/'}</b>
+                        <b>
+                          {dialogValue.uppercase ? 'feat'.toUpperCase() : 'feat'}
+                          {dialogValue.branchSeparator ? dialogValue.branchSeparator : '/'}
+                        </b>
                         my-amazing-branch-name
                       </Box>
                     </Grid>
@@ -281,11 +292,23 @@ function MainPage() {
                             <Input
                               name="separator"
                               type="text"
-                              placeholder="e.g. '/', ':'"
+                              placeholder="e.g. '/', ':', '#'"
+                              value={dialogValue.branchSeparator}
                               onChange={(event) =>
                                 setDialogValue({ ...dialogValue, branchSeparator: event.target.value.trim() })
                               }
                             />
+                          </FormControl>
+                        </Grid>
+                        <Grid xs={5}>
+                          <FormControl>
+                            <FormLabel>Uppercase</FormLabel>
+                            <Box sx={{ float: 'left', mt: 0.5 }}>
+                              <SwitchButton
+                                checked={dialogValue.uppercase}
+                                setChecked={(value) => setDialogValue({ ...dialogValue, uppercase: value })}
+                              />
+                            </Box>
                           </FormControl>
                         </Grid>
                       </Grid>

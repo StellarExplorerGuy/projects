@@ -1,6 +1,7 @@
 export type ItemType = {
   profile: string
   profiles: string[]
+  uppercase: boolean
   branchSeparator: string
   signature: string
   checked: boolean
