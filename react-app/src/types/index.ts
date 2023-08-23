@@ -5,6 +5,8 @@ export type ItemType = {
   branchSeparator: string
   signature: string
   checked: boolean
+  commit: string
+  pr: string
 }
 
 export type ItemProfile = {

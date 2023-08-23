@@ -36,9 +36,11 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as Accordion from '@radix-ui/react-accordion'
 
-const save = () => {
-  window.localStorage.setItem('faster-pr-config', 'OK')
+const save = (dialogValue: ItemType): void => {
+  window.localStorage.setItem(FASTER_PR_PROFILE, JSON.stringify(dialogValue))
 }
+
+const close = (): void => {}
 
 const defaultInitializer = (index: number) => index
 function createRange<T = number>(length: number, initializer: (index: number) => any = defaultInitializer): T[] {
@@ -51,15 +53,15 @@ function MainPage() {
   const [openDeleteProfile, setOpenDeleteProfile] = useState(false)
   const [openEditBranch, setOpenEditBranch] = useState(false)
 
-  const [commitText, setCommitText] = useState('')
-  const [prText, setPRText] = useState('')
   const [items, setItems] = useState<UniqueIdentifier[]>(
     () => INITIAL_ITEMS ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
   )
 
   const [dialogValue, setDialogValue] = useState<ItemType>(() => {
     const localValue = localStorage.getItem(FASTER_PR_PROFILE)
-    if (localValue === null) {
+    if (localValue === null || (localValue !== null && !JSON.parse(localValue)?.profile)) {
+      // use default
+      const { TYPE, ISSUE, REPO_ORG, REPO_NAME, SIGNATURE } = TEMPLATE_KEY
       return {
         profiles: [DEFAULT_PROFILE],
         profile: DEFAULT_PROFILE,
@@ -67,29 +69,24 @@ function MainPage() {
         branchSeparator: '',
         checked: true,
         uppercase: false,
+        commit: getCommit({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
+        pr: getPR({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
       }
     }
     const data = JSON.parse(localValue)
     return {
-      profiles: [DEFAULT_PROFILE],
-      profile: data,
-      signature: '',
-      branchSeparator: '',
-      checked: true,
-      uppercase: false,
+      profiles: data.profiles,
+      profile: data.profile,
+      signature: data.signature,
+      branchSeparator: data.branchSeparator,
+      checked: data.checked,
+      uppercase: data.uppercase,
+      commit: data.commit,
+      pr: data.pr,
     }
   })
 
-  useEffect(() => {
-    localStorage.setItem(FASTER_PR_PROFILE, JSON.stringify(dialogValue.profile))
-
-    const { TYPE, ISSUE, REPO_ORG, REPO_NAME, SIGNATURE } = TEMPLATE_KEY
-    setCommitText(getCommit({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }))
-    setPRText(getPR({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }))
-  }, [dialogValue])
-
   const isProfileEnabled = dialogValue.profile === DEFAULT_PROFILE
-
   return (
     <>
       <CssBaseline />
@@ -181,167 +178,179 @@ function MainPage() {
           </Grid>
         </div>
         <MessageBox message="You can switch profile, create new or use default. Configs are stored to your browser storage. Please, press 'save' to apply the changes." />
-        <Sheet>
-          <Typography level="h2" fontSize="xl2" sx={{ mb: 2 }}>
-            Templates
-          </Typography>
-          <List
-            variant="outlined"
-            component={Accordion.Root}
-            type="multiple"
-            defaultValue={['item-0']}
-            sx={{
-              borderRadius: 'xs',
-              '--ListDivider-gap': '0px',
-              '--focus-outline-offset': '-2px',
-            }}
-          >
-            <Accordion.Item value="item-0">
-              <AccordionHeader isFirst>Common</AccordionHeader>
-              <AccordionContent>
-                <Grid container spacing={2}>
-                  <Grid xs={3}>
-                    <Box sx={{ float: 'left', pt: 0.5 }}>
-                      <FormItem text="Signature" />
-                    </Box>
-                    <InfoIconButton text="Define signature for your commit and PR templates." />
-                    <FormControl>
-                      <Input
-                        value={dialogValue.signature}
-                        disabled={dialogValue.checked}
-                        name="email"
-                        type="email"
-                        placeholder="John Doe john.doe@email.com"
-                        onChange={(event) => setDialogValue({ ...dialogValue, signature: event.target.value })}
-                        endDecorator={
-                          <IconButton onClick={() => setDialogValue({ ...dialogValue, signature: '' })}>
-                            <ClearOutlinedIcon color="info" fontSize="small" />
-                          </IconButton>
-                        }
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid xs={2}>
-                    <Box sx={{ float: 'left', pt: 0.5 }}>
-                      <FormLabel>Use default signature</FormLabel>
-                    </Box>
-                    <InfoIconButton text="If enabled, then plugin would try to find your username." />
-                    <FormControl>
-                      <Box sx={{ float: 'left', mt: 0.5 }}>
-                        <SwitchButton
-                          checked={dialogValue.checked}
-                          setChecked={(value) => setDialogValue({ ...dialogValue, checked: value })}
-                        />
+        {dialogValue?.profile && (
+          <Sheet>
+            <Typography level="h2" fontSize="xl2" sx={{ mb: 2 }}>
+              Templates
+            </Typography>
+            <List
+              variant="outlined"
+              component={Accordion.Root}
+              type="multiple"
+              defaultValue={['item-0']}
+              sx={{
+                borderRadius: 'xs',
+                '--ListDivider-gap': '0px',
+                '--focus-outline-offset': '-2px',
+              }}
+            >
+              <Accordion.Item value="item-0">
+                <AccordionHeader isFirst>Common</AccordionHeader>
+                <AccordionContent>
+                  <Grid container spacing={2}>
+                    <Grid xs={3}>
+                      <Box sx={{ float: 'left', pt: 0.5 }}>
+                        <FormItem text="Signature" />
                       </Box>
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </AccordionContent>
-            </Accordion.Item>
-            <ListDivider component="div" />
-            <Accordion.Item value="item-1">
-              <AccordionHeader>Branch name</AccordionHeader>
-              <AccordionContent>
-                <Grid container>
-                  <Grid xs={3}>
-                    <Box sx={{ float: 'left', pt: 0.5 }}>
-                      <FormItem text="Demo view" />
-                    </Box>
-                    <InfoIconButton text="Dynamic preview of the branch that is shown as example." />
-                    <Box sx={{ pt: 1 }}>
-                      <b>
-                        {dialogValue.uppercase ? 'feat'.toUpperCase() : 'feat'}
-                        {dialogValue.branchSeparator ? dialogValue.branchSeparator : '/'}
-                      </b>
-                      my-amazing-branch-name
-                    </Box>
-                  </Grid>
-                  <Grid xs={0.5}>
-                    <Button
-                      sx={{ mt: 3 }}
-                      aria-label="new"
-                      variant="solid"
-                      color="primary"
-                      size="md"
-                      onClick={() => setOpenEditBranch(true)}
-                    >
-                      <ModeIcon />
-                    </Button>
-                  </Grid>
-                  <Divider sx={{ mr: 4 }} orientation="vertical" />
-                  <Grid xs={4}>
-                    <Grid container spacing={2}>
-                      <Grid xs={5}>
-                        <FormControl>
-                          <FormLabel>Define branch separator</FormLabel>
-                          <Input
-                            name="separator"
-                            type="text"
-                            placeholder="e.g. '/', ':', '#'"
-                            value={dialogValue.branchSeparator}
-                            onChange={(event) =>
-                              setDialogValue({ ...dialogValue, branchSeparator: event.target.value.trim() })
-                            }
+                      <InfoIconButton text="Define signature for your commit and PR templates." />
+                      <FormControl>
+                        <Input
+                          value={dialogValue.signature}
+                          disabled={dialogValue.checked}
+                          name="email"
+                          type="email"
+                          placeholder="John Doe john.doe@email.com"
+                          onChange={(event) => setDialogValue({ ...dialogValue, signature: event.target.value })}
+                          endDecorator={
+                            <IconButton onClick={() => setDialogValue({ ...dialogValue, signature: '' })}>
+                              <ClearOutlinedIcon color="info" fontSize="small" />
+                            </IconButton>
+                          }
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid xs={2}>
+                      <Box sx={{ float: 'left', pt: 0.5 }}>
+                        <FormLabel>Use default signature</FormLabel>
+                      </Box>
+                      <InfoIconButton text="If enabled, then plugin would try to find your username." />
+                      <FormControl>
+                        <Box sx={{ float: 'left', mt: 0.5 }}>
+                          <SwitchButton
+                            checked={dialogValue.checked}
+                            setChecked={(value) => setDialogValue({ ...dialogValue, checked: value })}
                           />
-                        </FormControl>
-                      </Grid>
-                      <Grid xs={5}>
-                        <FormControl>
-                          <FormLabel>Uppercase</FormLabel>
-                          <Box sx={{ float: 'left', mt: 0.5 }}>
-                            <SwitchButton
-                              checked={dialogValue.uppercase}
-                              setChecked={(value) => setDialogValue({ ...dialogValue, uppercase: value })}
+                        </Box>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                </AccordionContent>
+              </Accordion.Item>
+              <ListDivider component="div" />
+              <Accordion.Item value="item-1">
+                <AccordionHeader>Branch name</AccordionHeader>
+                <AccordionContent>
+                  <Grid container>
+                    <Grid xs={3}>
+                      <Box sx={{ float: 'left', pt: 0.5 }}>
+                        <FormItem text="Demo view" />
+                      </Box>
+                      <InfoIconButton text="Dynamic preview of the branch that is shown as example." />
+                      <Box sx={{ pt: 1 }}>
+                        <b>
+                          {dialogValue.uppercase ? 'feat'.toUpperCase() : 'feat'}
+                          {dialogValue.branchSeparator ? dialogValue.branchSeparator : '/'}
+                        </b>
+                        my-amazing-branch-name
+                      </Box>
+                    </Grid>
+                    <Grid xs={0.5}>
+                      <Button
+                        sx={{ mt: 3 }}
+                        aria-label="new"
+                        variant="solid"
+                        color="primary"
+                        size="md"
+                        onClick={() => setOpenEditBranch(true)}
+                      >
+                        <ModeIcon />
+                      </Button>
+                    </Grid>
+                    <Divider sx={{ mr: 4 }} orientation="vertical" />
+                    <Grid xs={4}>
+                      <Grid container spacing={2}>
+                        <Grid xs={5}>
+                          <FormControl>
+                            <FormLabel>Define branch separator</FormLabel>
+                            <Input
+                              name="separator"
+                              type="text"
+                              placeholder="e.g. '/', ':', '#'"
+                              value={dialogValue.branchSeparator}
+                              onChange={(event) =>
+                                setDialogValue({ ...dialogValue, branchSeparator: event.target.value.trim() })
+                              }
                             />
-                          </Box>
-                        </FormControl>
+                          </FormControl>
+                        </Grid>
+                        <Grid xs={5}>
+                          <FormControl>
+                            <FormLabel>Uppercase</FormLabel>
+                            <Box sx={{ float: 'left', mt: 0.5 }}>
+                              <SwitchButton
+                                checked={dialogValue.uppercase}
+                                setChecked={(value) => setDialogValue({ ...dialogValue, uppercase: value })}
+                              />
+                            </Box>
+                          </FormControl>
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </AccordionContent>
-            </Accordion.Item>
-            <ListDivider component="div" />
-            <Accordion.Item value="item-2">
-              <AccordionHeader>Commit body</AccordionHeader>
-              <AccordionContent>
-                <Grid container>
-                  <Grid xs={12}>
-                    <Box sx={{ float: 'left', pt: 0.5 }}>
-                      <FormItem text="Demo view" />
-                    </Box>
-                    <InfoIconButton text="Commit body where uppercase text is used to be update with actual value. Dynamic keys: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE." />
-                    <PreviewMD text={commitText} setMarkdown={setCommitText} />
+                </AccordionContent>
+              </Accordion.Item>
+              <ListDivider component="div" />
+              <Accordion.Item value="item-2">
+                <AccordionHeader>Commit body</AccordionHeader>
+                <AccordionContent>
+                  <Grid container>
+                    <Grid xs={12}>
+                      <Box sx={{ float: 'left', pt: 0.5 }}>
+                        <FormItem text="Demo view" />
+                      </Box>
+                      <InfoIconButton text="Commit body where uppercase text is used to be update with actual value. Dynamic keys: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE." />
+                      <PreviewMD
+                        field="commit"
+                        value={dialogValue.commit}
+                        dialogValue={dialogValue}
+                        setDialogValue={setDialogValue}
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
-              </AccordionContent>
-            </Accordion.Item>
+                </AccordionContent>
+              </Accordion.Item>
 
-            <ListDivider component="div" />
+              <ListDivider component="div" />
 
-            <Accordion.Item value="item-3">
-              <AccordionHeader isLast>Pull request body</AccordionHeader>
-              <AccordionContent isLast>
-                <Grid container>
-                  <Grid xs={12}>
-                    <Box sx={{ float: 'left', pt: 0.5 }}>
-                      <FormItem text="Demo view" />
-                    </Box>
-                    <InfoIconButton text="PR body where uppercase text is used to be update with actual value. Dynamic keys: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE." />
-                    <PreviewMD text={prText} setMarkdown={setPRText} />
+              <Accordion.Item value="item-3">
+                <AccordionHeader isLast>Pull request body</AccordionHeader>
+                <AccordionContent isLast>
+                  <Grid container>
+                    <Grid xs={12}>
+                      <Box sx={{ float: 'left', pt: 0.5 }}>
+                        <FormItem text="Demo view" />
+                      </Box>
+                      <InfoIconButton text="PR body where uppercase text is used to be update with actual value. Dynamic keys: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE." />
+                      <PreviewMD
+                        field="pr"
+                        value={dialogValue.pr}
+                        dialogValue={dialogValue}
+                        setDialogValue={setDialogValue}
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
-              </AccordionContent>
-            </Accordion.Item>
-          </List>
-        </Sheet>
+                </AccordionContent>
+              </Accordion.Item>
+            </List>
+          </Sheet>
+        )}
 
         <Stack sx={{ mt: 1 }} spacing={2}>
           <Stack direction="row" justifyContent="flex-end" spacing={2}>
-            <Button variant="outlined" onClick={() => save()}>
+            <Button variant="outlined" onClick={() => close()}>
               Close
             </Button>
-            <Button onClick={() => save()}>Save</Button>
+            <Button onClick={() => save(dialogValue)}>Save</Button>
           </Stack>
         </Stack>
       </Sheet>

@@ -1,20 +1,24 @@
+import { ItemType } from 'types'
+
 import MarkdownEditor from '@uiw/react-markdown-editor'
 
 import styles from './PreviewMD.module.scss'
 
 interface PreviewMDProps {
-  text: string
-  setMarkdown: React.Dispatch<React.SetStateAction<string>>
+  field: keyof ItemType
+  value: string
+  dialogValue: ItemType
+  setDialogValue: React.Dispatch<React.SetStateAction<ItemType>>
 }
 
-function PreviewMD({ text, setMarkdown }: PreviewMDProps) {
+function PreviewMD({ field, value, dialogValue, setDialogValue }: PreviewMDProps) {
   return (
     <MarkdownEditor
       className={styles.wrapper}
       visible
-      value={text}
+      value={value}
       onChange={(value) => {
-        setMarkdown(value)
+        setDialogValue({ ...dialogValue, [field]: value })
       }}
     />
   )
