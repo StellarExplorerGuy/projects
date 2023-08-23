@@ -1,6 +1,6 @@
 export const DEFAULT_PROFILE = 'default'
 export const INITIAL_ITEMS = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore']
-// const CONFIG_PROFILE_KEY = 'FASTER_PR'
+export const FASTER_PR_PROFILE_KEY = 'FASTER_PR_KEY'
 export const FASTER_PR_PROFILE = 'FASTER_PR_PROFILE'
 
 export const TEMPLATE_KEY = {

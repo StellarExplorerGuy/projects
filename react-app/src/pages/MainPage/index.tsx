@@ -11,17 +11,17 @@ import EditBranch from 'components/modals/EditBranch'
 import EditProfile from 'components/modals/EditProfile'
 import NewProfile from 'components/modals/NewProfile'
 import { ItemType } from 'types'
-import { DEFAULT_PROFILE, FASTER_PR_PROFILE, INITIAL_ITEMS, TEMPLATE_KEY } from 'utils/constants'
+import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, INITIAL_ITEMS, TEMPLATE_KEY } from 'utils/constants'
 import { getCommit, getPR } from 'utils/data'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { UniqueIdentifier } from '@dnd-kit/core'
 import AddIcon from '@mui/icons-material/Add'
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import ModeIcon from '@mui/icons-material/Mode'
-import { Box, Divider } from '@mui/joy'
+import { Alert, Box, Divider } from '@mui/joy'
 import Button from '@mui/joy/Button'
 import CssBaseline from '@mui/joy/CssBaseline'
 import FormControl from '@mui/joy/FormControl'
@@ -36,8 +36,50 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as Accordion from '@radix-ui/react-accordion'
 
-const save = (dialogValue: ItemType): void => {
-  window.localStorage.setItem(FASTER_PR_PROFILE, JSON.stringify(dialogValue))
+const save = (
+  dialogValue: ItemType,
+  setAlertInfo: React.Dispatch<
+    React.SetStateAction<{
+      visible: boolean
+      msg: string
+      type: string
+      width: number
+    }>
+  >,
+): void => {
+  if (dialogValue.profile === DEFAULT_PROFILE) {
+    setAlertInfo({
+      visible: true,
+      msg: "You can't edit default profile, please use new profile.",
+      type: 'danger',
+      width: 400,
+    })
+    return
+  }
+
+  const raw = window.localStorage.getItem(FASTER_PR_PROFILE)!
+  const profiles = JSON.parse(raw)
+  const selectedProfile = {
+    ...profiles,
+    [dialogValue.profile]: dialogValue,
+  }
+  window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(dialogValue.profile))
+  window.localStorage.setItem(FASTER_PR_PROFILE, JSON.stringify(selectedProfile))
+
+  setAlertInfo({
+    visible: true,
+    msg: 'Saved!',
+    type: 'success',
+    width: 200,
+  })
+  setTimeout(() => {
+    setAlertInfo({
+      visible: false,
+      msg: '',
+      type: 'success',
+      width: 200,
+    })
+  }, 3000)
 }
 
 const close = (): void => {}
@@ -52,15 +94,23 @@ function MainPage() {
   const [openEditProfile, setOpeEditProfile] = useState(false)
   const [openDeleteProfile, setOpenDeleteProfile] = useState(false)
   const [openEditBranch, setOpenEditBranch] = useState(false)
+  const [alertInfo, setAlertInfo] = useState({
+    visible: false,
+    msg: '',
+    type: 'success',
+    width: 200,
+  })
 
   const [items, setItems] = useState<UniqueIdentifier[]>(
     () => INITIAL_ITEMS ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
   )
 
   const [dialogValue, setDialogValue] = useState<ItemType>(() => {
-    const localValue = localStorage.getItem(FASTER_PR_PROFILE)
-    if (localValue === null || (localValue !== null && !JSON.parse(localValue)?.profile)) {
+    const localKey = localStorage.getItem(FASTER_PR_PROFILE_KEY)
+    const profileKey = localKey === null ? DEFAULT_PROFILE : JSON.parse(localKey)
+    if (profileKey === DEFAULT_PROFILE) {
       // use default
+      window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE))
       const { TYPE, ISSUE, REPO_ORG, REPO_NAME, SIGNATURE } = TEMPLATE_KEY
       return {
         profiles: [DEFAULT_PROFILE],
@@ -73,7 +123,9 @@ function MainPage() {
         pr: getPR({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
       }
     }
-    const data = JSON.parse(localValue)
+
+    const localValue = localStorage.getItem(FASTER_PR_PROFILE)!
+    const data = JSON.parse(localValue)[profileKey]
     return {
       profiles: data.profiles,
       profile: data.profile,
@@ -319,9 +371,7 @@ function MainPage() {
                   </Grid>
                 </AccordionContent>
               </Accordion.Item>
-
               <ListDivider component="div" />
-
               <Accordion.Item value="item-3">
                 <AccordionHeader isLast>Pull request body</AccordionHeader>
                 <AccordionContent isLast>
@@ -347,10 +397,17 @@ function MainPage() {
 
         <Stack sx={{ mt: 1 }} spacing={2}>
           <Stack direction="row" justifyContent="flex-end" spacing={2}>
+            {alertInfo.visible && (
+              <Box sx={{ width: alertInfo.width }}>
+                <Alert variant="soft" color={alertInfo.type as any}>
+                  {alertInfo.msg}
+                </Alert>
+              </Box>
+            )}
             <Button variant="outlined" onClick={() => close()}>
               Close
             </Button>
-            <Button onClick={() => save(dialogValue)}>Save</Button>
+            <Button onClick={() => save(dialogValue, setAlertInfo)}>Save</Button>
           </Stack>
         </Stack>
       </Sheet>
