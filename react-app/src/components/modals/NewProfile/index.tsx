@@ -1,4 +1,5 @@
 import { ItemProfile } from 'types'
+import { FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
 
 import { useState } from 'react'
 
@@ -12,6 +13,7 @@ import Modal from '@mui/joy/Modal'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
+import { defaultProfile } from 'utils/data'
 
 function NewProfile({ open, toggleOpen, dialogValue, setDialogValue }: ItemProfile) {
   const [input, setInput] = useState('')
@@ -21,13 +23,38 @@ function NewProfile({ open, toggleOpen, dialogValue, setDialogValue }: ItemProfi
   }
 
   const handleSubmit = () => {
+    const defaultData = defaultProfile()
+    const localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
+    const allProfiles = JSON.parse(localProfile)
+    window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(input))
+    window.localStorage.setItem(
+      FASTER_PR_PROFILE,
+      JSON.stringify({
+        ...allProfiles,
+        profiles: [...dialogValue.profiles, input],
+        [input]: {
+          profile: input,
+          uppercase: defaultData.uppercase,
+          branchSeparator: defaultData.branchSeparator,
+          signature: defaultData.signature,
+          checked: defaultData.checked,
+          commit: defaultData.commit,
+          pr: defaultData.pr,
+        },
+      }),
+    )
+
     setDialogValue({
-      ...dialogValue,
-      profiles: [...dialogValue.profiles, input],
       profile: input,
+      profiles: [...dialogValue.profiles, input],
+      uppercase: defaultData.uppercase,
+      branchSeparator: defaultData.branchSeparator,
+      signature: defaultData.signature,
+      checked: defaultData.checked,
+      commit: defaultData.commit,
+      pr: defaultData.pr,
     })
     handleClose()
-
   }
 
   return (

@@ -1,3 +1,5 @@
+import { DEFAULT_PROFILE, TEMPLATE_KEY } from "./constants"
+
 type CommitBody = {
   type: string
   issue: string
@@ -76,4 +78,19 @@ Contributes:
 - [x] Desired commit message set as PR title and description set above
 - [x] Link to relevant GitHub issue provided
 `
+}
+
+export const defaultProfile = () => {
+  const { TYPE, ISSUE, REPO_ORG, REPO_NAME, SIGNATURE } = TEMPLATE_KEY
+
+  return {
+    profiles: [DEFAULT_PROFILE],
+    profile: DEFAULT_PROFILE,
+    signature: '',
+    branchSeparator: '',
+    checked: true,
+    uppercase: false,
+    commit: getCommit({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
+    pr: getPR({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
+  }
 }

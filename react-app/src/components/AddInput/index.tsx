@@ -36,6 +36,8 @@ function AddInput({ items, setItems }: AddInputProps) {
         sx={{ '--Input-decoratorChildHeight': '45px' }}
         placeholder="feat/"
         type="text"
+        variant="outlined"
+        color="primary"
         required
         value={data.input}
         onChange={(event) => setData({ input: event.target.value, status: 'initial' })}
