@@ -11,9 +11,9 @@ import EditBranch from 'components/modals/EditBranch'
 import EditProfile from 'components/modals/EditProfile'
 import NewProfile from 'components/modals/NewProfile'
 import ResetProfile from 'components/modals/ResetProfile'
-import { ItemType } from 'types'
+import { DIALOG, ItemType } from 'types'
 import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
-import { defaultProfile, showAlertInfo } from 'utils/data'
+import { defaultProfile, showAlertInfo, updateLocalStorage } from 'utils/data'
 
 import { useState } from 'react'
 
@@ -67,8 +67,8 @@ const save = (
     },
   }
 
-  window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(dialogValue.profile))
-  window.localStorage.setItem(FASTER_PR_PROFILE, JSON.stringify(selectedProfile))
+  updateLocalStorage(FASTER_PR_PROFILE_KEY, dialogValue.profile)
+  updateLocalStorage(FASTER_PR_PROFILE, selectedProfile)
   showAlertInfo(
     {
       visible: true,
@@ -83,11 +83,14 @@ const save = (
 const close = (): void => {}
 
 function MainPage() {
-  const [openNewProfile, setOpenNewProfile] = useState(false)
-  const [openEditProfile, setOpeEditProfile] = useState(false)
-  const [openDeleteProfile, setOpenDeleteProfile] = useState(false)
-  const [openResetDefault, setOpenResetDefault] = useState(false)
-  const [openEditBranch, setOpenEditBranch] = useState(false)
+  const [openDialogs, setOpenDialogs] = useState({
+    newProfile: false,
+    editProfile: false,
+    deleteProfile: false,
+    resetDefault: false,
+    editBranch: false,
+  })
+
   const [alertInfo, setAlertInfo] = useState({
     visible: false,
     msg: '',
@@ -152,83 +155,45 @@ function MainPage() {
 
   const handleNewProfileSubmit = (input: string): void => {
     const defaultData = defaultProfile()
-    const localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
-    const allProfiles = JSON.parse(localProfile)
-    window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(input))
-    window.localStorage.setItem(
-      FASTER_PR_PROFILE,
-      JSON.stringify({
-        ...allProfiles,
-        profiles: [...dialogValue.profiles, input],
-        [input]: {
-          profile: input,
-          uppercase: defaultData.uppercase,
-          branchSeparator: defaultData.branchSeparator,
-          branchPrefixes: defaultData.branchPrefixes,
-          signature: defaultData.signature,
-          checked: defaultData.checked,
-          commit: defaultData.commit,
-          pr: defaultData.pr,
-        },
-      }),
-    )
+    const allProfiles = JSON.parse(localStorage.getItem(FASTER_PR_PROFILE)!) || {}
+    const updatedProfiles = [...dialogValue.profiles, input]
 
-    setDialogValue({
-      profile: input,
-      profiles: [...dialogValue.profiles, input],
-      uppercase: defaultData.uppercase,
-      branchSeparator: defaultData.branchSeparator,
-      branchPrefixes: defaultData.branchPrefixes,
-      signature: defaultData.signature,
-      checked: defaultData.checked,
-      commit: defaultData.commit,
-      pr: defaultData.pr,
+    updateLocalStorage(FASTER_PR_PROFILE_KEY, input)
+    updateLocalStorage(FASTER_PR_PROFILE, {
+      ...allProfiles,
+      profiles: updatedProfiles,
+      [input]: { ...defaultData, profile: input },
     })
-    setOpenNewProfile(false)
-    showAlertInfo(
-      {
-        visible: true,
-        msg: `The profile [${input}] is added! It is using default configs.`,
-        type: 'success',
-        width: 400,
-      },
-      setAlertInfo,
-    )
+
+    setDialogValue({ ...defaultData, profiles: updatedProfiles, profile: input })
+    handleClose(DIALOG.NEW_PROFILE)
+    showAlertInfo({ visible: true, msg: `The profile [${input}] is added!`, type: 'success', width: 400 }, setAlertInfo)
   }
 
   const handleEditProfileSubmit = (input: string): void => {
     const index = dialogValue.profiles.findIndex((profile) => profile === dialogValue.profile)
     if (index === -1) return
-    let localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
+    const localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
     const allProfiles = JSON.parse(localProfile)
     dialogValue.profiles[index] = input
 
     delete allProfiles[dialogValue.profile]
 
-    window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(input))
-    window.localStorage.setItem(
-      FASTER_PR_PROFILE,
-      JSON.stringify({
-        ...allProfiles,
-        profiles: [...dialogValue.profiles],
-        [input]: {
-          profile: input,
-          uppercase: dialogValue.uppercase,
-          branchSeparator: dialogValue.branchSeparator,
-          branchPrefixes: dialogValue.branchPrefixes,
-          signature: dialogValue.signature,
-          checked: dialogValue.checked,
-          commit: dialogValue.commit,
-          pr: dialogValue.pr,
-        },
-      }),
-    )
+    updateLocalStorage(FASTER_PR_PROFILE_KEY, input)
+    updateLocalStorage(FASTER_PR_PROFILE, {
+      ...allProfiles,
+      profiles: [...dialogValue.profiles],
+      [input]: { ...dialogValue, profile: input },
+    })
+
     setDialogValue({
       ...dialogValue,
       profiles: [...dialogValue.profiles],
       profile: input,
     })
-    setOpeEditProfile(false)
+
+
+    handleClose(DIALOG.EDIT_PROFILE)
     showAlertInfo(
       {
         visible: true,
@@ -246,24 +211,20 @@ function MainPage() {
     let localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
     const allProfiles = JSON.parse(localProfile)
 
-    window.localStorage.setItem(
-      FASTER_PR_PROFILE,
-      JSON.stringify({
-        ...allProfiles,
-        profiles: [...dialogValue.profiles],
-        [dialogValue.profile]: {
-          ...dialogValue,
-          branchPrefixes,
-        },
-      }),
-    )
-
+    updateLocalStorage(FASTER_PR_PROFILE, {
+      ...allProfiles,
+      profiles: [...dialogValue.profiles],
+      [dialogValue.profile]: {
+        ...dialogValue,
+        branchPrefixes,
+      },
+    })
     setDialogValue({
       ...dialogValue,
       branchPrefixes,
     })
 
-    setOpenEditBranch(false)
+    handleClose(DIALOG.EDIT_BRANCH)
     showAlertInfo(
       {
         visible: true,
@@ -286,21 +247,18 @@ function MainPage() {
     dialogValue.profiles.splice(index, 1)
     delete allProfiles[dialogValue.profile]
 
-    window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE))
-    window.localStorage.setItem(
-      FASTER_PR_PROFILE,
-      JSON.stringify({
-        ...allProfiles,
-        profiles: dialogValue.profiles,
-      }),
-    )
+    updateLocalStorage(FASTER_PR_PROFILE_KEY, DEFAULT_PROFILE)
+    updateLocalStorage(FASTER_PR_PROFILE, {
+      ...allProfiles,
+      profiles: dialogValue.profiles,
+    })
 
     setDialogValue({
       ...allProfiles[DEFAULT_PROFILE],
       profiles: dialogValue.profiles,
       profile: DEFAULT_PROFILE,
     })
-    setOpenDeleteProfile(false)
+    handleClose(DIALOG.DELETE_PROFILE)
     showAlertInfo(
       {
         visible: true,
@@ -316,16 +274,14 @@ function MainPage() {
     const defaultData = defaultProfile()
     let localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
     const allProfiles = JSON.parse(localProfile)
-    window.localStorage.setItem(
-      FASTER_PR_PROFILE,
-      JSON.stringify({
-        ...allProfiles,
-        [dialogValue.profile]: {
-          ...defaultData,
-          profile: dialogValue.profile,
-        },
-      }),
-    )
+
+    updateLocalStorage(FASTER_PR_PROFILE, {
+      ...allProfiles,
+      [dialogValue.profile]: {
+        ...defaultData,
+        profile: dialogValue.profile,
+      },
+    })
     setDialogValue({
       ...defaultData,
       branchPrefixes: dialogValue.branchPrefixes,
@@ -333,7 +289,7 @@ function MainPage() {
       profile: dialogValue.profile,
     })
 
-    setOpenResetDefault(false)
+    handleClose(DIALOG.RESET_DEFAULT)
     showAlertInfo(
       {
         visible: true,
@@ -346,42 +302,53 @@ function MainPage() {
   }
 
   const isProfileEnabled = dialogValue.profile === DEFAULT_PROFILE
+
+  const handleClose = (field: DIALOG): void => {
+    setOpenDialogs({ ...openDialogs, [field]: false })
+  }
+  const handleOpen = (field: DIALOG): void => {
+    setOpenDialogs({ ...openDialogs, [field]: true })
+  }
   return (
     <>
       <CssBaseline />
-      {openNewProfile && (
-        <NewProfile open={openNewProfile} toggleOpen={setOpenNewProfile} handleSave={handleNewProfileSubmit} />
+      {openDialogs.newProfile && (
+        <NewProfile
+          open={openDialogs.newProfile}
+          handleClose={() => handleClose(DIALOG.NEW_PROFILE)}
+          handleSave={handleNewProfileSubmit}
+        />
       )}
-      {openEditProfile && (
+      {openDialogs.editProfile && (
         <EditProfile
           dialogValue={dialogValue}
-          open={openEditProfile}
-          toggleOpen={setOpeEditProfile}
+          open={openDialogs.editProfile}
+          handleClose={() => handleClose(DIALOG.EDIT_PROFILE)}
           handleSave={handleEditProfileSubmit}
         />
       )}
-      {openDeleteProfile && (
+      {openDialogs.deleteProfile && (
         <DeleteProfile
           dialogValue={dialogValue}
-          open={openDeleteProfile}
-          toggleOpen={setOpenDeleteProfile}
+          open={openDialogs.deleteProfile}
+          handleClose={() => handleClose(DIALOG.DELETE_PROFILE)}
           handleSave={handleDeleteProfileSubmit}
         />
       )}
-      {openEditBranch && (
+      {openDialogs.editBranch && (
         <EditBranch
-          open={openEditBranch}
-          toggleOpen={setOpenEditBranch}
+          open={openDialogs.editBranch}
+          handleClose={() => handleClose(DIALOG.EDIT_BRANCH)}
           items={dialogValue.branchPrefixes}
           handleSave={handleSaveBranch}
         />
       )}
-      {openResetDefault && (
+      {openDialogs.resetDefault && (
         <ResetProfile
-          open={openResetDefault}
+          open={openDialogs.resetDefault}
           dialogValue={dialogValue}
           handleSubmit={handleSubmit}
-          toggleOpen={setOpenResetDefault}
+          handleClose={() => handleClose(DIALOG.RESET_DEFAULT)}
         />
       )}
       <Sheet
@@ -420,7 +387,7 @@ function MainPage() {
                       variant="solid"
                       color="primary"
                       size="md"
-                      onClick={() => setOpenNewProfile(true)}
+                      onClick={() => handleOpen(DIALOG.NEW_PROFILE)}
                     >
                       <AddIcon />
                     </Button>
@@ -430,7 +397,7 @@ function MainPage() {
                       color="primary"
                       size="md"
                       disabled={isProfileEnabled}
-                      onClick={() => setOpeEditProfile(true)}
+                      onClick={() => handleOpen(DIALOG.EDIT_PROFILE)}
                     >
                       <ModeIcon />
                     </Button>
@@ -440,7 +407,7 @@ function MainPage() {
                       color="primary"
                       size="md"
                       disabled={isProfileEnabled}
-                      onClick={() => setOpenDeleteProfile(true)}
+                      onClick={() => handleOpen(DIALOG.DELETE_PROFILE)}
                     >
                       <DeleteForeverIcon />
                     </Button>
@@ -449,8 +416,7 @@ function MainPage() {
                       variant="solid"
                       color="primary"
                       size="md"
-                      disabled={openResetDefault}
-                      onClick={() => setOpenResetDefault(true)}
+                      onClick={() => handleOpen(DIALOG.RESET_DEFAULT)}
                     >
                       <RestartAltIcon />
                     </Button>
@@ -546,7 +512,7 @@ function MainPage() {
                           variant="solid"
                           color="primary"
                           size="md"
-                          onClick={() => setOpenEditBranch(true)}
+                          onClick={() => handleOpen(DIALOG.EDIT_BRANCH)}
                         >
                           <ModeIcon />
                         </Button>

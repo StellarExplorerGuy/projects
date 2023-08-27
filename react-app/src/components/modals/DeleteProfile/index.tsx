@@ -9,15 +9,11 @@ import Typography from '@mui/joy/Typography'
 interface DeleteProfileProps {
   open: boolean
   dialogValue: ItemType
-  toggleOpen: React.Dispatch<React.SetStateAction<boolean>>
+  handleClose: () => void
   handleSave: () => void
 }
 
-function DeleteProfile({ open, dialogValue, toggleOpen, handleSave }: DeleteProfileProps) {
-  const handleClose = () => {
-    toggleOpen(false)
-  }
-
+function DeleteProfile({ open, dialogValue, handleClose, handleSave }: DeleteProfileProps) {
   return (
     <Modal open={open} onClose={handleClose}>
       <ModalDialog variant="outlined" role="alertdialog" size="md">

@@ -13,16 +13,12 @@ import Typography from '@mui/joy/Typography'
 
 interface NewProfileProps {
   open: boolean
-  toggleOpen: React.Dispatch<React.SetStateAction<boolean>>
+  handleClose: () => void
   handleSave: (input: string) => void
 }
 
-function NewProfile({ open, toggleOpen, handleSave }: NewProfileProps) {
+function NewProfile({ open, handleClose, handleSave }: NewProfileProps) {
   const [input, setInput] = useState('')
-
-  const handleClose = () => {
-    toggleOpen(false)
-  }
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -54,7 +50,9 @@ function NewProfile({ open, toggleOpen, handleSave }: NewProfileProps) {
             <Button variant="outlined" color="neutral" onClick={handleClose}>
               Cancel
             </Button>
-            <Button onClick={()=> handleSave(input)}>Save</Button>
+            <Button disabled={!input.trim().length} onClick={() => handleSave(input)}>
+              Save
+            </Button>
           </Stack>
         </Stack>
       </ModalDialog>

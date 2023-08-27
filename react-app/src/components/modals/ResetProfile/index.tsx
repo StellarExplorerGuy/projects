@@ -9,15 +9,11 @@ import Typography from '@mui/joy/Typography'
 interface ResetProfileProps {
   open: boolean
   dialogValue: ItemType
-  toggleOpen: React.Dispatch<React.SetStateAction<boolean>>
+  handleClose: () => void
   handleSubmit: ()=> void
 }
 
-function ResetProfile({ open, dialogValue, handleSubmit, toggleOpen }: ResetProfileProps) {
-  const handleClose = () => {
-    toggleOpen(false)
-  }
-
+function ResetProfile({ open, dialogValue, handleSubmit, handleClose }: ResetProfileProps) {
   return (
     <Modal open={open} onClose={handleClose}>
       <ModalDialog variant="outlined" role="alertdialog" size="md">

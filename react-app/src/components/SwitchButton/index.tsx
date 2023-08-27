@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import Switch from '@mui/joy/Switch'
 import Typography from '@mui/joy/Typography'
+import { memo } from 'react'
 
 interface SwitchButtonProps {
   checked: boolean
@@ -35,4 +36,4 @@ function SwitchButton({ checked, setChecked }: SwitchButtonProps) {
     />
   )
 }
-export default SwitchButton
+export default memo(SwitchButton)

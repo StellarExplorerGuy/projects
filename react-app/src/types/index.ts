@@ -15,7 +15,14 @@ export type ItemType = {
 export type ItemProfile = {
   open: boolean
   dialogValue: ItemType
-  toggleOpen: React.Dispatch<React.SetStateAction<boolean>>
+  handleClose: React.Dispatch<React.SetStateAction<boolean>>
   setDialogValue: React.Dispatch<React.SetStateAction<ItemType>>
 }
 
+export enum DIALOG {
+  NEW_PROFILE = 'newProfile',
+  EDIT_PROFILE = 'editProfile',
+  DELETE_PROFILE = 'deleteProfile',
+  RESET_DEFAULT = 'resetDefault',
+  EDIT_BRANCH = 'editBranch',
+}

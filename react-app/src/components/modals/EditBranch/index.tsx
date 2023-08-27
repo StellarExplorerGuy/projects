@@ -62,15 +62,12 @@ function CustomSeparatorButtonGroup({ items, setItems }: CustomSeparatorButtonGr
 
 interface EditBranchProps {
   open: boolean
-  toggleOpen: React.Dispatch<React.SetStateAction<boolean>>
+  handleClose: () => void
   items: UniqueIdentifier[]
   handleSave: (data: UniqueIdentifier[]) => void
 }
 
-function EditBranch({ open, toggleOpen, items, handleSave }: EditBranchProps) {
-  const handleClose = () => {
-    toggleOpen(false)
-  }
+function EditBranch({ open, handleClose, items, handleSave }: EditBranchProps) {
   const [data, setItemsData] = useState(items)
 
   return (

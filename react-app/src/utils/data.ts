@@ -129,3 +129,10 @@ export const showAlertInfo = (
     })
   }, 5000)
 }
+
+export const updateLocalStorage = (key: string, data: any): void => {
+  try {
+    const localData = JSON.parse(localStorage.getItem(key)!) || {}
+    localStorage.setItem(key, JSON.stringify({ ...localData, ...data }))
+  } catch (error) {}
+}

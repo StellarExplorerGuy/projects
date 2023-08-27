@@ -16,16 +16,12 @@ import Typography from '@mui/joy/Typography'
 interface EditProfileProps {
   open: boolean
   dialogValue: ItemType
-  toggleOpen: React.Dispatch<React.SetStateAction<boolean>>
+  handleClose: () => void
   handleSave: (input: string) => void
 }
 
-function EditProfile({ open, toggleOpen, dialogValue, handleSave }: EditProfileProps) {
+function EditProfile({ open, handleClose, dialogValue, handleSave }: EditProfileProps) {
   const [input, setInput] = useState('')
-
-  const handleClose = () => {
-    toggleOpen(false)
-  }
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -57,7 +53,9 @@ function EditProfile({ open, toggleOpen, dialogValue, handleSave }: EditProfileP
             <Button variant="outlined" color="neutral" onClick={handleClose}>
               Cancel
             </Button>
-            <Button onClick={() => handleSave(input)}>Save</Button>
+            <Button disabled={!input.trim().length} onClick={() => handleSave(input)}>
+              Save
+            </Button>
           </Stack>
         </Stack>
       </ModalDialog>
