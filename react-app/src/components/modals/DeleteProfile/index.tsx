@@ -1,5 +1,4 @@
 import { ItemType } from 'types'
-import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
 
 import Button from '@mui/joy/Button'
 import Modal from '@mui/joy/Modal'
@@ -11,40 +10,12 @@ interface DeleteProfileProps {
   open: boolean
   dialogValue: ItemType
   toggleOpen: React.Dispatch<React.SetStateAction<boolean>>
-  setDialogValue: React.Dispatch<React.SetStateAction<ItemType>>
+  handleSave: () => void
 }
 
-function DeleteProfile({ open, dialogValue, toggleOpen, setDialogValue }: DeleteProfileProps) {
+function DeleteProfile({ open, dialogValue, toggleOpen, handleSave }: DeleteProfileProps) {
   const handleClose = () => {
     toggleOpen(false)
-  }
-
-  const handleSubmit = () => {
-    const index = dialogValue.profiles.findIndex((profile: string) => profile === dialogValue.profile)
-    if (index === -1) return
-
-    dialogValue.profiles.splice(index, 1)
-
-    window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE))
-    window.localStorage.setItem(
-      FASTER_PR_PROFILE,
-      JSON.stringify({
-        [DEFAULT_PROFILE]: {
-          profile: dialogValue.profile,
-          uppercase: dialogValue.uppercase,
-          branchSeparator: dialogValue.branchSeparator,
-          signature: dialogValue.signature,
-          checked: dialogValue.checked,
-          commit: dialogValue.commit,
-          pr: dialogValue.pr,
-        },
-      }),
-    )
-    setDialogValue({
-      ...dialogValue,
-      profile: DEFAULT_PROFILE,
-    })
-    handleClose()
   }
 
   return (
@@ -61,7 +32,7 @@ function DeleteProfile({ open, dialogValue, toggleOpen, setDialogValue }: Delete
             <Button variant="outlined" color="neutral" onClick={handleClose}>
               No
             </Button>
-            <Button color="danger" onClick={handleSubmit}>Yes</Button>
+            <Button color="danger" onClick={()=> handleSave()}>Yes</Button>
           </Stack>
         </Stack>
       </ModalDialog>

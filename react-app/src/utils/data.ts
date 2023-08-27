@@ -1,4 +1,6 @@
-import { DEFAULT_PROFILE, TEMPLATE_KEY } from "./constants"
+import { UniqueIdentifier } from '@dnd-kit/core'
+
+import { DEFAULT_PROFILE, INITIAL_ITEMS, TEMPLATE_KEY } from './constants'
 
 type CommitBody = {
   type: string
@@ -14,6 +16,11 @@ type PRBody = {
   repoOrg: string
   repoName: string
   user: string
+}
+
+const defaultInitializer = (index: number) => index
+export function createRange<T = number>(length: number, initializer: (index: number) => any = defaultInitializer): T[] {
+  return [...new Array(length)].map((_, index) => initializer(index))
 }
 
 const singleSeparator = '`'
@@ -88,9 +95,37 @@ export const defaultProfile = () => {
     profile: DEFAULT_PROFILE,
     signature: '',
     branchSeparator: '',
+    branchPrefixes: INITIAL_ITEMS ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
     checked: true,
     uppercase: false,
     commit: getCommit({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
     pr: getPR({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
   }
+}
+
+export const showAlertInfo = (
+  data: {
+    visible: boolean
+    msg: string
+    type: string
+    width: number
+  },
+  setAlertInfo: React.Dispatch<
+    React.SetStateAction<{
+      visible: boolean
+      msg: string
+      type: string
+      width: number
+    }>
+  >,
+) => {
+  setAlertInfo(data)
+  setTimeout(() => {
+    setAlertInfo({
+      visible: false,
+      msg: '',
+      type: 'success',
+      width: 200,
+    })
+  }, 3000)
 }

@@ -25,7 +25,7 @@ function ResetProfile({ open, dialogValue, handleSubmit, toggleOpen }: ResetProf
           Reset Profile
         </Typography>
         <Typography id="basic-modal-dialog-description" mt={0.5} mb={2} textColor="text.tertiary">
-          Would you like to reset <b>[{dialogValue.profile}]</b> profile?
+          Would you like to reset <b>[{dialogValue.profile}]</b> profile to default configs?
         </Typography>
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="flex-end" spacing={2}>

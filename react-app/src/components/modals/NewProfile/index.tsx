@@ -1,6 +1,3 @@
-import { ItemProfile } from 'types'
-import { FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
-
 import { useState } from 'react'
 
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
@@ -13,48 +10,18 @@ import Modal from '@mui/joy/Modal'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
-import { defaultProfile } from 'utils/data'
 
-function NewProfile({ open, toggleOpen, dialogValue, setDialogValue }: ItemProfile) {
+interface NewProfileProps {
+  open: boolean
+  toggleOpen: React.Dispatch<React.SetStateAction<boolean>>
+  handleSave: (input: string) => void
+}
+
+function NewProfile({ open, toggleOpen, handleSave }: NewProfileProps) {
   const [input, setInput] = useState('')
 
   const handleClose = () => {
     toggleOpen(false)
-  }
-
-  const handleSubmit = () => {
-    const defaultData = defaultProfile()
-    const localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
-    const allProfiles = JSON.parse(localProfile)
-    window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(input))
-    window.localStorage.setItem(
-      FASTER_PR_PROFILE,
-      JSON.stringify({
-        ...allProfiles,
-        profiles: [...dialogValue.profiles, input],
-        [input]: {
-          profile: input,
-          uppercase: defaultData.uppercase,
-          branchSeparator: defaultData.branchSeparator,
-          signature: defaultData.signature,
-          checked: defaultData.checked,
-          commit: defaultData.commit,
-          pr: defaultData.pr,
-        },
-      }),
-    )
-
-    setDialogValue({
-      profile: input,
-      profiles: [...dialogValue.profiles, input],
-      uppercase: defaultData.uppercase,
-      branchSeparator: defaultData.branchSeparator,
-      signature: defaultData.signature,
-      checked: defaultData.checked,
-      commit: defaultData.commit,
-      pr: defaultData.pr,
-    })
-    handleClose()
   }
 
   return (
@@ -87,7 +54,7 @@ function NewProfile({ open, toggleOpen, dialogValue, setDialogValue }: ItemProfi
             <Button variant="outlined" color="neutral" onClick={handleClose}>
               Cancel
             </Button>
-            <Button onClick={handleSubmit}>Save</Button>
+            <Button onClick={()=> handleSave(input)}>Save</Button>
           </Stack>
         </Stack>
       </ModalDialog>

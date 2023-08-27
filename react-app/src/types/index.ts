@@ -1,7 +1,10 @@
+import { UniqueIdentifier } from "@dnd-kit/core"
+
 export type ItemType = {
   profile: string
   profiles: string[]
   uppercase: boolean
+  branchPrefixes: UniqueIdentifier[]
   branchSeparator: string
   signature: string
   checked: boolean

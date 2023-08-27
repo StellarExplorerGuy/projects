@@ -12,8 +12,8 @@ import EditProfile from 'components/modals/EditProfile'
 import NewProfile from 'components/modals/NewProfile'
 import ResetProfile from 'components/modals/ResetProfile'
 import { ItemType } from 'types'
-import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, INITIAL_ITEMS } from 'utils/constants'
-import { defaultProfile } from 'utils/data'
+import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
+import { defaultProfile, showAlertInfo } from 'utils/data'
 
 import { useState } from 'react'
 
@@ -59,6 +59,7 @@ const save = (
       profile: dialogValue.profile,
       uppercase: dialogValue.uppercase,
       branchSeparator: dialogValue.branchSeparator,
+      branchPrefixes: dialogValue.branchPrefixes,
       signature: dialogValue.signature,
       checked: dialogValue.checked,
       commit: dialogValue.commit,
@@ -68,29 +69,18 @@ const save = (
 
   window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(dialogValue.profile))
   window.localStorage.setItem(FASTER_PR_PROFILE, JSON.stringify(selectedProfile))
-
-  setAlertInfo({
-    visible: true,
-    msg: 'Saved!',
-    type: 'success',
-    width: 200,
-  })
-  setTimeout(() => {
-    setAlertInfo({
-      visible: false,
-      msg: '',
+  showAlertInfo(
+    {
+      visible: true,
+      msg: 'Saved!',
       type: 'success',
-      width: 200,
-    })
-  }, 3000)
+      width: 300,
+    },
+    setAlertInfo,
+  )
 }
 
 const close = (): void => {}
-
-const defaultInitializer = (index: number) => index
-function createRange<T = number>(length: number, initializer: (index: number) => any = defaultInitializer): T[] {
-  return [...new Array(length)].map((_, index) => initializer(index))
-}
 
 function MainPage() {
   const [openNewProfile, setOpenNewProfile] = useState(false)
@@ -104,10 +94,6 @@ function MainPage() {
     type: 'success',
     width: 200,
   })
-
-  const [items, setItems] = useState<UniqueIdentifier[]>(
-    () => INITIAL_ITEMS ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
-  )
 
   const [dialogValue, setDialogValue] = useState<ItemType>(() => {
     const localKey = localStorage.getItem(FASTER_PR_PROFILE_KEY)
@@ -128,6 +114,7 @@ function MainPage() {
             profile: selectedProfile.profile,
             signature: selectedProfile.signature,
             branchSeparator: selectedProfile.branchSeparator,
+            branchPrefixes: selectedProfile.branchPrefixes,
             checked: selectedProfile.checked,
             uppercase: selectedProfile.uppercase,
             commit: selectedProfile.commit,
@@ -140,6 +127,7 @@ function MainPage() {
         profile: selectedProfile.profile,
         signature: selectedProfile.signature,
         branchSeparator: selectedProfile.branchSeparator,
+        branchPrefixes: selectedProfile.branchPrefixes,
         checked: selectedProfile.checked,
         uppercase: selectedProfile.uppercase,
         commit: selectedProfile.commit,
@@ -154,12 +142,176 @@ function MainPage() {
       profile: selectedProfile.profile,
       signature: selectedProfile.signature,
       branchSeparator: selectedProfile.branchSeparator,
+      branchPrefixes: selectedProfile.branchPrefixes,
       checked: selectedProfile.checked,
       uppercase: selectedProfile.uppercase,
       commit: selectedProfile.commit,
       pr: selectedProfile.pr,
     }
   })
+
+  const handleNewProfileSubmit = (input: string): void => {
+    const defaultData = defaultProfile()
+    const localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
+    const allProfiles = JSON.parse(localProfile)
+    window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(input))
+    window.localStorage.setItem(
+      FASTER_PR_PROFILE,
+      JSON.stringify({
+        ...allProfiles,
+        profiles: [...dialogValue.profiles, input],
+        [input]: {
+          profile: input,
+          uppercase: defaultData.uppercase,
+          branchSeparator: defaultData.branchSeparator,
+          branchPrefixes: defaultData.branchPrefixes,
+          signature: defaultData.signature,
+          checked: defaultData.checked,
+          commit: defaultData.commit,
+          pr: defaultData.pr,
+        },
+      }),
+    )
+
+    setDialogValue({
+      profile: input,
+      profiles: [...dialogValue.profiles, input],
+      uppercase: defaultData.uppercase,
+      branchSeparator: defaultData.branchSeparator,
+      branchPrefixes: defaultData.branchPrefixes,
+      signature: defaultData.signature,
+      checked: defaultData.checked,
+      commit: defaultData.commit,
+      pr: defaultData.pr,
+    })
+    setOpenNewProfile(false)
+    showAlertInfo(
+      {
+        visible: true,
+        msg: `The profile [${input}] is added!`,
+        type: 'success',
+        width: 300,
+      },
+      setAlertInfo,
+    )
+  }
+
+  const handleEditProfileSubmit = (input: string): void => {
+    const index = dialogValue.profiles.findIndex((profile) => profile === dialogValue.profile)
+    if (index === -1) return
+    let localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
+    const allProfiles = JSON.parse(localProfile)
+    dialogValue.profiles[index] = input
+
+    delete allProfiles[dialogValue.profile]
+
+    window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(input))
+    window.localStorage.setItem(
+      FASTER_PR_PROFILE,
+      JSON.stringify({
+        ...allProfiles,
+        profiles: [...dialogValue.profiles],
+        [input]: {
+          profile: input,
+          uppercase: dialogValue.uppercase,
+          branchSeparator: dialogValue.branchSeparator,
+          branchPrefixes: dialogValue.branchPrefixes,
+          signature: dialogValue.signature,
+          checked: dialogValue.checked,
+          commit: dialogValue.commit,
+          pr: dialogValue.pr,
+        },
+      }),
+    )
+    setDialogValue({
+      ...dialogValue,
+      profiles: [...dialogValue.profiles],
+      profile: input,
+    })
+    setOpeEditProfile(false)
+    showAlertInfo(
+      {
+        visible: true,
+        msg: `The current profile name is changed to [${input}]!`,
+        type: 'success',
+        width: 400,
+      },
+      setAlertInfo,
+    )
+  }
+
+  const handleSaveBranch = (branchPrefixes: UniqueIdentifier[]): void => {
+    const index = dialogValue.profiles.findIndex((profile) => profile === dialogValue.profile)
+    if (index === -1) return
+    let localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
+    const allProfiles = JSON.parse(localProfile)
+
+    window.localStorage.setItem(
+      FASTER_PR_PROFILE,
+      JSON.stringify({
+        ...allProfiles,
+        profiles: [...dialogValue.profiles],
+        [dialogValue.profile]: {
+          ...dialogValue,
+          branchPrefixes,
+        },
+      }),
+    )
+
+    setDialogValue({
+      ...dialogValue,
+      branchPrefixes,
+    })
+
+    setOpenEditBranch(false)
+    showAlertInfo(
+      {
+        visible: true,
+        msg: `The prefixes for branches  are saved!`,
+        type: 'success',
+        width: 300,
+      },
+      setAlertInfo,
+    )
+  }
+
+  const handleDeleteProfileSubmit = (): void => {
+    const index = dialogValue.profiles.findIndex((profile: string) => profile === dialogValue.profile)
+    if (index === -1) return
+
+    dialogValue.profiles.splice(index, 1)
+
+    window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE))
+    window.localStorage.setItem(
+      FASTER_PR_PROFILE,
+      JSON.stringify({
+        [DEFAULT_PROFILE]: {
+          profile: dialogValue.profile,
+          uppercase: dialogValue.uppercase,
+          branchSeparator: dialogValue.branchSeparator,
+          branchPrefixes: dialogValue.branchPrefixes,
+          signature: dialogValue.signature,
+          checked: dialogValue.checked,
+          commit: dialogValue.commit,
+          pr: dialogValue.pr,
+        },
+      }),
+    )
+    setDialogValue({
+      ...dialogValue,
+      profile: DEFAULT_PROFILE,
+    })
+    setOpenDeleteProfile(false)
+    showAlertInfo(
+      {
+        visible: true,
+        msg: `The profile is deleted! Now you are using [${DEFAULT_PROFILE}] profile.`,
+        type: 'success',
+        width: 400,
+      },
+      setAlertInfo,
+    )
+  }
 
   const handleSubmit = (): void => {
     const defaultData = defaultProfile()
@@ -177,25 +329,21 @@ function MainPage() {
     )
     setDialogValue({
       ...defaultData,
+      branchPrefixes: dialogValue.branchPrefixes,
       profiles: dialogValue.profiles,
       profile: dialogValue.profile,
     })
 
     setOpenResetDefault(false)
-    setAlertInfo({
-      visible: true,
-      msg: `The profile [${dialogValue.profile}] is reverted!`,
-      type: 'success',
-      width: 300,
-    })
-    setTimeout(() => {
-      setAlertInfo({
-        visible: false,
-        msg: '',
+    showAlertInfo(
+      {
+        visible: true,
+        msg: `The profile [${dialogValue.profile}] is reverted!`,
         type: 'success',
-        width: 200,
-      })
-    }, 3000)
+        width: 300,
+      },
+      setAlertInfo,
+    )
   }
 
   const isProfileEnabled = dialogValue.profile === DEFAULT_PROFILE
@@ -204,10 +352,9 @@ function MainPage() {
       <CssBaseline />
       {openNewProfile && (
         <NewProfile
-          dialogValue={dialogValue}
           open={openNewProfile}
           toggleOpen={setOpenNewProfile}
-          setDialogValue={setDialogValue}
+          handleSave={handleNewProfileSubmit}
         />
       )}
       {openEditProfile && (
@@ -215,7 +362,7 @@ function MainPage() {
           dialogValue={dialogValue}
           open={openEditProfile}
           toggleOpen={setOpeEditProfile}
-          setDialogValue={setDialogValue}
+          handleSave={handleEditProfileSubmit}
         />
       )}
       {openDeleteProfile && (
@@ -223,11 +370,16 @@ function MainPage() {
           dialogValue={dialogValue}
           open={openDeleteProfile}
           toggleOpen={setOpenDeleteProfile}
-          setDialogValue={setDialogValue}
+          handleSave={handleDeleteProfileSubmit}
         />
       )}
       {openEditBranch && (
-        <EditBranch open={openEditBranch} toggleOpen={setOpenEditBranch} items={items} setItems={setItems} />
+        <EditBranch
+          open={openEditBranch}
+          toggleOpen={setOpenEditBranch}
+          items={dialogValue.branchPrefixes}
+          handleSave={handleSaveBranch}
+        />
       )}
       {openResetDefault && (
         <ResetProfile

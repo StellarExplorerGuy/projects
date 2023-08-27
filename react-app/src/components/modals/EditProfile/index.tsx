@@ -1,5 +1,4 @@
-import { ItemProfile } from 'types'
-import { FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
+import { ItemType } from 'types'
 
 import { useState } from 'react'
 
@@ -14,45 +13,18 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
-function EditProfile({ open, toggleOpen, dialogValue, setDialogValue }: ItemProfile) {
+interface EditProfileProps {
+  open: boolean
+  dialogValue: ItemType
+  toggleOpen: React.Dispatch<React.SetStateAction<boolean>>
+  handleSave: (input: string) => void
+}
+
+function EditProfile({ open, toggleOpen, dialogValue, handleSave }: EditProfileProps) {
   const [input, setInput] = useState('')
 
   const handleClose = () => {
     toggleOpen(false)
-  }
-
-  const handleSubmit = () => {
-    const index = dialogValue.profiles.findIndex((profile) => profile === dialogValue.profile)
-    if (index === -1) return
-    let localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
-    const allProfiles = JSON.parse(localProfile)
-    dialogValue.profiles[index] = input
-
-    delete allProfiles[dialogValue.profile]
-
-    window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(input))
-    window.localStorage.setItem(
-      FASTER_PR_PROFILE,
-      JSON.stringify({
-        ...allProfiles,
-        profiles: [...dialogValue.profiles],
-        [input]: {
-          profile: input,
-          uppercase: dialogValue.uppercase,
-          branchSeparator: dialogValue.branchSeparator,
-          signature: dialogValue.signature,
-          checked: dialogValue.checked,
-          commit: dialogValue.commit,
-          pr: dialogValue.pr,
-        },
-      }),
-    )
-    setDialogValue({
-      ...dialogValue,
-      profiles: [...dialogValue.profiles],
-      profile: input,
-    })
-    handleClose()
   }
 
   return (
@@ -85,7 +57,7 @@ function EditProfile({ open, toggleOpen, dialogValue, setDialogValue }: ItemProf
             <Button variant="outlined" color="neutral" onClick={handleClose}>
               Cancel
             </Button>
-            <Button onClick={handleSubmit}>Save</Button>
+            <Button onClick={() => handleSave(input)}>Save</Button>
           </Stack>
         </Stack>
       </ModalDialog>

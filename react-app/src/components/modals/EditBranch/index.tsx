@@ -14,15 +14,12 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 
-
-// const arrayList = ['🚀 feat', '🔨 fix', '🐛 bug', '📝 docs', '😎 style', '✨ refactor', '📦 test', '💊 chore']
 interface CustomSeparatorButtonGroupProps {
   items: UniqueIdentifier[]
   setItems: React.Dispatch<React.SetStateAction<UniqueIdentifier[]>>
 }
 function CustomSeparatorButtonGroup({ items, setItems }: CustomSeparatorButtonGroupProps) {
   const handleChange = (item: any) => {
-    console.info(`You clicked`, item)
     setItems([item, ...items])
   }
 
@@ -67,20 +64,14 @@ interface EditBranchProps {
   open: boolean
   toggleOpen: React.Dispatch<React.SetStateAction<boolean>>
   items: UniqueIdentifier[]
-  setItems: React.Dispatch<React.SetStateAction<UniqueIdentifier[]>>
+  handleSave: (data: UniqueIdentifier[]) => void
 }
 
-function EditBranch({ open, toggleOpen, items, setItems }: EditBranchProps) {
+function EditBranch({ open, toggleOpen, items, handleSave }: EditBranchProps) {
   const handleClose = () => {
     toggleOpen(false)
   }
-
   const [data, setItemsData] = useState(items)
-
-  const handleSave = () => {
-    setItems(data)
-    handleClose()
-  }
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -89,7 +80,8 @@ function EditBranch({ open, toggleOpen, items, setItems }: EditBranchProps) {
           Edit branch details
         </Typography>
         <Typography id="basic-modal-dialog-description" mt={0.5} mb={2} textColor="text.tertiary">
-          You can create and reorder branch prefixes - issue type.
+          You have the ability to generate and arrange prefixes for branches, which correspond to different types of
+          issues.
           <CustomSeparatorButtonGroup items={data} setItems={setItemsData} />
         </Typography>
         <Grid container>
@@ -104,7 +96,7 @@ function EditBranch({ open, toggleOpen, items, setItems }: EditBranchProps) {
           <Button variant="outlined" color="neutral" onClick={handleClose}>
             Cancel
           </Button>
-          <Button disabled={data.length === 0} onClick={handleSave}>
+          <Button disabled={data.length === 0} onClick={() => handleSave(data)}>
             Save
           </Button>
         </Stack>
