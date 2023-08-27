@@ -49,6 +49,8 @@ ${separator}
 **READY**
 
 ## Description
+
+
 ${separator}
 - ${params.type}: 
 
@@ -61,8 +63,10 @@ ${separator}
 ## Impacted Areas in Application
 <!-- List general components of the application that this PR will affect: -->
 
+
 ### Screenshots
 <!-- For UI items, please provide screenshots demonstrating the work completed -->
+
 
 ## Which issue(s) does this pull-request fix?
 <!-- Please include a link to the issue -->
@@ -108,7 +112,6 @@ export const showAlertInfo = (
     visible: boolean
     msg: string
     type: string
-    width: number
   },
   setAlertInfo: React.Dispatch<
     React.SetStateAction<{
@@ -119,13 +122,13 @@ export const showAlertInfo = (
     }>
   >,
 ) => {
-  setAlertInfo(data)
+  setAlertInfo({...data, width: data.msg.length >= 70 ? 400 : 100,})
   setTimeout(() => {
     setAlertInfo({
       visible: false,
       msg: '',
       type: 'success',
-      width: 200,
+      width: 0,
     })
   }, 5000)
 }

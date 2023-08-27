@@ -67,14 +67,12 @@ const save = (
     },
   }
 
-  updateLocalStorage(FASTER_PR_PROFILE_KEY, dialogValue.profile)
   updateLocalStorage(FASTER_PR_PROFILE, selectedProfile)
   showAlertInfo(
     {
       visible: true,
       msg: 'Saved!',
       type: 'success',
-      width: 300,
     },
     setAlertInfo,
   )
@@ -102,9 +100,8 @@ function MainPage() {
     const localKey = localStorage.getItem(FASTER_PR_PROFILE_KEY)
     const profileKey = localKey === null ? DEFAULT_PROFILE : JSON.parse(localKey)
 
-    let localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
+    const localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
     let selectedProfile = null
-
     if (!localProfile && !JSON.parse(localProfile)?.profile) {
       selectedProfile = { ...defaultProfile() }
 
@@ -167,7 +164,7 @@ function MainPage() {
 
     setDialogValue({ ...defaultData, profiles: updatedProfiles, profile: input })
     handleClose(DIALOG.NEW_PROFILE)
-    showAlertInfo({ visible: true, msg: `The profile [${input}] is added!`, type: 'success', width: 400 }, setAlertInfo)
+    showAlertInfo({ visible: true, msg: `The profile [${input}] is added!`, type: 'success' }, setAlertInfo)
   }
 
   const handleEditProfileSubmit = (input: string): void => {
@@ -192,14 +189,12 @@ function MainPage() {
       profile: input,
     })
 
-
     handleClose(DIALOG.EDIT_PROFILE)
     showAlertInfo(
       {
         visible: true,
         msg: `The current profile name is changed to [${input}]!`,
         type: 'success',
-        width: 400,
       },
       setAlertInfo,
     )
@@ -230,7 +225,6 @@ function MainPage() {
         visible: true,
         msg: `The prefixes for branches  are saved!`,
         type: 'success',
-        width: 300,
       },
       setAlertInfo,
     )
@@ -264,15 +258,14 @@ function MainPage() {
         visible: true,
         msg: `The profile is deleted! Now you are using [${DEFAULT_PROFILE}] profile.`,
         type: 'success',
-        width: 400,
       },
       setAlertInfo,
     )
   }
 
-  const handleSubmit = (): void => {
+  const handleResetDefault = (): void => {
     const defaultData = defaultProfile()
-    let localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
+    const localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
     const allProfiles = JSON.parse(localProfile)
 
     updateLocalStorage(FASTER_PR_PROFILE, {
@@ -295,7 +288,6 @@ function MainPage() {
         visible: true,
         msg: `The profile [${dialogValue.profile}] is reverted!`,
         type: 'success',
-        width: 300,
       },
       setAlertInfo,
     )
@@ -347,7 +339,7 @@ function MainPage() {
         <ResetProfile
           open={openDialogs.resetDefault}
           dialogValue={dialogValue}
-          handleSubmit={handleSubmit}
+          handleSubmit={handleResetDefault}
           handleClose={() => handleClose(DIALOG.RESET_DEFAULT)}
         />
       )}
