@@ -127,5 +127,5 @@ export const showAlertInfo = (
       type: 'success',
       width: 200,
     })
-  }, 3000)
+  }, 5000)
 }

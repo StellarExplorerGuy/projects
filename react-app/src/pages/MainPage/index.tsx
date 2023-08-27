@@ -188,9 +188,9 @@ function MainPage() {
     showAlertInfo(
       {
         visible: true,
-        msg: `The profile [${input}] is added!`,
+        msg: `The profile [${input}] is added! It is using default configs.`,
         type: 'success',
-        width: 300,
+        width: 400,
       },
       setAlertInfo,
     )
@@ -279,26 +279,25 @@ function MainPage() {
     const index = dialogValue.profiles.findIndex((profile: string) => profile === dialogValue.profile)
     if (index === -1) return
 
+    const localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
+    const allProfiles = JSON.parse(localProfile)
+    if (!allProfiles) return
+
     dialogValue.profiles.splice(index, 1)
+    delete allProfiles[dialogValue.profile]
 
     window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE))
     window.localStorage.setItem(
       FASTER_PR_PROFILE,
       JSON.stringify({
-        [DEFAULT_PROFILE]: {
-          profile: dialogValue.profile,
-          uppercase: dialogValue.uppercase,
-          branchSeparator: dialogValue.branchSeparator,
-          branchPrefixes: dialogValue.branchPrefixes,
-          signature: dialogValue.signature,
-          checked: dialogValue.checked,
-          commit: dialogValue.commit,
-          pr: dialogValue.pr,
-        },
+        ...allProfiles,
+        profiles: dialogValue.profiles,
       }),
     )
+
     setDialogValue({
-      ...dialogValue,
+      ...allProfiles[DEFAULT_PROFILE],
+      profiles: dialogValue.profiles,
       profile: DEFAULT_PROFILE,
     })
     setOpenDeleteProfile(false)
@@ -351,11 +350,7 @@ function MainPage() {
     <>
       <CssBaseline />
       {openNewProfile && (
-        <NewProfile
-          open={openNewProfile}
-          toggleOpen={setOpenNewProfile}
-          handleSave={handleNewProfileSubmit}
-        />
+        <NewProfile open={openNewProfile} toggleOpen={setOpenNewProfile} handleSave={handleNewProfileSubmit} />
       )}
       {openEditProfile && (
         <EditProfile
