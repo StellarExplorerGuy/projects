@@ -530,13 +530,13 @@ function MainPage() {
                         <Box sx={{ float: 'left', pt: 0.5 }}>
                           <FormItem text="Demo view" />
                         </Box>
-                        <InfoIconButton text="Dynamic preview of the branch that is shown as example." />
+                        <InfoIconButton text="Dynamic preview of the branch that is shown below as example." />
                         <Box sx={{ pt: 1 }}>
                           <b>
                             {dialogValue.uppercase ? 'feat'.toUpperCase() : 'feat'}
                             {dialogValue.branchSeparator ? dialogValue.branchSeparator : '/'}
                           </b>
-                          my-amazing-branch-name
+                          1-my-amazing-branch-name
                         </Box>
                       </Grid>
                       <Grid xs={0.5}>
@@ -572,7 +572,7 @@ function MainPage() {
                           </Grid>
                           <Grid xs={5}>
                             <FormControl>
-                              <FormLabel>Uppercase</FormLabel>
+                              <FormLabel>Prefix uppercase</FormLabel>
                               <Box sx={{ float: 'left', mt: 0.5 }}>
                                 <SwitchButton
                                   checked={dialogValue.uppercase}
