@@ -1,6 +1,6 @@
 import { UniqueIdentifier } from '@dnd-kit/core'
 
-import { DEFAULT_PROFILE, INITIAL_ITEMS, TEMPLATE_KEY } from './constants'
+import { DEFAULT_PROFILE, BRANCH_PREFIXES, TEMPLATE_KEY } from './constants'
 
 type CommitBody = {
   type: string
@@ -92,14 +92,14 @@ Contributes:
 }
 
 export const defaultProfile = () => {
-  const { TYPE, ISSUE, REPO_ORG, REPO_NAME, SIGNATURE } = TEMPLATE_KEY
+  const { ISSUE_TYPE: TYPE, ISSUE, REPO_ORG, REPO_NAME, SIGNATURE } = TEMPLATE_KEY
 
   return {
     profiles: [DEFAULT_PROFILE],
     profile: DEFAULT_PROFILE,
     signature: '',
     branchSeparator: '',
-    branchPrefixes: INITIAL_ITEMS ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
+    branchPrefixes: BRANCH_PREFIXES ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
     checked: true,
     uppercase: false,
     commit: getCommit({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
