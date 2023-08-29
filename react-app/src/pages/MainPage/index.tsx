@@ -106,7 +106,7 @@ function MainPage() {
 
     const localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
     let selectedProfile = null
-    if (!localProfile && !JSON.parse(localProfile)?.profile) {
+    if (!localKey || (!localProfile && !JSON.parse(localProfile)?.profile)) {
       selectedProfile = { ...defaultProfile() }
 
       window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE))

@@ -10,3 +10,5 @@ https://rickblyth.com/blog/the-pros--cons-of-developing-chrome-extensions
 
 
 https://mui.com/material-ui/material-icons
+
+https://github.com/StellarExplorerGuy/projects

@@ -16,7 +16,7 @@ export default function TabsVertical({ tabs }: TabsVerticalProps) {
         ))}
       </TabList>
       {tabs.data.map((item, index) => (
-        <TabPanel sx={{ p: 0 }} value={index}>
+        <TabPanel key={index} sx={{ p: 0 }} value={index}>
           {item}
         </TabPanel>
       ))}
