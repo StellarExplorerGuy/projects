@@ -25,4 +25,5 @@ export enum DIALOG {
   DELETE_PROFILE = 'deleteProfile',
   RESET_DEFAULT = 'resetDefault',
   EDIT_BRANCH = 'editBranch',
+  TIP = 'tip'
 }

@@ -10,3 +10,5 @@ export const TEMPLATE_KEY = {
   REPO_NAME: 'REPO_NAME',
   SIGNATURE: 'SIGNATURE',
 }
+
+export const HOME_URL = 'https://github.com/StellarExplorerGuy/projects';

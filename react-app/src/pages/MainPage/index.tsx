@@ -11,8 +11,9 @@ import EditBranch from 'components/modals/EditBranch'
 import EditProfile from 'components/modals/EditProfile'
 import NewProfile from 'components/modals/NewProfile'
 import ResetProfile from 'components/modals/ResetProfile'
+import Tip from 'components/modals/Tip'
 import { DIALOG, ItemType } from 'types'
-import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
+import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, HOME_URL } from 'utils/constants'
 import { defaultProfile, showAlertInfo, updateLocalStorage } from 'utils/data'
 
 import { useState } from 'react'
@@ -21,6 +22,8 @@ import { UniqueIdentifier } from '@dnd-kit/core'
 import AddIcon from '@mui/icons-material/Add'
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import EmojiObjectsTwoToneIcon from '@mui/icons-material/EmojiObjectsTwoTone'
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded'
 import ModeIcon from '@mui/icons-material/Mode'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
 import { Alert, Box, Divider } from '@mui/joy'
@@ -87,6 +90,7 @@ function MainPage() {
     deleteProfile: false,
     resetDefault: false,
     editBranch: false,
+    tip: false,
   })
 
   const [alertInfo, setAlertInfo] = useState({
@@ -343,6 +347,7 @@ function MainPage() {
           handleClose={() => handleClose(DIALOG.RESET_DEFAULT)}
         />
       )}
+      {openDialogs.tip && <Tip open={openDialogs.tip} handleClose={() => handleClose(DIALOG.TIP)} />}
       <Sheet
         sx={{
           mx: 'auto',
@@ -359,66 +364,83 @@ function MainPage() {
       >
         {dialogValue?.profiles && (
           <>
-            <div>
-              <Typography level="h4" component="h1">
-                <b>Customization</b>
-              </Typography>
-
-              <Grid container spacing={2} sx={{ mt: 0.5 }}>
-                <Grid xs={3}>
-                  <ProfilesSelector
-                    dialogValue={dialogValue}
-                    data={dialogValue.profiles}
-                    setDialogValue={setDialogValue}
-                  />
-                </Grid>
-                <Grid xs={8}>
-                  <Stack spacing={1} direction="row">
-                    <Button
-                      aria-label="new"
-                      variant="solid"
-                      color="primary"
-                      size="md"
-                      onClick={() => handleOpen(DIALOG.NEW_PROFILE)}
-                    >
-                      <AddIcon />
-                    </Button>
-                    <Button
-                      aria-label="edit"
-                      variant="solid"
-                      color="primary"
-                      size="md"
-                      disabled={isProfileEnabled}
-                      onClick={() => handleOpen(DIALOG.EDIT_PROFILE)}
-                    >
-                      <ModeIcon />
-                    </Button>
-                    <Button
-                      aria-label="delete"
-                      variant="solid"
-                      color="primary"
-                      size="md"
-                      disabled={isProfileEnabled}
-                      onClick={() => handleOpen(DIALOG.DELETE_PROFILE)}
-                    >
-                      <DeleteForeverIcon />
-                    </Button>
-                    <Button
-                      aria-label="reset"
-                      variant="solid"
-                      color="primary"
-                      size="md"
-                      onClick={() => handleOpen(DIALOG.RESET_DEFAULT)}
-                    >
-                      <RestartAltIcon />
-                    </Button>
-                  </Stack>
-                </Grid>
-                <Grid xs={1} sx={{ float: 'right' }}>
+            <Typography level="h4" component="h1">
+              <b>Customization</b>
+            </Typography>
+            <Grid
+              container
+              direction="row"
+              justifyContent="space-between"
+              alignItems="flex-end"
+              spacing={2}
+              sx={{ mt: 0.5 }}
+            >
+              <Grid xs={3}>
+                <ProfilesSelector
+                  dialogValue={dialogValue}
+                  data={dialogValue.profiles}
+                  setDialogValue={setDialogValue}
+                />
+              </Grid>
+              <Grid xs={8}>
+                <Stack spacing={1} direction="row">
+                  <Button
+                    aria-label="new"
+                    variant="solid"
+                    color="primary"
+                    size="md"
+                    onClick={() => handleOpen(DIALOG.NEW_PROFILE)}
+                  >
+                    <AddIcon />
+                  </Button>
+                  <Button
+                    aria-label="edit"
+                    variant="solid"
+                    color="primary"
+                    size="md"
+                    disabled={isProfileEnabled}
+                    onClick={() => handleOpen(DIALOG.EDIT_PROFILE)}
+                  >
+                    <ModeIcon />
+                  </Button>
+                  <Button
+                    aria-label="delete"
+                    variant="solid"
+                    color="primary"
+                    size="md"
+                    disabled={isProfileEnabled}
+                    onClick={() => handleOpen(DIALOG.DELETE_PROFILE)}
+                  >
+                    <DeleteForeverIcon />
+                  </Button>
+                  <Button
+                    aria-label="reset"
+                    variant="solid"
+                    color="primary"
+                    size="md"
+                    onClick={() => handleOpen(DIALOG.RESET_DEFAULT)}
+                  >
+                    <RestartAltIcon />
+                  </Button>
+                </Stack>
+              </Grid>
+              <Grid xs={1}>
+                <Grid container direction="row" justifyContent="flex-end" alignItems="flex-start">
+                  <IconButton
+                    sx={{
+                      mr: 2,
+                      borderRadius: 8,
+                    }}
+                    variant="outlined"
+                    onClick={() => window.open(HOME_URL, '_blank')}
+                  >
+                    <FavoriteRoundedIcon sx={{ color: 'red' }} fontSize="small" />
+                  </IconButton>
                   <ModeToggle />
                 </Grid>
               </Grid>
-            </div>
+            </Grid>
+
             <MessageBox message="You can switch profile, create new or use default. Configs are stored to your browser storage. Please, press 'save' to apply the changes." />
             <Sheet>
               <Typography level="h2" fontSize="xl2" sx={{ mb: 2 }}>
@@ -589,21 +611,35 @@ function MainPage() {
           </>
         )}
 
-        <Stack sx={{ mt: 1 }} spacing={2}>
-          <Stack direction="row" justifyContent="flex-end" spacing={2}>
-            {alertInfo.visible && (
-              <Box sx={{ width: alertInfo.width }}>
-                <Alert variant="soft" color={alertInfo.type as any}>
-                  {alertInfo.msg}
-                </Alert>
-              </Box>
-            )}
-            <Button variant="outlined" onClick={() => close()}>
-              Close
-            </Button>
-            <Button onClick={() => save(dialogValue, setAlertInfo)}>Save</Button>
+        <Grid sx={{ mt: 1 }} container direction="row" justifyContent="space-between" alignItems="flex-end">
+          <IconButton
+            sx={{
+              borderRadius: 8,
+              ':hover': {
+                background: 'yellow',
+              },
+            }}
+            variant="outlined"
+            onClick={() => handleOpen(DIALOG.TIP)}
+          >
+            <EmojiObjectsTwoToneIcon color="primary" fontSize="small" />
+          </IconButton>
+          <Stack spacing={2}>
+            <Stack direction="row" justifyContent="flex-end" spacing={2}>
+              {alertInfo.visible && (
+                <Box sx={{ width: alertInfo.width }}>
+                  <Alert variant="soft" color={alertInfo.type as any}>
+                    {alertInfo.msg}
+                  </Alert>
+                </Box>
+              )}
+              <Button variant="outlined" onClick={() => close()}>
+                Close
+              </Button>
+              <Button onClick={() => save(dialogValue, setAlertInfo)}>Save</Button>
+            </Stack>
           </Stack>
-        </Stack>
+        </Grid>
       </Sheet>
     </>
   )
