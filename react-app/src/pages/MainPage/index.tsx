@@ -519,9 +519,10 @@ function MainPage() {
                           1-my-amazing-branch-name
                         </Box>
                       </Grid>
-                      <Grid xs={0.5}>
+                      <Grid xs={0.8}>
+                        <FormLabel>Edit issues</FormLabel>
                         <Button
-                          sx={{ mt: 3 }}
+                          sx={{ mt: 1 }}
                           aria-label="new"
                           variant="solid"
                           color="primary"
