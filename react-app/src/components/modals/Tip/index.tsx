@@ -17,7 +17,7 @@ function Tip({ open, handleClose }: TipProps) {
     <Modal open={open} onClose={handleClose}>
       <ModalDialog sx={{ width: '70vw', height: '70vh' }} variant="outlined" role="alertdialog" size="lg">
         <Typography id="basic-modal-dialog-title" component="h2" level="inherit">
-          Git Tips
+          PR Tips
         </Typography>
         <Card variant="soft" sx={{ p: 0, mt: 0.5, mb: 2 }}>
           <CardContent>

@@ -58,6 +58,10 @@ export function getTips() {
           Avoid long and unnecessary discussions that cause delays in the review process and also distract other team
           members.
         </li>
+        <li>
+          If you or someone detected additional issue and it would take more than 1 hour to solve it, then you can add TODO
+          to code as reference and create an issue where you would provide that TODO ref.
+        </li>
         <li>Review your own code before assigning other reviewers.</li>
       </ul>
     </Box>,
@@ -77,7 +81,7 @@ export function getTips() {
       </ul>
     </Box>,
     <Box sx={{ ml: 2, mt: 2 }} fontWeight="sm">
-      <Typography level="title-sm">Commit Linting [Node.js env]</Typography>
+      <Typography level="title-sm">Commit Linting [Node env]</Typography>
       <ul style={{ marginTop: 0 }}>
         <li>
           Commit messages can be linted using the{' '}
