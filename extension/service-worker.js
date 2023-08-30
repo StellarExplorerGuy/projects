@@ -330,7 +330,6 @@ Contributes:
 `;
     }
 
-    const DEFAULT_PROFILE = "default";
     const FASTER_PR_PROFILE_KEY = "FASTER_PR_KEY";
     const FASTER_PR_PROFILE = "FASTER_PR_PROFILE";
 
