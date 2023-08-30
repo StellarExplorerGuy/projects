@@ -412,11 +412,11 @@ Contributes:
           }
 
           const formattedCommit = profile.commit
-            .replace(/ISSUE_TYPE/gi, type)
-            .replace(/ISSUE/gi, issue)
-            .replace(/REPO_ORG/gi, repoDetails.user)
-            .replace(/REPO_NAME/gi, repoDetails.repo)
-            .replace(/SIGNATURE/gi, signature);
+            .replace(/ISSUE_TYPE/g, type)
+            .replace(/ISSUE/g, issue)
+            .replace(/REPO_ORG/g, repoDetails.user)
+            .replace(/REPO_NAME/g, repoDetails.repo)
+            .replace(/SIGNATURE/g, signature);
 
           return formattedCommit;
         }
@@ -440,11 +440,11 @@ Contributes:
           }
 
           const formattedPR = profile.pr
-            .replace(/ISSUE_TYPE/gi, type)
-            .replace(/ISSUE/gi, issue)
-            .replace(/REPO_ORG/gi, repoDetails.user)
-            .replace(/REPO_NAME/gi, repoDetails.repo)
-            .replace(/SIGNATURE/gi, signature);
+            .replace(/ISSUE_TYPE/g, type)
+            .replace(/ISSUE/g, issue)
+            .replace(/REPO_ORG/g, repoDetails.user)
+            .replace(/REPO_NAME/g, repoDetails.repo)
+            .replace(/SIGNATURE/g, signature);
 
           return formattedPR;
         }
