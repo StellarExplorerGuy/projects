@@ -258,7 +258,13 @@ function Content({
   const isProfileEnabled = dialogValue.profile === DEFAULT_PROFILE
 
   return (
-    <>
+    <Box
+      sx={{
+        overflow: 'scroll',
+        mx: 'calc(-1 * var(--ModalDialog-padding))',
+        px: 'var(--ModalDialog-padding)',
+      }}
+    >
       {openDialogs.newProfile && (
         <NewProfile
           open={openDialogs.newProfile}
@@ -542,7 +548,7 @@ function Content({
           </Sheet>
         </>
       )}
-    </>
+    </Box>
   )
 }
 
