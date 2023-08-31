@@ -329,7 +329,7 @@ Contributes:
 - [x] Link to relevant GitHub issue provided
 `;
     }
-
+    const ID = "content-23e32e23";
     const FASTER_PR_PROFILE_KEY = "FASTER_PR_KEY";
     const FASTER_PR_PROFILE = "FASTER_PR_PROFILE";
 
@@ -630,22 +630,15 @@ Contributes:
 
       const openPopupBtn = document.getElementById("options");
       openPopupBtn.addEventListener("click", () => {
-        const popupHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>Customization</title>
-          <script src="${chrome.runtime.getURL("content.js")}"></script>
-        </head>
-        <body></body>
-        </html>
-        `;
-
-        const popupWindow = window.open("", "Popup", "width=400,height=300");
-        popupWindow.document.open();
-        popupWindow.document.write(popupHtml);
-        popupWindow.document.close();
+        window.postMessage({ action: "changeState", newState: true }, "*");
       });
+      if (!document.getElementById(ID)) {
+        const popupHtml = `<html><head><title>Customization</title><script src="${chrome.runtime.getURL("content.js")}"></script></head><body></body></html>`;
+        const newDiv = document.createElement("div");
+        newDiv.id = ID;
+        newDiv.innerHTML = popupHtml;
+        document.body.appendChild(newDiv);
+      }
     }
   } catch (error) {
     console.log("[error]", error);

@@ -1,4 +1,4 @@
-import MainPage from 'pages/MainPage'
+import Content from 'pages/MainPage'
 import 'styles/globals.scss'
 
 import { CssVarsProvider } from '@mui/joy/styles'
@@ -7,7 +7,7 @@ function App() {
   return (
     <CssVarsProvider>
       <main>
-        <MainPage />
+        <Content />
       </main>
     </CssVarsProvider>
   )
