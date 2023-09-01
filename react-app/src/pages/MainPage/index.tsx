@@ -358,21 +358,6 @@ function Content({
                 </Button>
               </Stack>
             </Grid>
-            <Grid xs={1}>
-              <Grid container direction="row" justifyContent="flex-end" alignItems="flex-start">
-                <IconButton
-                  sx={{
-                    mr: 2,
-                    borderRadius: 8,
-                  }}
-                  variant="outlined"
-                  onClick={() => window.open(HOME_URL, '_blank')}
-                >
-                  <FavoriteRoundedIcon sx={{ color: 'red' }} fontSize="small" />
-                </IconButton>
-                <ModeToggle />
-              </Grid>
-            </Grid>
           </Grid>
           <Box sx={{ mt: 1, mb: 1 }}>
             <MessageBox message="You can switch profile, create new or use default. Configs are stored to your browser storage. Please, press 'save' to apply the changes." />
@@ -645,9 +630,36 @@ function Main(): JSX.Element {
       {open ? (
         <Modal open={open} onClose={() => setClose(false)}>
           <ModalDialog layout="fullscreen" variant="outlined" role="alertdialog">
-            <Typography id="basic-modal-dialog-title" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
-              Customization
-            </Typography>
+            <Grid
+              sx={{ mb: 0.5 }}
+              container
+              direction="row"
+              justifyContent="space-between"
+              alignItems="flex-end"
+              spacing={2}
+            >
+              <Grid xs={2}>
+                <Typography id="basic-modal-dialog-title" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
+                  Customization
+                </Typography>
+              </Grid>
+              <Grid xs={10}>
+                <Grid container direction="row" justifyContent="flex-end" alignItems="flex-start">
+                  <IconButton
+                    sx={{
+                      mr: 2,
+                      borderRadius: 8,
+                    }}
+                    variant="outlined"
+                    onClick={() => window.open(HOME_URL, '_blank')}
+                  >
+                    <FavoriteRoundedIcon sx={{ color: 'red' }} fontSize="small" />
+                  </IconButton>
+                  <ModeToggle />
+                </Grid>
+              </Grid>
+            </Grid>
+
             <Divider sx={{ height: 4, background: 'var(--joy-palette-primary-500)' }} />
             <Content
               openDialogs={openDialogs}
