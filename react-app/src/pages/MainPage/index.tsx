@@ -651,7 +651,7 @@ function Main(): JSX.Element {
             <Typography id="basic-modal-dialog-title" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
               Customization
             </Typography>
-            <Divider sx={{ height: 4, background: 'var(--joy-palette-primary-500)' }}  />
+            <Divider sx={{ height: 4, background: 'var(--joy-palette-primary-500)' }} />
             <Content
               openDialogs={openDialogs}
               dialogValue={dialogValue}

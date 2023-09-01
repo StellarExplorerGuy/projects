@@ -15,7 +15,7 @@ interface ResetProfileProps {
 
 function ResetProfile({ open, dialogValue, handleSubmit, handleClose }: ResetProfileProps) {
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open}>
       <ModalDialog variant="outlined" role="alertdialog" size="md">
         <Typography id="basic-modal-dialog-title" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
           Reset Profile
