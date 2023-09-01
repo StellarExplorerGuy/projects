@@ -48,7 +48,6 @@ const save = (
       visible: boolean
       msg: string
       type: string
-      width: number
     }>
   >,
 ): void => {
@@ -97,7 +96,6 @@ interface ContentProps {
       visible: boolean
       msg: string
       type: string
-      width: number
     }>
   >
   handleClose: (field: DIALOG) => void
@@ -619,7 +617,6 @@ function Main(): JSX.Element {
     visible: false,
     msg: '',
     type: 'success',
-    width: 200,
   })
   const handleClose = (field: DIALOG): void => {
     setOpenDialogs({ ...openDialogs, [field]: false })
@@ -674,13 +671,11 @@ function Main(): JSX.Element {
                 <EmojiObjectsTwoToneIcon color="primary" fontSize="small" />
               </IconButton>
               <Stack spacing={2}>
-                <Stack direction="row" justifyContent="flex-end" spacing={2}>
+                <Stack direction="row" justifyContent="flex-end" spacing={2} height={{ height: 42 }}>
                   {alertInfo.visible && (
-                    <Box sx={{ width: alertInfo.width }}>
-                      <Alert variant="soft" color={alertInfo.type as any}>
-                        {alertInfo.msg}
-                      </Alert>
-                    </Box>
+                    <Alert variant="soft" color={alertInfo.type as any} sx={{ width: 'fit-content' }}>
+                      {alertInfo.msg}
+                    </Alert>
                   )}
                   <Button variant="outlined" onClick={() => setClose(false)}>
                     Close

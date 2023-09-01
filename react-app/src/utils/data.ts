@@ -118,17 +118,15 @@ export const showAlertInfo = (
       visible: boolean
       msg: string
       type: string
-      width: number
     }>
   >,
 ) => {
-  setAlertInfo({...data, width: data.msg.length >= 70 ? 400 : 100,})
+  setAlertInfo(data)
   setTimeout(() => {
     setAlertInfo({
       visible: false,
       msg: '',
       type: 'success',
-      width: 0,
     })
   }, 5000)
 }
