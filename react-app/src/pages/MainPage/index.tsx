@@ -316,7 +316,7 @@ function Content({
             <Grid xs={3}>
               <ProfilesSelector dialogValue={dialogValue} data={dialogValue.profiles} setDialogValue={setDialogValue} />
             </Grid>
-            <Grid xs={8}>
+            <Grid xs={9}>
               <Stack spacing={1} direction="row">
                 <Button
                   aria-label="new"
