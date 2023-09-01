@@ -137,3 +137,9 @@ export const updateLocalStorage = (key: string, data: any): void => {
     localStorage.setItem(key, JSON.stringify({ ...localData, ...data }))
   } catch (error) {}
 }
+
+export const updateKey = (key: string, data: string): void => {
+  try {
+    localStorage.setItem(key, JSON.stringify(data))
+  } catch (error) {}
+}

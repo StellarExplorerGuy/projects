@@ -5,6 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Chip from '@mui/joy/Chip'
 import Option from '@mui/joy/Option'
 import Select from '@mui/joy/Select'
+import { updateKey } from 'utils/data'
 
 interface ProfilesSelectorProps {
   dialogValue: ItemType
@@ -13,7 +14,7 @@ interface ProfilesSelectorProps {
 }
 function ProfilesSelector({ dialogValue, data, setDialogValue }: ProfilesSelectorProps) {
   const handleSubmit = ({ profile }: { profile: string }) => {
-    window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(profile))
+    updateKey(FASTER_PR_PROFILE_KEY, profile)
 
     let localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
     const allProfiles = JSON.parse(localProfile)

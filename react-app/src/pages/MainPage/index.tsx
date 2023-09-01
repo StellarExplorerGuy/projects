@@ -14,7 +14,7 @@ import ResetProfile from 'components/modals/ResetProfile'
 import Tip from 'components/modals/Tip'
 import { DIALOG, ItemType } from 'types'
 import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, HOME_URL } from 'utils/constants'
-import { defaultProfile, showAlertInfo, updateLocalStorage } from 'utils/data'
+import { defaultProfile, showAlertInfo, updateKey, updateLocalStorage } from 'utils/data'
 
 import { useEffect, useState } from 'react'
 
@@ -115,7 +115,7 @@ function Content({
     const allProfiles = JSON.parse(localStorage.getItem(FASTER_PR_PROFILE)!) || {}
     const updatedProfiles = [...dialogValue.profiles, input]
 
-    updateLocalStorage(FASTER_PR_PROFILE_KEY, input)
+    updateKey(FASTER_PR_PROFILE_KEY, input)
     updateLocalStorage(FASTER_PR_PROFILE, {
       ...allProfiles,
       profiles: updatedProfiles,
@@ -136,7 +136,7 @@ function Content({
 
     delete allProfiles[dialogValue.profile]
 
-    updateLocalStorage(FASTER_PR_PROFILE_KEY, input)
+    updateKey(FASTER_PR_PROFILE_KEY, input)
     updateLocalStorage(FASTER_PR_PROFILE, {
       ...allProfiles,
       profiles: [...dialogValue.profiles],
@@ -201,7 +201,7 @@ function Content({
     dialogValue.profiles.splice(index, 1)
     delete allProfiles[dialogValue.profile]
 
-    updateLocalStorage(FASTER_PR_PROFILE_KEY, DEFAULT_PROFILE)
+    updateKey(FASTER_PR_PROFILE_KEY, DEFAULT_PROFILE)
     updateLocalStorage(FASTER_PR_PROFILE, {
       ...allProfiles,
       profiles: dialogValue.profiles,
