@@ -465,6 +465,7 @@ Contributes:
     }
 
     function getBranchName(text) {
+      const DOT_KEY = 'dwedtw'
       const trimmedText = text.trim();
 
       // Extracting the number from the text using regex
@@ -475,11 +476,17 @@ Contributes:
       // Removing the number and the # from the text
       const textWithoutNumber = trimmedText.replace(regex, "");
 
+      // Replace dots (.) between numbers with dashes (-)
+      const textWithDashes = textWithoutNumber.replace(
+        /(\d)\.(\d)/g,
+        `$1${DOT_KEY}$2`
+      );
+
       // Converting the remaining text to the desired format
       const formattedText =
         number +
         "-" +
-        textWithoutNumber
+        textWithDashes
           .replace(/\s+/g, "-") // Replacing spaces with dashes
           .replace(/[^\w-]/g, "") // Removing non-alphanumeric characters except dashes
           .toLowerCase(); // Converting to lowercase
@@ -487,7 +494,8 @@ Contributes:
       // Removing the trailing dash from the formatted text
       const finalFormattedText = formattedText
         .replace(/-+$/, "")
-        .replace(/-+/g, "-");
+        .replace(/-+/g, "-")
+        .replace(DOT_KEY, ".");
 
       return finalFormattedText;
     }
@@ -633,7 +641,9 @@ Contributes:
         window.postMessage({ action: "changeState", newState: true }, "*");
       });
       if (!document.getElementById(ID)) {
-        const popupHtml = `<html><head><title>Customization</title><script src="${chrome.runtime.getURL("content.js")}"></script></head><body></body></html>`;
+        const popupHtml = `<html><head><title>Customization</title><script src="${chrome.runtime.getURL(
+          "content.js"
+        )}"></script></head><body></body></html>`;
         const newDiv = document.createElement("div");
         newDiv.id = ID;
         newDiv.innerHTML = popupHtml;
