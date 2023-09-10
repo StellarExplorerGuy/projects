@@ -59,8 +59,9 @@ export function getTips() {
           members.
         </li>
         <li>
-          If you or someone detected additional issue and it would take more than 1 hour to solve it, then you can add TODO
-          to code as reference and create an issue where you would provide that TODO ref.
+          If you or someone else identifies an additional issue that requires more than 1 hour to resolve, you can
+          insert a TODO comment in the code as a reference and create an associated issue where you will provide details
+          regarding this TODO reference.
         </li>
         <li>Review your own code before assigning other reviewers.</li>
       </ul>
@@ -101,6 +102,11 @@ export function getTips() {
           can be used for pre-commit linting of commit messages and code.
         </li>
       </ul>
+      Detailed setup can be found{' '}
+      <Link target="_blank" href="https://typicode.github.io/husky/getting-started.html">
+        here
+      </Link>
+      .
     </Box>,
   ]
 }
