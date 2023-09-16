@@ -3,7 +3,7 @@
   "action": {},
   "manifest_version": 3,
   "version": "1.0",
-  "description": "Customize and copy branch name / commit / PR desc",
+  "description": "Personalize and copy a branch name, commit message, or pull request description.",
   "permissions": [
     "activeTab",
     "tabs",
