@@ -84,12 +84,10 @@ const save = (
     },
     setAlertInfo,
   )
-  // window.location.reload();
-  try {
-    chrome.runtime.sendMessage({ action: 'showNotification' })
-  } catch (error) {
-    console.log('!![TEST]err', error)
-  }
+
+  setTimeout(() => {
+    window.location.reload();
+  }, 2000);
 }
 
 interface ContentProps {
