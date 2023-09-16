@@ -26,7 +26,7 @@ import EmojiObjectsTwoToneIcon from '@mui/icons-material/EmojiObjectsTwoTone'
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded'
 import ModeIcon from '@mui/icons-material/Mode'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
-import { Alert, Box, Divider, Modal, ModalDialog } from '@mui/joy'
+import { Alert, Box, Divider, Modal, ModalDialog, Tooltip } from '@mui/joy'
 import Button from '@mui/joy/Button'
 import CssBaseline from '@mui/joy/CssBaseline'
 import FormControl from '@mui/joy/FormControl'
@@ -40,6 +40,12 @@ import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as Accordion from '@radix-ui/react-accordion'
+
+declare namespace chrome {
+  namespace runtime {
+    function sendMessage(message: any, responseCallback?: (response: any) => void): void
+  }
+}
 
 const save = (
   dialogValue: ItemType,
@@ -78,7 +84,12 @@ const save = (
     },
     setAlertInfo,
   )
-  window.location.reload();
+  // window.location.reload();
+  try {
+    chrome.runtime.sendMessage({ action: 'showNotification' })
+  } catch (error) {
+    console.log('!![TEST]err', error)
+  }
 }
 
 interface ContentProps {
@@ -319,44 +330,52 @@ function Content({
             </Grid>
             <Grid xs={9}>
               <Stack spacing={1} direction="row">
-                <Button
-                  aria-label="new"
-                  variant="solid"
-                  color="primary"
-                  size="md"
-                  onClick={() => handleOpen(DIALOG.NEW_PROFILE)}
-                >
-                  <AddIcon />
-                </Button>
-                <Button
-                  aria-label="edit"
-                  variant="solid"
-                  color="primary"
-                  size="md"
-                  disabled={isProfileEnabled}
-                  onClick={() => handleOpen(DIALOG.EDIT_PROFILE)}
-                >
-                  <ModeIcon />
-                </Button>
-                <Button
-                  aria-label="delete"
-                  variant="solid"
-                  color="primary"
-                  size="md"
-                  disabled={isProfileEnabled}
-                  onClick={() => handleOpen(DIALOG.DELETE_PROFILE)}
-                >
-                  <DeleteForeverIcon />
-                </Button>
-                <Button
-                  aria-label="reset"
-                  variant="solid"
-                  color="primary"
-                  size="md"
-                  onClick={() => handleOpen(DIALOG.RESET_DEFAULT)}
-                >
-                  <RestartAltIcon />
-                </Button>
+                <Tooltip arrow title="Add new profile" variant="solid" placement="top" color="neutral" size="lg">
+                  <Button
+                    aria-label="new"
+                    variant="solid"
+                    color="primary"
+                    size="md"
+                    onClick={() => handleOpen(DIALOG.NEW_PROFILE)}
+                  >
+                    <AddIcon />
+                  </Button>
+                </Tooltip>
+                <Tooltip arrow title="Edit a profile" variant="solid" placement="top" color="neutral" size="lg">
+                  <Button
+                    aria-label="edit"
+                    variant="solid"
+                    color="primary"
+                    size="md"
+                    disabled={isProfileEnabled}
+                    onClick={() => handleOpen(DIALOG.EDIT_PROFILE)}
+                  >
+                    <ModeIcon />
+                  </Button>
+                </Tooltip>
+                <Tooltip arrow title="The deletion of profile" variant="solid" placement="top" color="neutral" size="lg">
+                  <Button
+                    aria-label="delete"
+                    variant="solid"
+                    color="primary"
+                    size="md"
+                    disabled={isProfileEnabled}
+                    onClick={() => handleOpen(DIALOG.DELETE_PROFILE)}
+                  >
+                    <DeleteForeverIcon />
+                  </Button>
+                </Tooltip>
+                <Tooltip arrow title="Restore a profile to its default settings" variant="solid" placement="top" color="neutral" size="lg">
+                  <Button
+                    aria-label="reset"
+                    variant="solid"
+                    color="primary"
+                    size="md"
+                    onClick={() => handleOpen(DIALOG.RESET_DEFAULT)}
+                  >
+                    <RestartAltIcon />
+                  </Button>
+                </Tooltip>
               </Stack>
             </Grid>
           </Grid>
@@ -537,7 +556,7 @@ function Content({
 }
 
 function Main(): JSX.Element {
-  const [open, setClose] = useState(false)
+  const [open, setClose] = useState(true)
   const [dialogValue, setDialogValue] = useState<ItemType>(() => {
     const localKey = localStorage.getItem(FASTER_PR_PROFILE_KEY)
     const profileKey = localKey === null ? DEFAULT_PROFILE : JSON.parse(localKey)
