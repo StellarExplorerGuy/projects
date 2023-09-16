@@ -198,7 +198,7 @@ const STYLES = `
 
   .options:hover {
       cursor: pointer;
-      background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
+      transform: scale(2, 0.5);
   }
 
   .options:active {
