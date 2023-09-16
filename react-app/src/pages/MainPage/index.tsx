@@ -536,7 +536,7 @@ function Content({
 }
 
 function Main(): JSX.Element {
-  const [open, setClose] = useState(true)
+  const [open, setClose] = useState(false)
   const [dialogValue, setDialogValue] = useState<ItemType>(() => {
     const localKey = localStorage.getItem(FASTER_PR_PROFILE_KEY)
     const profileKey = localKey === null ? DEFAULT_PROFILE : JSON.parse(localKey)
@@ -691,6 +691,9 @@ function Main(): JSX.Element {
                   )}
                   <Button variant="outlined" onClick={() => setClose(false)}>
                     Close
+                    <Typography sx={{ pl: 1 }} color="neutral">
+                      [esc]
+                    </Typography>
                   </Button>
                   <Button onClick={() => save(dialogValue, setAlertInfo)}>Save</Button>
                 </Stack>
