@@ -78,6 +78,7 @@ const save = (
     },
     setAlertInfo,
   )
+  window.location.reload();
 }
 
 interface ContentProps {

@@ -1,32 +1,12 @@
 // service-worker.js
 //https://nrogap.medium.com/how-to-write-a-chrome-extension-b81218954c7c
 // TODO minified?
+// TODO test https://nextjs.org/docs/pages/building-your-application/configuring/content-security-policy
 
 const ICON = `<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg height="512px" id="Layer_1" style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M424.5,216.5h-15.2c-12.4,0-22.8-10.7-22.8-23.4c0-6.4,2.7-12.2,7.5-16.5l9.8-9.6c9.7-9.6,9.7-25.3,0-34.9l-22.3-22.1  c-4.4-4.4-10.9-7-17.5-7c-6.6,0-13,2.6-17.5,7l-9.4,9.4c-4.5,5-10.5,7.7-17,7.7c-12.8,0-23.5-10.4-23.5-22.7V89.1  c0-13.5-10.9-25.1-24.5-25.1h-30.4c-13.6,0-24.4,11.5-24.4,25.1v15.2c0,12.3-10.7,22.7-23.5,22.7c-6.4,0-12.3-2.7-16.6-7.4l-9.7-9.6  c-4.4-4.5-10.9-7-17.5-7s-13,2.6-17.5,7L110,132c-9.6,9.6-9.6,25.3,0,34.8l9.4,9.4c5,4.5,7.8,10.5,7.8,16.9  c0,12.8-10.4,23.4-22.8,23.4H89.2c-13.7,0-25.2,10.7-25.2,24.3V256v15.2c0,13.5,11.5,24.3,25.2,24.3h15.2  c12.4,0,22.8,10.7,22.8,23.4c0,6.4-2.8,12.4-7.8,16.9l-9.4,9.3c-9.6,9.6-9.6,25.3,0,34.8l22.3,22.2c4.4,4.5,10.9,7,17.5,7  c6.6,0,13-2.6,17.5-7l9.7-9.6c4.2-4.7,10.2-7.4,16.6-7.4c12.8,0,23.5,10.4,23.5,22.7v15.2c0,13.5,10.8,25.1,24.5,25.1h30.4  c13.6,0,24.4-11.5,24.4-25.1v-15.2c0-12.3,10.7-22.7,23.5-22.7c6.4,0,12.4,2.8,17,7.7l9.4,9.4c4.5,4.4,10.9,7,17.5,7  c6.6,0,13-2.6,17.5-7l22.3-22.2c9.6-9.6,9.6-25.3,0-34.9l-9.8-9.6c-4.8-4.3-7.5-10.2-7.5-16.5c0-12.8,10.4-23.4,22.8-23.4h15.2  c13.6,0,23.3-10.7,23.3-24.3V256v-15.2C447.8,227.2,438.1,216.5,424.5,216.5z M336.8,256L336.8,256c0,44.1-35.7,80-80,80  c-44.3,0-80-35.9-80-80l0,0l0,0c0-44.1,35.7-80,80-80C301.1,176,336.8,211.9,336.8,256L336.8,256z"/></svg>`;
 const STYLES = `
 <head>
 <style>
-.modal {
-display: none;
-position: fixed;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-background-color: white;
-padding: 20px;
-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-}
-.overlay {
-display: none;
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-color: rgba(0, 0, 0, 0.5);
-}
-
-/* */ 
   .main-content {
     background-color: var(--color-canvas-default);
     border: 1px solid var(--color-border-default);
@@ -61,7 +41,6 @@ background-color: rgba(0, 0, 0, 0.5);
       --slice-3: inset(10% -6px 85% 0);
       --slice-4: inset(40% -6px 43% 0);
       --slice-5: inset(80% -6px 5% 0);
-
       content: 'ALTERNATE TEXT';
       display: block;
       position: absolute;
@@ -197,17 +176,23 @@ background-color: rgba(0, 0, 0, 0.5);
   }
 
   /* options */
+  .options_wrapper {
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    float: right;
+    height: 39px;
+    background: #05abe0;
+    background-position: center;
+    transition: background 0.8s;
+    display: inline-block;
+  }
   .options {
-      float: right;
-      padding: 2px 20px;
-      background: #05abe0;
-      border-top-right-radius: 50px;
-      border-bottom-right-radius: 50px;
-      background-position: center;
-      transition: background 0.8s;
+    position: relative;
+    top: 7px;
+    right: 3px;
   }
   .options svg {
-    height: 31px;
+    height: 25px;
     width: 31px;
   }
 
@@ -258,6 +243,44 @@ background-color: rgba(0, 0, 0, 0.5);
 
   .popup-text {
     font-size: 16px;
+  }
+
+  /* Styling for the dropdown container */
+  .dropdown_x {
+    position: relative;
+  }
+  .dropdown-button_x {
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+      cursor: pointer;
+      min-width: 120px;
+      max-width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+  }
+  .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 100px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+  }
+  .dropdown-item {
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      color: #333;
+      text-align: center;
+      cursor: pointer;
+  }
+  .dropdown-item:hover {
+      background-color: #ddd;
   }
 </style>
 </head>
@@ -342,6 +365,11 @@ Contributes:
         return {};
       }
     }
+    function setLocalStorage(key, data) {
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+      } catch (error) {}
+    }
 
     const DEFAULT_BRANCH_PREFIXES = [
       "feat",
@@ -377,6 +405,28 @@ Contributes:
       } catch (error) {
         return getBranchPrefixes(DEFAULT_BRANCH_PREFIXES);
       }
+    }
+
+    function getProfileData() {
+      try {
+        const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
+        const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
+
+        if (allProfiles.profiles) {
+          return { selected: profileKey, list: allProfiles.profiles };
+        }
+        return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] };
+      } catch (error) {
+        return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] };
+      }
+    }
+
+    function processProfiles(list) {
+      let data = "";
+      list.forEach(
+        (item) => (data += `<div class="dropdown-item">${item}</div>`)
+      );
+      return data;
     }
 
     function processBranchName(prefix, suffix) {
@@ -465,7 +515,7 @@ Contributes:
     }
 
     function getBranchName(text) {
-      const DOT_KEY = 'dwedtw'
+      const DOT_KEY = "dwedtw";
       const trimmedText = text.trim();
 
       // Extracting the number from the text using regex
@@ -561,85 +611,165 @@ Contributes:
       );
       const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)[0];
 
-      const newElement = document.createElement("span");
-      newElement.innerHTML = `
-  ${STYLES}
-    <div id="fast-pr">
-      <div class="main-content">
-        <div>
-            <b>Copy:</b>
-            <button id="button1" class="button" role="button">Branch</button>
-            <button id="button2" class="button" role="button">Commit</button>
-            <button id="button3" class="button" role="button">PR desc</button>
-        </div>
-        <nav class="tabs">
-            <div class="selector"></div>
-            ${getPrefixesTabs()}
-            <span id="options" class="options">${ICON}</span>
-        </nav>
-      </div>
-    </div>
-  `;
-      headerElement[0].appendChild(newElement);
+      //common dropdown listener
+      window.addEventListener("click", function (event) {
+        if (!event.target.matches(".dropdown-button_x")) {
+          if (dropdownContent.style.display === "block") {
+            dropdownContent.style.display = "none";
+          }
+        }
+      });
+      //
+      function initDropdown() {
+        const toggleDropdown = document.getElementById("toggleDropdown");
+        const dropdownContent = document.getElementById("dropdownContent");
+        const dropdownItems = document.querySelectorAll(".dropdown-item");
 
-      // Attach event listeners using event delegation
-      const button1 = document.getElementById("button1");
-      const button2 = document.getElementById("button2");
-      const button3 = document.getElementById("button3");
-      const avatarInfo = document.querySelector(
-        "div#issuecomment-new .d-inline-block > img"
-      );
-      const regex = /alt="@([^"]+)">/;
-      const match = avatarInfo.outerHTML.match(regex);
+        toggleDropdown.addEventListener("click", function () {
+          if (dropdownContent.style.display === "block") {
+            dropdownContent.style.display = "none";
+          } else {
+            dropdownContent.style.display = "block";
+          }
+        });
 
-      let user = DEFAULT_USER;
-      if (match) {
-        const username = match[1];
-        user = username;
+        dropdownItems.forEach(function (item) {
+          item.addEventListener("click", function () {
+            setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
+            const pluginBody = document.getElementById("fast-pr");
+            pluginBody.remove();
+            init();
+          });
+        });
+      }
+      function init(initDropdownRef) {
+        const profilesData = getProfileData();
+        const newElement = document.createElement("span");
+        const plugin = `
+        ${STYLES}
+          <div id="fast-pr">
+            <div class="main-content">
+              <div>
+                  <b>Copy:</b>
+                  <button id="button1" class="button" role="button">Branch</button>
+                  <button id="button2" class="button" role="button">Commit</button>
+                  <button id="button3" class="button" role="button">PR desc</button>
+              </div>
+              <nav class="tabs">
+                  <div class="selector"></div>
+                  ${getPrefixesTabs()}
+                  <span class="options_wrapper">
+                  <span class="dropdown_x">
+                  <button class="dropdown-button_x" id="toggleDropdown">${
+                    profilesData.selected
+                  }</button>
+                  <span class="dropdown-content" id="dropdownContent">
+                    ${processProfiles(profilesData.list)}
+                  </span>
+                  </span>
+                   <span id="options" class="options">${ICON}</span>
+                  </span>
+              </nav>
+            </div>
+          </div>
+        `;
+        newElement.innerHTML = plugin;
+        headerElement[0].appendChild(newElement);
+
+        const button1 = document.getElementById("button1");
+        const button2 = document.getElementById("button2");
+        const button3 = document.getElementById("button3");
+
+        const avatarInfo = document.querySelector(
+          "div#issuecomment-new .d-inline-block > img"
+        );
+        const regex = /alt="@([^"]+)">/;
+        const match = avatarInfo.outerHTML.match(regex);
+
+        let user = DEFAULT_USER;
+        if (match) {
+          const username = match[1];
+          user = username;
+        }
+
+        const tabs = document.querySelector(".tabs");
+        const activeItem = tabs.querySelector(".active");
+        const activeWidth = activeItem.offsetWidth;
+        document.querySelector(".selector").style.left =
+          activeItem.offsetLeft + "px";
+        document.querySelector(".selector").style.width = activeWidth + "px";
+
+        button1.addEventListener("click", () => {
+          const activeItem = tabs.querySelector(".active");
+          copyTextToClipboard(
+            processBranchName(activeItem.textContent, formattedHeader)
+          );
+        });
+        button2.addEventListener("click", () => {
+          const activeItem = tabs.querySelector(".active");
+          copyTextToClipboard(
+            processCommit(
+              activeItem.textContent,
+              issueNumber,
+              getRepoDetails(),
+              user
+            )
+          );
+        });
+        button3.addEventListener("click", () => {
+          const activeItem = tabs.querySelector(".active");
+          copyTextToClipboard(
+            processPR(
+              activeItem.textContent,
+              issueNumber,
+              getRepoDetails(),
+              user
+            )
+          );
+        });
+
+        tabs.addEventListener("click", onTabClick);
+
+        const buttons = document.querySelectorAll(".button");
+        buttons.forEach((button) =>
+          button.addEventListener("click", onButtonClick)
+        );
+
+        const openPopupBtn = document.getElementById("options");
+        openPopupBtn.addEventListener("click", () => {
+          window.postMessage({ action: "changeState", newState: true }, "*");
+        });
+
+        // <dropdown
+        if (!initDropdownRef) {
+          const toggleDropdown = document.getElementById("toggleDropdown");
+          const dropdownContent = document.getElementById("dropdownContent");
+          const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+          toggleDropdown.addEventListener("click", function () {
+            if (dropdownContent.style.display === "block") {
+              dropdownContent.style.display = "none";
+            } else {
+              dropdownContent.style.display = "block";
+            }
+          });
+
+          dropdownItems.forEach(function (item) {
+            item.addEventListener("click", function () {
+              setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
+              const pluginBody = document.getElementById("fast-pr");
+              pluginBody.remove();
+              init();
+            });
+          });
+        } else {
+          initDropdownRef();
+        }
+        // dropdown>
       }
 
-      const tabs = document.querySelector(".tabs");
-      const activeItem = tabs.querySelector(".active");
-      const activeWidth = activeItem.offsetWidth;
-      document.querySelector(".selector").style.left =
-        activeItem.offsetLeft + "px";
-      document.querySelector(".selector").style.width = activeWidth + "px";
+      init(initDropdown);
 
-      button1.addEventListener("click", () => {
-        const activeItem = tabs.querySelector(".active");
-        copyTextToClipboard(
-          processBranchName(activeItem.textContent, formattedHeader)
-        );
-      });
-      button2.addEventListener("click", () => {
-        const activeItem = tabs.querySelector(".active");
-        copyTextToClipboard(
-          processCommit(
-            activeItem.textContent,
-            issueNumber,
-            getRepoDetails(),
-            user
-          )
-        );
-      });
-      button3.addEventListener("click", () => {
-        const activeItem = tabs.querySelector(".active");
-        copyTextToClipboard(
-          processPR(activeItem.textContent, issueNumber, getRepoDetails(), user)
-        );
-      });
-
-      tabs.addEventListener("click", onTabClick);
-
-      const buttons = document.querySelectorAll(".button");
-      buttons.forEach((button) =>
-        button.addEventListener("click", onButtonClick)
-      );
-
-      const openPopupBtn = document.getElementById("options");
-      openPopupBtn.addEventListener("click", () => {
-        window.postMessage({ action: "changeState", newState: true }, "*");
-      });
       if (!document.getElementById(ID)) {
         const popupHtml = `<html><head><title>Customization</title><script src="${chrome.runtime.getURL(
           "content.js"
