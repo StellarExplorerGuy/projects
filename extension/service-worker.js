@@ -142,12 +142,16 @@ const STYLES = `
 
   .tabs a {
       text-decoration: none;
-      color: #777;
+      color: #14a2e7;
       padding: 10px 20px;
       display: inline-block;
       position: relative;
       z-index: 1;
       transition-duration: 0.6s;
+  }
+
+  .tabs a:hover {
+    color: #777;
   }
 
   .tabs a.active {
@@ -185,11 +189,17 @@ const STYLES = `
     background-position: center;
     transition: background 0.8s;
     display: inline-block;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
   }
+
   .options {
     position: relative;
     top: 7px;
     right: 3px;
+  }
+  .options:hover {
+    fill: #fff;
   }
   .options svg {
     height: 25px;
@@ -197,52 +207,7 @@ const STYLES = `
   }
 
   .options:hover {
-      cursor: pointer;
-      transform: scale(2, 0.5);
-  }
-
-  .options:active {
-      background-color: #6eb9f7;
-      background-size: 100%;
-      transition: background 0s;
-  }
-
-  /* popupContainer */
-  #popupContainer {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 999;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  #popupContent {
-    width: 800px;
-    height: 500px;
-    padding: 12px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  }
-  
-  #closePopup, #savePopup {
-    margin-top: 10px;
-    padding: 8px 14px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 12px;
     cursor: pointer;
-    font-size: 16px;
-  }
-
-  .popup-text {
-    font-size: 16px;
   }
 
   /* Styling for the dropdown container */
@@ -250,11 +215,10 @@ const STYLES = `
     position: relative;
   }
   .dropdown-button_x {
-      background-color: #3498db;
+      background-color: #14a2e7;
       color: #fff;
       padding: 10px 20px;
       border: none;
-      border-radius: 5px;
       outline: none;
       cursor: pointer;
       min-width: 120px;
@@ -263,11 +227,16 @@ const STYLES = `
       overflow: hidden;
       text-overflow: ellipsis;
   }
+  .dropdown-button_x:hover {
+    background-color: #e0e0e0;
+    color: #333;
+  }
   .dropdown-content {
       display: none;
       position: absolute;
       background-color: #f9f9f9;
-      min-width: 100px;
+      min-width: 120px;
+      max-width: 120px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       z-index: 1;
   }
