@@ -113,6 +113,8 @@ export const Item = React.memo(
               '--scale-y': transform?.scaleY ? `${transform.scaleY}` : undefined,
               '--index': index,
               '--color': color,
+              marginTop: 10,
+              marginBottom: 10,
             } as React.CSSProperties
           }
           ref={ref}

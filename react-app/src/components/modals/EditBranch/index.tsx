@@ -77,7 +77,7 @@ function EditBranch({ open, handleClose, items, handleSave }: EditBranchProps) {
           Edit branch details
         </Typography>
         <Typography id="basic-modal-dialog-description" mt={0.5} mb={2} textColor="text.tertiary">
-          You have the ability to generate and arrange prefixes for branches, which correspond to different types of
+          You can generate and arrange prefixes for branches, which correspond to different types of
           issues.
           <CustomSeparatorButtonGroup items={data} setItems={setItemsData} />
         </Typography>
@@ -85,7 +85,7 @@ function EditBranch({ open, handleClose, items, handleSave }: EditBranchProps) {
           <Grid xs={12}>
             <AddInput items={data} setItems={setItemsData} />
           </Grid>
-          <Grid xs={12}>
+          <Grid sx={{mb: 5}} xs={12}>
             <RemovableItems items={data} setItems={setItemsData} />
           </Grid>
         </Grid>
