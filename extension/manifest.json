@@ -3,6 +3,11 @@
   "action": {},
   "manifest_version": 3,
   "version": "1.0",
+  "icons": {
+    "16": "icons/pr.png",
+    "48": "icons/pr.png",
+    "128": "icons/pr.png"
+  },
   "description": "Personalize and copy a branch name, commit message, or pull request description.",
   "permissions": [
     "activeTab",
