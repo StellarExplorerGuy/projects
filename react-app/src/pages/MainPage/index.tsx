@@ -86,8 +86,8 @@ const save = (
   )
 
   setTimeout(() => {
-    window.location.reload();
-  }, 2000);
+    window.location.reload()
+  }, 2000)
 }
 
 interface ContentProps {
@@ -351,7 +351,14 @@ function Content({
                     <ModeIcon />
                   </Button>
                 </Tooltip>
-                <Tooltip arrow title="The deletion of profile" variant="solid" placement="top" color="neutral" size="lg">
+                <Tooltip
+                  arrow
+                  title="The deletion of profile"
+                  variant="solid"
+                  placement="top"
+                  color="neutral"
+                  size="lg"
+                >
                   <Button
                     aria-label="delete"
                     variant="solid"
@@ -363,7 +370,14 @@ function Content({
                     <DeleteForeverIcon />
                   </Button>
                 </Tooltip>
-                <Tooltip arrow title="Restore a profile to its default settings" variant="solid" placement="top" color="neutral" size="lg">
+                <Tooltip
+                  arrow
+                  title="Restore a profile to its default settings"
+                  variant="solid"
+                  placement="top"
+                  color="neutral"
+                  size="lg"
+                >
                   <Button
                     aria-label="reset"
                     variant="solid"
@@ -646,7 +660,7 @@ function Main(): JSX.Element {
     <>
       <CssBaseline />
       {open ? (
-        <Modal  open={open} onClose={() => setClose(false)}>
+        <Modal open={open} onClose={() => setClose(false)}>
           <ModalDialog layout="fullscreen" variant="plain" role="alertdialog">
             <Grid
               sx={{ mb: 0.5 }}
