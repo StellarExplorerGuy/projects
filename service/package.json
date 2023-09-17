@@ -1,0 +1,16 @@
+{
+  "name": "service",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "vite build && npm run clear",
+    "clear": "cd ../extension && rm service-worker2.js"
+  },
+  "devDependencies": {
+    "vite": "4.4.9"
+  },
+  "engines": {
+    "node": "18.x",
+    "npm": "8.x"
+  }
+}
