@@ -103,7 +103,7 @@ export function getTips() {
         </li>
       </ul>
       Detailed setup can be found{' '}
-      <Link target="_blank" href="https://typicode.github.io/husky/getting-started.html">
+      <Link target="_blank" href="https://github.com/StellarExplorerGuy/projects/blob/main/docs/commit/commit.md">
         here
       </Link>
       .

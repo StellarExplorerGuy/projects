@@ -41,12 +41,6 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as Accordion from '@radix-ui/react-accordion'
 
-declare namespace chrome {
-  namespace runtime {
-    function sendMessage(message: any, responseCallback?: (response: any) => void): void
-  }
-}
-
 const save = (
   dialogValue: ItemType,
   setAlertInfo: React.Dispatch<
