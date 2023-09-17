@@ -646,8 +646,8 @@ function Main(): JSX.Element {
     <>
       <CssBaseline />
       {open ? (
-        <Modal open={open} onClose={() => setClose(false)}>
-          <ModalDialog layout="fullscreen" variant="outlined" role="alertdialog">
+        <Modal  open={open} onClose={() => setClose(false)}>
+          <ModalDialog layout="fullscreen" variant="plain" role="alertdialog">
             <Grid
               sx={{ mb: 0.5 }}
               container
