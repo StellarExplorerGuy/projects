@@ -8,7 +8,7 @@
     "48": "icons/pr.png",
     "128": "icons/pr.png"
   },
-  "description": "Personalize and copy a branch name, commit message, or pull request description.",
+  "description": "Personalize and copy a branch name, commit message, or pull request description (GitHub only).",
   "permissions": [
     "activeTab",
     "tabs",
