@@ -12,14 +12,14 @@ export const TIP_HEADERS = [
 
 export function getTips() {
   return [
-    <Box sx={{ ml: 2, mt: 2 }} fontWeight="sm">
+    <Box sx={{ ml: 4 }} fontWeight="sm">
       <ul style={{ marginTop: 0 }}>
         <li>A good pull request tends to be reviewed quickly.</li>
         <li>It reduces bug introduction into codebase.</li>
         <li>It does not block other developers.</li>
       </ul>
     </Box>,
-    <Box sx={{ ml: 2, mt: 2 }} fontWeight="sm">
+    <Box sx={{ ml: 4 }} fontWeight="sm">
       <ul style={{ marginTop: 0 }}>
         <li>
           Large pull requests will take more time and will probably block other developers who may be depending on the
@@ -32,7 +32,7 @@ export function getTips() {
         </li>
       </ul>
     </Box>,
-    <Box sx={{ ml: 2, mt: 2 }} fontWeight="sm">
+    <Box sx={{ ml: 4 }} fontWeight="sm">
       <ul style={{ marginTop: 0 }}>
         <li>Require a pull request before merging.</li>
         <li>Require approvals: 1.</li>
@@ -43,8 +43,8 @@ export function getTips() {
         </li>
       </ul>
     </Box>,
-    <Box sx={{ ml: 2, mt: 2 }} fontWeight="sm">
-      <Box sx={{ pl: 1 }}>
+    <Box sx={{ ml: 4 }} fontWeight="sm">
+      <Box sx={{ ml: -2 }}>
         Whether providing or receiving feedback, it is always helpful to keep in mind the following points:
       </Box>
       <ul style={{ marginTop: 0 }}>
@@ -66,7 +66,7 @@ export function getTips() {
         <li>Review your own code before assigning other reviewers.</li>
       </ul>
     </Box>,
-    <Box sx={{ ml: 2, mt: 2 }} fontWeight="sm">
+    <Box sx={{ ml: 4 }} fontWeight="sm">
       <ul style={{ marginTop: 0 }}>
         <li>Do not change the code while reviewing.</li>
         <li>If you disagree strongly, consider giving it a few minutes before responding.</li>
@@ -74,15 +74,17 @@ export function getTips() {
         <li>Use emoji to clarify tone. Compare "Looks good :)", LGTM or “Looks good! 👍 " with “It’s fine."</li>
       </ul>
     </Box>,
-    <Box sx={{ ml: 2, mt: 2 }} fontWeight="sm">
+    <Box sx={{ ml: 4 }} fontWeight="sm">
       <ul style={{ marginTop: 0 }}>
         <li>Be grateful for the reviewer’s suggestions.</li>
         <li>Extract some changes and refactorings into future tasks and stories.</li>
         <li>Try to respond to every comment.</li>
       </ul>
     </Box>,
-    <Box sx={{ ml: 2, mt: 2 }} fontWeight="sm">
-      <Typography level="title-sm">Commit Linting [Node env]</Typography>
+    <Box sx={{ ml: 4 }} fontWeight="sm">
+      <Typography sx={{ ml: -2 }} level="title-sm">
+        Commit Linting [Node env]
+      </Typography>
       <ul style={{ marginTop: 0 }}>
         <li>
           Commit messages can be linted using the{' '}
@@ -102,11 +104,14 @@ export function getTips() {
           can be used for pre-commit linting of commit messages and code.
         </li>
       </ul>
-      Detailed setup can be found{' '}
-      <Link target="_blank" href="https://github.com/StellarExplorerGuy/projects/blob/main/docs/commit/commit.md">
-        here
-      </Link>
-      .
+      <br />
+      <Box sx={{ ml: -2 }}>
+        Detailed setup can be found{' '}
+        <Link target="_blank" href="https://github.com/StellarExplorerGuy/projects/blob/main/docs/commit/commit.md">
+          here
+        </Link>
+        .
+      </Box>
     </Box>,
   ]
 }
