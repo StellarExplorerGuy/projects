@@ -1,10 +1,4 @@
-// service-worker.js
-//https://nrogap.medium.com/how-to-write-a-chrome-extension-b81218954c7c
-// TODO minified?
-// TODO test https://nextjs.org/docs/pages/building-your-application/configuring/content-security-policy
-
-const ICON = `<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg height="512px" id="Layer_1" style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M424.5,216.5h-15.2c-12.4,0-22.8-10.7-22.8-23.4c0-6.4,2.7-12.2,7.5-16.5l9.8-9.6c9.7-9.6,9.7-25.3,0-34.9l-22.3-22.1  c-4.4-4.4-10.9-7-17.5-7c-6.6,0-13,2.6-17.5,7l-9.4,9.4c-4.5,5-10.5,7.7-17,7.7c-12.8,0-23.5-10.4-23.5-22.7V89.1  c0-13.5-10.9-25.1-24.5-25.1h-30.4c-13.6,0-24.4,11.5-24.4,25.1v15.2c0,12.3-10.7,22.7-23.5,22.7c-6.4,0-12.3-2.7-16.6-7.4l-9.7-9.6  c-4.4-4.5-10.9-7-17.5-7s-13,2.6-17.5,7L110,132c-9.6,9.6-9.6,25.3,0,34.8l9.4,9.4c5,4.5,7.8,10.5,7.8,16.9  c0,12.8-10.4,23.4-22.8,23.4H89.2c-13.7,0-25.2,10.7-25.2,24.3V256v15.2c0,13.5,11.5,24.3,25.2,24.3h15.2  c12.4,0,22.8,10.7,22.8,23.4c0,6.4-2.8,12.4-7.8,16.9l-9.4,9.3c-9.6,9.6-9.6,25.3,0,34.8l22.3,22.2c4.4,4.5,10.9,7,17.5,7  c6.6,0,13-2.6,17.5-7l9.7-9.6c4.2-4.7,10.2-7.4,16.6-7.4c12.8,0,23.5,10.4,23.5,22.7v15.2c0,13.5,10.8,25.1,24.5,25.1h30.4  c13.6,0,24.4-11.5,24.4-25.1v-15.2c0-12.3,10.7-22.7,23.5-22.7c6.4,0,12.4,2.8,17,7.7l9.4,9.4c4.5,4.4,10.9,7,17.5,7  c6.6,0,13-2.6,17.5-7l22.3-22.2c9.6-9.6,9.6-25.3,0-34.9l-9.8-9.6c-4.8-4.3-7.5-10.2-7.5-16.5c0-12.8,10.4-23.4,22.8-23.4h15.2  c13.6,0,23.3-10.7,23.3-24.3V256v-15.2C447.8,227.2,438.1,216.5,424.5,216.5z M336.8,256L336.8,256c0,44.1-35.7,80-80,80  c-44.3,0-80-35.9-80-80l0,0l0,0c0-44.1,35.7-80,80-80C301.1,176,336.8,211.9,336.8,256L336.8,256z"/></svg>`;
-const STYLES = `
+const X=`<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg height="512px" id="Layer_1" style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M424.5,216.5h-15.2c-12.4,0-22.8-10.7-22.8-23.4c0-6.4,2.7-12.2,7.5-16.5l9.8-9.6c9.7-9.6,9.7-25.3,0-34.9l-22.3-22.1  c-4.4-4.4-10.9-7-17.5-7c-6.6,0-13,2.6-17.5,7l-9.4,9.4c-4.5,5-10.5,7.7-17,7.7c-12.8,0-23.5-10.4-23.5-22.7V89.1  c0-13.5-10.9-25.1-24.5-25.1h-30.4c-13.6,0-24.4,11.5-24.4,25.1v15.2c0,12.3-10.7,22.7-23.5,22.7c-6.4,0-12.3-2.7-16.6-7.4l-9.7-9.6  c-4.4-4.5-10.9-7-17.5-7s-13,2.6-17.5,7L110,132c-9.6,9.6-9.6,25.3,0,34.8l9.4,9.4c5,4.5,7.8,10.5,7.8,16.9  c0,12.8-10.4,23.4-22.8,23.4H89.2c-13.7,0-25.2,10.7-25.2,24.3V256v15.2c0,13.5,11.5,24.3,25.2,24.3h15.2  c12.4,0,22.8,10.7,22.8,23.4c0,6.4-2.8,12.4-7.8,16.9l-9.4,9.3c-9.6,9.6-9.6,25.3,0,34.8l22.3,22.2c4.4,4.5,10.9,7,17.5,7  c6.6,0,13-2.6,17.5-7l9.7-9.6c4.2-4.7,10.2-7.4,16.6-7.4c12.8,0,23.5,10.4,23.5,22.7v15.2c0,13.5,10.8,25.1,24.5,25.1h30.4  c13.6,0,24.4-11.5,24.4-25.1v-15.2c0-12.3,10.7-22.7,23.5-22.7c6.4,0,12.4,2.8,17,7.7l9.4,9.4c4.5,4.4,10.9,7,17.5,7  c6.6,0,13-2.6,17.5-7l22.3-22.2c9.6-9.6,9.6-25.3,0-34.9l-9.8-9.6c-4.8-4.3-7.5-10.2-7.5-16.5c0-12.8,10.4-23.4,22.8-23.4h15.2  c13.6,0,23.3-10.7,23.3-24.3V256v-15.2C447.8,227.2,438.1,216.5,424.5,216.5z M336.8,256L336.8,256c0,44.1-35.7,80-80,80  c-44.3,0-80-35.9-80-80l0,0l0,0c0-44.1,35.7-80,80-80C301.1,176,336.8,211.9,336.8,256L336.8,256z"/></svg>`,j=`
 <head>
 <style>
   .main-content {
@@ -253,46 +247,32 @@ const STYLES = `
   }
 </style>
 </head>
-`;
-
-const DEFAULT_USER = "Name Surname <name.surname@gmail.com>";
-
-function updatePage(ICON, STYLES, DEFAULT_USER) {
-  try {
-    const singleSeparator = "`";
-    const separator = "```";
-
-    function getCommit(type, issue, repoDetails, user) {
-      return `${type}: 
+`,J="Name Surname <name.surname@gmail.com>";function Q(u,w,E){try{let S=function(t,e,o,r){return`${t}: 
 
 <body>
 
-Contributes: ${repoDetails.user}/${repoDetails.repo}#${issue}
+Contributes: ${o.user}/${o.repo}#${e}
 
-Signed-off-by: ${user}`;
-    }
-
-    function getPR(params) {
-      return `<!-- Commit Message Title
+Signed-off-by: ${r}`},k=function(t){return`<!-- Commit Message Title
 * When opening this PR, the raiser should set the title of this PR to the first line of their desired commit message, e.g:
-${separator}
+${x}
 feat|fix|docs|style|refactor|perf|test|chore: changed function X
-${separator}
-* The reviewer should ensure that the first commit message field is of this form when performing the ${singleSeparator}squash and merge${singleSeparator} from this page.
+${x}
+* The reviewer should ensure that the first commit message field is of this form when performing the ${b}squash and merge${b} from this page.
 -->
 
 ## Status
 **READY**
 
 ## Description
-${separator}
-- ${params.type}: 
+${x}
+- ${t.type}: 
 
 Contributes:
-- ${params.repoDetails.user}/${params.repoDetails.repo}#${params.issueNumber}
+- ${t.repoDetails.user}/${t.repoDetails.repo}#${t.issueNumber}
 
-Signed-off-by: ${params.user}
-${separator}
+Signed-off-by: ${t.user}
+${x}
 
 ## Impacted Areas in Application
 <!-- List general components of the application that this PR will affect: -->
@@ -306,7 +286,7 @@ ${separator}
 <!-- Closes: your-org/your-project# -->
 
 Contributes:
-- ${params.repoDetails.user}/${params.repoDetails.repo}#${params.issueNumber}
+- ${t.repoDetails.user}/${t.repoDetails.repo}#${t.issueNumber}
 
 ## Any special notes for your reviewer?
 
@@ -319,303 +299,8 @@ Contributes:
 - [x] Local git lint performed
 - [x] Desired commit message set as PR title and description set above
 - [x] Link to relevant GitHub issue provided
-`;
-    }
-    const ID = "content-23e32e23";
-    const FASTER_PR_PROFILE_KEY = "FASTER_PR_KEY";
-    const FASTER_PR_PROFILE = "FASTER_PR_PROFILE";
-
-    /** Set default data when err */
-    function getLocalStorage(key) {
-      try {
-        const localData = JSON.parse(localStorage.getItem(key)) || {};
-        return localData;
-      } catch (error) {
-        return {};
-      }
-    }
-    function setLocalStorage(key, data) {
-      try {
-        localStorage.setItem(key, JSON.stringify(data));
-      } catch (error) {}
-    }
-
-    const DEFAULT_BRANCH_PREFIXES = [
-      "feat",
-      "fix",
-      "docs",
-      "style",
-      "refactor",
-      "test",
-      "chore",
-      "release",
-    ];
-    function getBranchPrefixes(prefixesList) {
-      let defaultPrefixes = "";
-      prefixesList.forEach(
-        (prefix, index) =>
-          (defaultPrefixes +=
-            index === 0
-              ? `<a class="active" href="#">${prefix}</a>`
-              : `<a href="#">${prefix}</a>`)
-      );
-      return defaultPrefixes;
-    }
-
-    function getPrefixesTabs() {
-      try {
-        const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
-        const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
-        const profile = allProfiles[profileKey];
-        if (profile.branchPrefixes) {
-          return getBranchPrefixes(profile.branchPrefixes);
-        }
-        return getBranchPrefixes(DEFAULT_BRANCH_PREFIXES);
-      } catch (error) {
-        return getBranchPrefixes(DEFAULT_BRANCH_PREFIXES);
-      }
-    }
-
-    function getProfileData() {
-      try {
-        const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
-        const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
-
-        if (allProfiles.profiles) {
-          return { selected: profileKey, list: allProfiles.profiles };
-        }
-        return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] };
-      } catch (error) {
-        return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] };
-      }
-    }
-
-    function processProfiles(list) {
-      let data = "";
-      list.forEach(
-        (item) => (data += `<div class="dropdown-item">${item}</div>`)
-      );
-      return data;
-    }
-
-    function processBranchName(prefix, suffix) {
-      try {
-        const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
-        const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
-        const profile = allProfiles[profileKey];
-        let branchSeparator = "/";
-
-        if (profile.uppercase) {
-          prefix = prefix.toUpperCase();
-        }
-        if (profile.branchSeparator) {
-          branchSeparator = profile.branchSeparator;
-        }
-        return `${prefix}${branchSeparator}${suffix}`;
-      } catch (error) {
-        return {};
-      }
-    }
-
-    function processCommit(type, issue, repoDetails, user) {
-      try {
-        const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
-        const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
-        const profile = allProfiles[profileKey];
-        if (profile) {
-          let signature = user;
-
-          if (profile.signature) {
-            signature = profile.signature;
-          }
-
-          const formattedCommit = profile.commit
-            .replace(/ISSUE_TYPE/g, type)
-            .replace(/ISSUE/g, issue)
-            .replace(/REPO_ORG/g, repoDetails.user)
-            .replace(/REPO_NAME/g, repoDetails.repo)
-            .replace(/SIGNATURE/g, signature);
-
-          return formattedCommit;
-        }
-
-        return getCommit(type, issue, repoDetails, user);
-      } catch (error) {
-        return getCommit(type, issue, repoDetails, user);
-      }
-    }
-
-    function processPR(type, issue, repoDetails, user) {
-      try {
-        const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
-        const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
-        const profile = allProfiles[profileKey];
-        if (profile) {
-          let signature = user;
-
-          if (profile.signature) {
-            signature = profile.signature;
-          }
-
-          const formattedPR = profile.pr
-            .replace(/ISSUE_TYPE/g, type)
-            .replace(/ISSUE/g, issue)
-            .replace(/REPO_ORG/g, repoDetails.user)
-            .replace(/REPO_NAME/g, repoDetails.repo)
-            .replace(/SIGNATURE/g, signature);
-
-          return formattedPR;
-        }
-
-        return getPR({
-          type: activeItem.textContent,
-          issueNumber,
-          repoDetails: getRepoDetails(),
-          user,
-        });
-      } catch (error) {
-        return getPR({
-          type: activeItem.textContent,
-          issueNumber,
-          repoDetails: getRepoDetails(),
-          user,
-        });
-      }
-    }
-
-    function getBranchName(text) {
-      const DOT_KEY = "dwedtw";
-      const trimmedText = text.trim();
-
-      // Extracting the number from the text using regex
-      const regex = /#(\d+)/;
-      const matches = trimmedText.match(regex);
-      const number = matches ? matches[1] : "";
-
-      // Removing the number and the # from the text
-      const textWithoutNumber = trimmedText.replace(regex, "");
-
-      // Replace dots (.) between numbers with dashes (-)
-      const textWithDashes = textWithoutNumber.replace(
-        /(\d)\.(\d)/g,
-        `$1${DOT_KEY}$2`
-      );
-
-      // Converting the remaining text to the desired format
-      const formattedText =
-        number +
-        "-" +
-        textWithDashes
-          .replace(/\s+/g, "-") // Replacing spaces with dashes
-          .replace(/[^\w-]/g, "") // Removing non-alphanumeric characters except dashes
-          .toLowerCase(); // Converting to lowercase
-
-      // Removing the trailing dash from the formatted text
-      const finalFormattedText = formattedText
-        .replace(/-+$/, "")
-        .replace(/-+/g, "-")
-        .replace(DOT_KEY, ".");
-
-      return finalFormattedText;
-    }
-
-    // Function to copy text to clipboard
-    function copyTextToClipboard(text) {
-      const textarea = document.createElement("textarea");
-      textarea.value = text;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
-    }
-
-    // Function to handle button click
-    function onButtonClick(event) {
-      const button = event.target;
-      button.classList.add("active");
-      setTimeout(() => {
-        button.classList.remove("active");
-      }, 1000); // Set the timeout to match the animation duration (1 second)
-    }
-
-    function getRepoDetails() {
-      const url = window.location.href;
-      const regex = /([^/]+)\/([^/]+)\/issues/;
-      const match = url.match(regex);
-
-      if (match && match.length >= 3) {
-        const user = match[1];
-        const repo = match[2];
-        return { user, repo };
-      }
-      return { user: "", repo: "" };
-    }
-
-    // Function to handle tab click
-    function onTabClick(event) {
-      event.preventDefault();
-
-      if (event.target.tagName === "A") {
-        const tabLinks = document.querySelectorAll(".tabs a");
-        tabLinks.forEach((link) => link.classList.remove("active"));
-
-        const targetTab = event.target;
-        targetTab.classList.add("active");
-
-        const activeWidth = targetTab.offsetWidth;
-        const itemPos = targetTab.offsetLeft;
-        document.querySelector(".selector").style.left = itemPos + "px";
-        document.querySelector(".selector").style.width = activeWidth + "px";
-      }
-    }
-
-    const headerElement = document.getElementsByClassName("gh-header-title");
-    const parentElement = document.getElementById("fast-pr");
-    if (parentElement) {
-      parentElement.parentNode.removeChild(parentElement);
-    }
-    if (headerElement.length === 1) {
-      const formattedHeader = getBranchName(
-        headerElement && headerElement[0] ? headerElement[0].textContent : ""
-      );
-      const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)[0];
-
-      //common dropdown listener
-      window.addEventListener("click", function (event) {
-        if (!event.target.matches(".dropdown-button_x")) {
-          if (dropdownContent.style.display === "block") {
-            dropdownContent.style.display = "none";
-          }
-        }
-      });
-      //
-      function initDropdown() {
-        const toggleDropdown = document.getElementById("toggleDropdown");
-        const dropdownContent = document.getElementById("dropdownContent");
-        const dropdownItems = document.querySelectorAll(".dropdown-item");
-
-        toggleDropdown.addEventListener("click", function () {
-          if (dropdownContent.style.display === "block") {
-            dropdownContent.style.display = "none";
-          } else {
-            dropdownContent.style.display = "block";
-          }
-        });
-
-        dropdownItems.forEach(function (item) {
-          item.addEventListener("click", function () {
-            setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
-            const pluginBody = document.getElementById("fast-pr");
-            pluginBody.remove();
-            init();
-          });
-        });
-      }
-      function init(initDropdownRef) {
-        const profilesData = getProfileData();
-        const newElement = document.createElement("span");
-        const plugin = `
-        ${STYLES}
+`},a=function(t){try{return JSON.parse(localStorage.getItem(t))||{}}catch{return{}}},C=function(t,e){try{localStorage.setItem(t,JSON.stringify(e))}catch{}},v=function(t){let e="";return t.forEach((o,r)=>e+=r===0?`<a class="active" href="#">${o}</a>`:`<a href="#">${o}</a>`),e},R=function(){try{const t=a(p),o=a(d)[t];return o.branchPrefixes?v(o.branchPrefixes):v(T)}catch{return v(T)}},_=function(){try{const t=a(p),e=a(d);return e.profiles?{selected:t,list:e.profiles}:{selected:d,list:[d]}}catch{return{selected:d,list:[d]}}},D=function(t){let e="";return t.forEach(o=>e+=`<div class="dropdown-item">${o}</div>`),e},F=function(t,e){try{const o=a(p),n=a(d)[o];let i="/";return n.uppercase&&(t=t.toUpperCase()),n.branchSeparator&&(i=n.branchSeparator),`${t}${i}${e}`}catch{return{}}},B=function(t,e,o,r){try{const n=a(p),s=a(d)[n];if(s){let c=r;return s.signature&&(c=s.signature),s.commit.replace(/ISSUE_TYPE/g,t).replace(/ISSUE/g,e).replace(/REPO_ORG/g,o.user).replace(/REPO_NAME/g,o.repo).replace(/SIGNATURE/g,c)}return S(t,e,o,r)}catch{return S(t,e,o,r)}},A=function(t,e,o,r){try{const n=a(p),s=a(d)[n];if(s){let c=r;return s.signature&&(c=s.signature),s.pr.replace(/ISSUE_TYPE/g,t).replace(/ISSUE/g,e).replace(/REPO_ORG/g,o.user).replace(/REPO_NAME/g,o.repo).replace(/SIGNATURE/g,c)}return k({type:activeItem.textContent,issueNumber,repoDetails:f(),user:r})}catch{return k({type:activeItem.textContent,issueNumber,repoDetails:f(),user:r})}},N=function(t){const e="dwedtw",o=t.trim(),r=/#(\d+)/,n=o.match(r),i=n?n[1]:"",c=o.replace(r,"").replace(/(\d)\.(\d)/g,`$1${e}$2`);return(i+"-"+c.replace(/\s+/g,"-").replace(/[^\w-]/g,"").toLowerCase()).replace(/-+$/,"").replace(/-+/g,"-").replace(e,".")},y=function(t){const e=document.createElement("textarea");e.value=t,document.body.appendChild(e),e.select(),document.execCommand("copy"),document.body.removeChild(e)},q=function(t){const e=t.target;e.classList.add("active"),setTimeout(()=>{e.classList.remove("active")},1e3)},f=function(){const t=window.location.href,e=/([^/]+)\/([^/]+)\/issues/,o=t.match(e);if(o&&o.length>=3){const r=o[1],n=o[2];return{user:r,repo:n}}return{user:"",repo:""}},O=function(t){if(t.preventDefault(),t.target.tagName==="A"){document.querySelectorAll(".tabs a").forEach(i=>i.classList.remove("active"));const o=t.target;o.classList.add("active");const r=o.offsetWidth,n=o.offsetLeft;document.querySelector(".selector").style.left=n+"px",document.querySelector(".selector").style.width=r+"px"}};var tt=S,et=k,ot=a,nt=C,rt=v,it=R,st=_,ct=D,at=F,lt=B,dt=A,pt=N,ut=y,ft=q,mt=f,ht=O;const b="`",x="```",$="content-23e32e23",p="FASTER_PR_KEY",d="FASTER_PR_PROFILE",T=["feat","fix","docs","style","refactor","test","chore","release"],m=document.getElementsByClassName("gh-header-title"),L=document.getElementById("fast-pr");if(L&&L.parentNode.removeChild(L),m.length===1){let o=function(){const n=document.getElementById("toggleDropdown"),i=document.getElementById("dropdownContent"),s=document.querySelectorAll(".dropdown-item");n.addEventListener("click",function(){i.style.display==="block"?i.style.display="none":i.style.display="block"}),s.forEach(function(c){c.addEventListener("click",function(){C(p,c.textContent),document.getElementById("fast-pr").remove(),r()})})},r=function(n){const i=_(),s=document.createElement("span"),c=`
+        ${w}
           <div id="fast-pr">
             <div class="main-content">
               <div>
@@ -626,146 +311,17 @@ Contributes:
               </div>
               <nav class="tabs">
                   <div class="selector"></div>
-                  ${getPrefixesTabs()}
+                  ${R()}
                   <span class="options_wrapper">
                   <span class="dropdown_x">
-                  <button class="dropdown-button_x" id="toggleDropdown">${
-                    profilesData.selected
-                  }</button>
+                  <button class="dropdown-button_x" id="toggleDropdown">${i.selected}</button>
                   <span class="dropdown-content" id="dropdownContent">
-                    ${processProfiles(profilesData.list)}
+                    ${D(i.list)}
                   </span>
                   </span>
-                   <span id="options" class="options">${ICON}</span>
+                   <span id="options" class="options">${u}</span>
                   </span>
               </nav>
             </div>
           </div>
-        `;
-        newElement.innerHTML = plugin;
-        headerElement[0].appendChild(newElement);
-
-        const button1 = document.getElementById("button1");
-        const button2 = document.getElementById("button2");
-        const button3 = document.getElementById("button3");
-
-        const avatarInfo = document.querySelector(
-          "div#issuecomment-new .d-inline-block > img"
-        );
-        const regex = /alt="@([^"]+)">/;
-        const match = avatarInfo.outerHTML.match(regex);
-
-        let user = DEFAULT_USER;
-        if (match) {
-          const username = match[1];
-          user = username;
-        }
-
-        const tabs = document.querySelector(".tabs");
-        const activeItem = tabs.querySelector(".active");
-        const activeWidth = activeItem.offsetWidth;
-        document.querySelector(".selector").style.left =
-          activeItem.offsetLeft + "px";
-        document.querySelector(".selector").style.width = activeWidth + "px";
-
-        button1.addEventListener("click", () => {
-          const activeItem = tabs.querySelector(".active");
-          copyTextToClipboard(
-            processBranchName(activeItem.textContent, formattedHeader)
-          );
-        });
-        button2.addEventListener("click", () => {
-          const activeItem = tabs.querySelector(".active");
-          copyTextToClipboard(
-            processCommit(
-              activeItem.textContent,
-              issueNumber,
-              getRepoDetails(),
-              user
-            )
-          );
-        });
-        button3.addEventListener("click", () => {
-          const activeItem = tabs.querySelector(".active");
-          copyTextToClipboard(
-            processPR(
-              activeItem.textContent,
-              issueNumber,
-              getRepoDetails(),
-              user
-            )
-          );
-        });
-
-        tabs.addEventListener("click", onTabClick);
-
-        const buttons = document.querySelectorAll(".button");
-        buttons.forEach((button) =>
-          button.addEventListener("click", onButtonClick)
-        );
-
-        const openPopupBtn = document.getElementById("options");
-        openPopupBtn.addEventListener("click", () => {
-          window.postMessage({ action: "changeState", newState: true }, "*");
-        });
-
-        // <dropdown
-        if (!initDropdownRef) {
-          const toggleDropdown = document.getElementById("toggleDropdown");
-          const dropdownContent = document.getElementById("dropdownContent");
-          const dropdownItems = document.querySelectorAll(".dropdown-item");
-
-          toggleDropdown.addEventListener("click", function () {
-            if (dropdownContent.style.display === "block") {
-              dropdownContent.style.display = "none";
-            } else {
-              dropdownContent.style.display = "block";
-            }
-          });
-
-          dropdownItems.forEach(function (item) {
-            item.addEventListener("click", function () {
-              setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
-              const pluginBody = document.getElementById("fast-pr");
-              pluginBody.remove();
-              init();
-            });
-          });
-        } else {
-          initDropdownRef();
-        }
-        // dropdown>
-      }
-
-      init(initDropdown);
-
-      if (!document.getElementById(ID)) {
-        const popupHtml = `<html><head><title>Customization</title><script src="${chrome.runtime.getURL(
-          "content.js"
-        )}"></script></head><body></body></html>`;
-        const newDiv = document.createElement("div");
-        newDiv.id = ID;
-        newDiv.innerHTML = popupHtml;
-        document.body.appendChild(newDiv);
-      }
-    }
-  } catch (error) {
-    console.log("[error]", error);
-  }
-}
-
-function attachContentScript(tabId) {
-  chrome.scripting.executeScript({
-    target: { tabId },
-    function: updatePage,
-    args: [ICON, STYLES, DEFAULT_USER],
-  });
-}
-
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  // Check if the page has completed loading and it's not a Chrome internal page
-  if (changeInfo.status === "complete" && tab.url.includes("github")) {
-    // Execute the content script on the loaded page
-    attachContentScript(tabId);
-  }
-});
+        `;s.innerHTML=c,m[0].appendChild(s);const h=document.getElementById("button1"),U=document.getElementById("button2"),G=document.getElementById("button3"),H=document.querySelector("div#issuecomment-new .d-inline-block > img"),K=/alt="@([^"]+)">/,z=H.outerHTML.match(K);let P=E;z&&(P=z[1]);const g=document.querySelector(".tabs"),M=g.querySelector(".active"),Y=M.offsetWidth;if(document.querySelector(".selector").style.left=M.offsetLeft+"px",document.querySelector(".selector").style.width=Y+"px",h.addEventListener("click",()=>{const l=g.querySelector(".active");y(F(l.textContent,t))}),U.addEventListener("click",()=>{const l=g.querySelector(".active");y(B(l.textContent,e,f(),P))}),G.addEventListener("click",()=>{const l=g.querySelector(".active");y(A(l.textContent,e,f(),P))}),g.addEventListener("click",O),document.querySelectorAll(".button").forEach(l=>l.addEventListener("click",q)),document.getElementById("options").addEventListener("click",()=>{window.postMessage({action:"changeState",newState:!0},"*")}),n)n();else{const l=document.getElementById("toggleDropdown"),I=document.getElementById("dropdownContent"),V=document.querySelectorAll(".dropdown-item");l.addEventListener("click",function(){I.style.display==="block"?I.style.display="none":I.style.display="block"}),V.forEach(function(W){W.addEventListener("click",function(){C(p,W.textContent),document.getElementById("fast-pr").remove(),r()})})}};var gt=o,bt=r;const t=N(m&&m[0]?m[0].textContent:""),e=t.match(/\d+(\.\d+)?/g)[0];if(window.addEventListener("click",function(n){n.target.matches(".dropdown-button_x")||dropdownContent.style.display==="block"&&(dropdownContent.style.display="none")}),r(o),!document.getElementById($)){const n=`<html><head><title>Customization</title><script src="${chrome.runtime.getURL("content.js")}"><\/script></head><body></body></html>`,i=document.createElement("div");i.id=$,i.innerHTML=n,document.body.appendChild(i)}}}catch(b){console.log("[error]",b)}}function Z(u){chrome.scripting.executeScript({target:{tabId:u},function:Q,args:[X,j,J]})}chrome.tabs.onUpdated.addListener((u,w,E)=>{w.status==="complete"&&E.url.includes("github")&&Z(u)});
