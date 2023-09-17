@@ -14,9 +14,9 @@ export function getTips() {
   return [
     <Box sx={{ ml: 4 }} fontWeight="sm">
       <ul style={{ marginTop: 0 }}>
-        <li>A good pull request tends to be reviewed quickly.</li>
-        <li>It reduces bug introduction into codebase.</li>
-        <li>It does not block other developers.</li>
+        <li>A good pull request tends to be reviewed quickly ⏱️🚀🔎.</li>
+        <li>It reduces bug introduction into codebase 🐛🚫👍.</li>
+        <li>It does not block other developers 🚧🔓👥.</li>
       </ul>
     </Box>,
     <Box sx={{ ml: 4 }} fontWeight="sm">
