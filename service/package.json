@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "vite build && npm run clear",
-    "clear": "cd ../extension && rm service-worker2.js"
+    "build": "vite build"
   },
   "devDependencies": {
     "vite": "4.4.9"

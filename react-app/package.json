@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "webpack --mode production && npm run clear",
-    "clear": "cd ../extension && rm content.js.LICENSE.txt",
+    "build": "webpack --mode production",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -8,3 +8,7 @@ cd ..
 echo "build react-app-modal"
 cd react-app && npm run build
 
+cd ../extension
+
+rm service-worker2.js
+rm content.js.LICENSE.txt
