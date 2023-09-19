@@ -580,23 +580,39 @@ Contributes:
         const dropdownContent = document.getElementById("dropdownContent");
         const dropdownItems = document.querySelectorAll(".dropdown-item");
 
-        toggleDropdown.addEventListener("click", function () {
-          if (dropdownContent.style.display === "block") {
-            dropdownContent.style.display = "none";
-          } else {
-            dropdownContent.style.display = "block";
-          }
-        });
-
-        dropdownItems.forEach(function (item) {
-          item.addEventListener("click", function () {
-            setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
-            const pluginBody = document.getElementById("fast-pr");
-            pluginBody.remove();
-            init();
+        if (toggleDropdown && dropdownContent && dropdownItems) {
+          toggleDropdown.addEventListener("click", function () {
+            if (dropdownContent.style.display === "block") {
+              dropdownContent.style.display = "none";
+            } else {
+              dropdownContent.style.display = "block";
+            }
           });
-        });
+
+          dropdownItems.forEach(function (item) {
+            item.addEventListener("click", function () {
+              setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
+              const pluginBody = document.getElementById("fast-pr");
+              pluginBody.remove();
+              init();
+            });
+          });
+          //common dropdown listener
+          window.addEventListener("click", function (event) {
+            if (!event.target.matches(".dropdown-button_x")) {
+              if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+              }
+            }
+          });
+          // dropdown>
+        } else {
+          setTimeout(() => {
+            initDropdown();
+          }, 100);
+        }
       }
+
       function init(initDropdownRef) {
         const profilesData = getProfileData();
         const newElement = document.createElement("span");
@@ -633,101 +649,115 @@ Contributes:
         const button1 = document.getElementById("button1");
         const button2 = document.getElementById("button2");
         const button3 = document.getElementById("button3");
+        const tabs = document.querySelector(".tabs");
+        const activeItem = tabs.querySelector(".active");
+        const toggleDropdown = document.getElementById("toggleDropdown");
+        const dropdownContent = document.getElementById("dropdownContent");
+        const dropdownItems = document.querySelectorAll(".dropdown-item");
 
         const avatarInfo = document.querySelector(
           "div#issuecomment-new .d-inline-block > img"
         );
-        const regex = /alt="@([^"]+)">/;
-        const match = avatarInfo.outerHTML.match(regex);
 
-        let user = DEFAULT_USER;
-        if (match) {
-          const username = match[1];
-          user = username;
-        }
+        if (
+          button1 &&
+          button2 &&
+          button3 &&
+          tabs &&
+          activeItem &&
+          toggleDropdown &&
+          dropdownContent &&
+          dropdownItems
+        ) {
+          const regex = /alt="@([^"]+)">/;
+          const match = avatarInfo.outerHTML.match(regex);
 
-        const tabs = document.querySelector(".tabs");
-        const activeItem = tabs.querySelector(".active");
-        const activeWidth = activeItem.offsetWidth;
-        document.querySelector(".selector").style.left =
-          activeItem.offsetLeft + "px";
-        document.querySelector(".selector").style.width = activeWidth + "px";
-
-        button1.addEventListener("click", () => {
-          const activeItem = tabs.querySelector(".active");
-          copyTextToClipboard(
-            processBranchName(activeItem.textContent, formattedHeader)
-          );
-        });
-        button2.addEventListener("click", () => {
-          const activeItem = tabs.querySelector(".active");
-          copyTextToClipboard(
-            processCommit(
-              activeItem.textContent,
-              issueNumber,
-              getRepoDetails(),
-              user
-            )
-          );
-        });
-        button3.addEventListener("click", () => {
-          const activeItem = tabs.querySelector(".active");
-          copyTextToClipboard(
-            processPR(
-              activeItem.textContent,
-              issueNumber,
-              getRepoDetails(),
-              user
-            )
-          );
-        });
-
-        tabs.addEventListener("click", onTabClick);
-
-        const buttons = document.querySelectorAll(".button");
-        buttons.forEach((button) =>
-          button.addEventListener("click", onButtonClick)
-        );
-
-        const openPopupBtn = document.getElementById("options");
-        openPopupBtn.addEventListener("click", () => {
-          window.postMessage({ action: "changeState", newState: true }, "*");
-        });
-
-        // <dropdown
-        if (!initDropdownRef) {
-          const toggleDropdown = document.getElementById("toggleDropdown");
-          const dropdownContent = document.getElementById("dropdownContent");
-          const dropdownItems = document.querySelectorAll(".dropdown-item");
-
-          toggleDropdown.addEventListener("click", function () {
-            if (dropdownContent.style.display === "block") {
-              dropdownContent.style.display = "none";
-            } else {
-              dropdownContent.style.display = "block";
-            }
-          });
-
-          dropdownItems.forEach(function (item) {
-            item.addEventListener("click", function () {
-              setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
-              const pluginBody = document.getElementById("fast-pr");
-              pluginBody.remove();
-              init();
-            });
-          });
-        } else {
-          initDropdownRef();
-        }
-        //common dropdown listener
-        window.addEventListener("click", function (event) {
-          if (!event.target.matches(".dropdown-button_x")) {
-            if (dropdownContent.style.display === "block") {
-              dropdownContent.style.display = "none";
-            }
+          let user = DEFAULT_USER;
+          if (match) {
+            const username = match[1];
+            user = username;
           }
-        });
-        // dropdown>
+          const activeWidth = activeItem.offsetWidth;
+          document.querySelector(".selector").style.left =
+            activeItem.offsetLeft + "px";
+          document.querySelector(".selector").style.width = activeWidth + "px";
+
+          button1.addEventListener("click", () => {
+            const activeItem = tabs.querySelector(".active");
+            copyTextToClipboard(
+              processBranchName(activeItem.textContent, formattedHeader)
+            );
+          });
+          button2.addEventListener("click", () => {
+            const activeItem = tabs.querySelector(".active");
+            copyTextToClipboard(
+              processCommit(
+                activeItem.textContent,
+                issueNumber,
+                getRepoDetails(),
+                user
+              )
+            );
+          });
+          button3.addEventListener("click", () => {
+            const activeItem = tabs.querySelector(".active");
+            copyTextToClipboard(
+              processPR(
+                activeItem.textContent,
+                issueNumber,
+                getRepoDetails(),
+                user
+              )
+            );
+          });
+
+          tabs.addEventListener("click", onTabClick);
+
+          const buttons = document.querySelectorAll(".button");
+          buttons.forEach((button) =>
+            button.addEventListener("click", onButtonClick)
+          );
+
+          const openPopupBtn = document.getElementById("options");
+          openPopupBtn.addEventListener("click", () => {
+            window.postMessage({ action: "changeState", newState: true }, "*");
+          });
+
+          // <dropdown
+          if (!initDropdownRef) {
+            toggleDropdown.addEventListener("click", function () {
+              if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+              } else {
+                dropdownContent.style.display = "block";
+              }
+            });
+
+            dropdownItems.forEach(function (item) {
+              item.addEventListener("click", function () {
+                setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
+                const pluginBody = document.getElementById("fast-pr");
+                pluginBody.remove();
+                init();
+              });
+            });
+            //common dropdown listener
+            window.addEventListener("click", function (event) {
+              if (!event.target.matches(".dropdown-button_x")) {
+                if (dropdownContent.style.display === "block") {
+                  dropdownContent.style.display = "none";
+                }
+              }
+            });
+            // dropdown>
+          } else {
+            initDropdownRef();
+          }
+        } else {
+          setTimeout(() => {
+            init(initDropdownRef);
+          }, 100);
+        }
       }
 
       init(initDropdown);
