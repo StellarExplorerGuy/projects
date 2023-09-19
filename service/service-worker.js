@@ -468,23 +468,24 @@ Contributes:
 
         return getPR({
           type: activeItem.textContent,
-          issueNumber,
+          issueNumber: issue,
           repoDetails: getRepoDetails(),
           user,
         });
       } catch (error) {
         return getPR({
           type: activeItem.textContent,
-          issueNumber,
+          issueNumber: issue,
           repoDetails: getRepoDetails(),
           user,
         });
       }
     }
 
+    const regexCSS = /-?\.main-content\s*\{[\s\S]*$/;
     function getBranchName(text) {
       const DOT_KEY = "dwedtw";
-      const trimmedText = text.trim();
+      const trimmedText = text.replace(regexCSS,'').trim();
 
       // Extracting the number from the text using regex
       const regex = /#(\d+)/;
@@ -563,60 +564,66 @@ Contributes:
         document.querySelector(".selector").style.width = activeWidth + "px";
       }
     }
-
     const headerElement = document.getElementsByClassName("gh-header-title");
-    const parentElement = document.getElementById("fast-pr");
-    if (parentElement) {
-      parentElement.parentNode.removeChild(parentElement);
-    }
+
     if (headerElement.length === 1) {
+    function getFormattedHeader() {
+      const headerElement = document.getElementsByClassName("gh-header-title");
+
       const formattedHeader = getBranchName(
         headerElement && headerElement[0] ? headerElement[0].textContent : ""
       );
       const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)[0];
+      return { formattedHeader, issueNumber };
+    }
 
-      function initDropdown() {
-        const toggleDropdown = document.getElementById("toggleDropdown");
-        const dropdownContent = document.getElementById("dropdownContent");
-        const dropdownItems = document.querySelectorAll(".dropdown-item");
+    const parentElement = document.getElementById("fast-pr");
+    if (parentElement) {
+      parentElement.parentNode.removeChild(parentElement);
+    }
 
-        if (toggleDropdown && dropdownContent && dropdownItems) {
-          toggleDropdown.addEventListener("click", function () {
+    function initDropdown() {
+      const toggleDropdown = document.getElementById("toggleDropdown");
+      const dropdownContent = document.getElementById("dropdownContent");
+      const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+      if (toggleDropdown && dropdownContent && dropdownItems) {
+        toggleDropdown.addEventListener("click", function () {
+          if (dropdownContent.style.display === "block") {
+            dropdownContent.style.display = "none";
+          } else {
+            dropdownContent.style.display = "block";
+          }
+        });
+
+        dropdownItems.forEach(function (item) {
+          item.addEventListener("click", function () {
+            setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
+            const pluginBody = document.getElementById("fast-pr");
+            pluginBody.remove();
+            init();
+          });
+        });
+        //common dropdown listener
+        window.addEventListener("click", function (event) {
+          if (!event.target.matches(".dropdown-button_x")) {
             if (dropdownContent.style.display === "block") {
               dropdownContent.style.display = "none";
-            } else {
-              dropdownContent.style.display = "block";
             }
-          });
-
-          dropdownItems.forEach(function (item) {
-            item.addEventListener("click", function () {
-              setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
-              const pluginBody = document.getElementById("fast-pr");
-              pluginBody.remove();
-              init();
-            });
-          });
-          //common dropdown listener
-          window.addEventListener("click", function (event) {
-            if (!event.target.matches(".dropdown-button_x")) {
-              if (dropdownContent.style.display === "block") {
-                dropdownContent.style.display = "none";
-              }
-            }
-          });
-          // dropdown>
-        } else {
-          setTimeout(() => {
-            initDropdown();
-          }, 100);
-        }
+          }
+        });
+        // dropdown>
+      } else {
+        setTimeout(() => {
+          initDropdown();
+        }, 100);
       }
+    }
 
-      function init(initDropdownRef) {
-        const profilesData = getProfileData();
-        const newElement = document.createElement("span");
-        newElement.innerHTML = `
+    function init(initDropdownRef) {
+      const profilesData = getProfileData();
+      const newElement = document.createElement("span");
+      newElement.innerHTML = `
         ${STYLES}
           <div id="fast-pr">
             <div class="main-content">
@@ -644,133 +651,136 @@ Contributes:
             </div>
           </div>
         `;
-        headerElement[0].appendChild(newElement);
+      headerElement[0].appendChild(newElement);
 
-        const button1 = document.getElementById("button1");
-        const button2 = document.getElementById("button2");
-        const button3 = document.getElementById("button3");
-        const tabs = document.querySelector(".tabs");
-        const activeItem = tabs.querySelector(".active");
-        const toggleDropdown = document.getElementById("toggleDropdown");
-        const dropdownContent = document.getElementById("dropdownContent");
-        const dropdownItems = document.querySelectorAll(".dropdown-item");
+      const button1 = document.getElementById("button1");
+      const button2 = document.getElementById("button2");
+      const button3 = document.getElementById("button3");
+      const tabs = document.querySelector(".tabs");
+      const activeItem = tabs.querySelector(".active");
+      const toggleDropdown = document.getElementById("toggleDropdown");
+      const dropdownContent = document.getElementById("dropdownContent");
+      const dropdownItems = document.querySelectorAll(".dropdown-item");
 
-        const avatarInfo = document.querySelector(
-          "div#issuecomment-new .d-inline-block > img"
+      const avatarInfo = document.querySelector(
+        "div#issuecomment-new .d-inline-block > img"
+      );
+
+      if (
+        button1 &&
+        button2 &&
+        button3 &&
+        tabs &&
+        activeItem &&
+        toggleDropdown &&
+        dropdownContent &&
+        dropdownItems
+      ) {
+        const regex = /alt="@([^"]+)">/;
+        const match = avatarInfo.outerHTML.match(regex);
+
+        let user = DEFAULT_USER;
+        if (match) {
+          const username = match[1];
+          user = username;
+        }
+        const activeWidth = activeItem.offsetWidth;
+        document.querySelector(".selector").style.left =
+          activeItem.offsetLeft + "px";
+        document.querySelector(".selector").style.width = activeWidth + "px";
+
+        button1.addEventListener("click", () => {
+          const activeItem = tabs.querySelector(".active");
+          const { formattedHeader } = getFormattedHeader();
+          copyTextToClipboard(
+            processBranchName(activeItem.textContent, formattedHeader)
+          );
+        });
+        button2.addEventListener("click", () => {
+          const activeItem = tabs.querySelector(".active");
+          const { issueNumber } = getFormattedHeader();
+          copyTextToClipboard(
+            processCommit(
+              activeItem.textContent,
+              issueNumber,
+              getRepoDetails(),
+              user
+            )
+          );
+        });
+        button3.addEventListener("click", () => {
+          const activeItem = tabs.querySelector(".active");
+          const { issueNumber } = getFormattedHeader();
+          copyTextToClipboard(
+            processPR(
+              activeItem.textContent,
+              issueNumber,
+              getRepoDetails(),
+              user
+            )
+          );
+        });
+
+        tabs.addEventListener("click", onTabClick);
+
+        const buttons = document.querySelectorAll(".button");
+        buttons.forEach((button) =>
+          button.addEventListener("click", onButtonClick)
         );
 
-        if (
-          button1 &&
-          button2 &&
-          button3 &&
-          tabs &&
-          activeItem &&
-          toggleDropdown &&
-          dropdownContent &&
-          dropdownItems
-        ) {
-          const regex = /alt="@([^"]+)">/;
-          const match = avatarInfo.outerHTML.match(regex);
+        const openPopupBtn = document.getElementById("options");
+        openPopupBtn.addEventListener("click", () => {
+          window.postMessage({ action: "changeState", newState: true }, "*");
+        });
 
-          let user = DEFAULT_USER;
-          if (match) {
-            const username = match[1];
-            user = username;
-          }
-          const activeWidth = activeItem.offsetWidth;
-          document.querySelector(".selector").style.left =
-            activeItem.offsetLeft + "px";
-          document.querySelector(".selector").style.width = activeWidth + "px";
-
-          button1.addEventListener("click", () => {
-            const activeItem = tabs.querySelector(".active");
-            copyTextToClipboard(
-              processBranchName(activeItem.textContent, formattedHeader)
-            );
-          });
-          button2.addEventListener("click", () => {
-            const activeItem = tabs.querySelector(".active");
-            copyTextToClipboard(
-              processCommit(
-                activeItem.textContent,
-                issueNumber,
-                getRepoDetails(),
-                user
-              )
-            );
-          });
-          button3.addEventListener("click", () => {
-            const activeItem = tabs.querySelector(".active");
-            copyTextToClipboard(
-              processPR(
-                activeItem.textContent,
-                issueNumber,
-                getRepoDetails(),
-                user
-              )
-            );
+        // <dropdown
+        if (!initDropdownRef) {
+          toggleDropdown.addEventListener("click", function () {
+            if (dropdownContent.style.display === "block") {
+              dropdownContent.style.display = "none";
+            } else {
+              dropdownContent.style.display = "block";
+            }
           });
 
-          tabs.addEventListener("click", onTabClick);
-
-          const buttons = document.querySelectorAll(".button");
-          buttons.forEach((button) =>
-            button.addEventListener("click", onButtonClick)
-          );
-
-          const openPopupBtn = document.getElementById("options");
-          openPopupBtn.addEventListener("click", () => {
-            window.postMessage({ action: "changeState", newState: true }, "*");
+          dropdownItems.forEach(function (item) {
+            item.addEventListener("click", function () {
+              setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
+              const pluginBody = document.getElementById("fast-pr");
+              pluginBody.remove();
+              init();
+            });
           });
-
-          // <dropdown
-          if (!initDropdownRef) {
-            toggleDropdown.addEventListener("click", function () {
+          //common dropdown listener
+          window.addEventListener("click", function (event) {
+            if (!event.target.matches(".dropdown-button_x")) {
               if (dropdownContent.style.display === "block") {
                 dropdownContent.style.display = "none";
-              } else {
-                dropdownContent.style.display = "block";
               }
-            });
-
-            dropdownItems.forEach(function (item) {
-              item.addEventListener("click", function () {
-                setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
-                const pluginBody = document.getElementById("fast-pr");
-                pluginBody.remove();
-                init();
-              });
-            });
-            //common dropdown listener
-            window.addEventListener("click", function (event) {
-              if (!event.target.matches(".dropdown-button_x")) {
-                if (dropdownContent.style.display === "block") {
-                  dropdownContent.style.display = "none";
-                }
-              }
-            });
-            // dropdown>
-          } else {
-            initDropdownRef();
-          }
+            }
+          });
+          // dropdown>
         } else {
-          setTimeout(() => {
-            init(initDropdownRef);
-          }, 100);
+          initDropdownRef();
         }
+      } else {
+        setTimeout(() => {
+          init(initDropdownRef);
+        }, 100);
       }
+    }
 
-      init(initDropdown);
+    init(initDropdown);
 
-      if (!document.getElementById(ID)) {
-        const popupHtml = `<html><head><title>Customization</title><script src="${chrome.runtime.getURL(
-          "content.js"
-        )}"></script></head><body></body></html>`;
-        const newDiv = document.createElement("div");
-        newDiv.id = ID;
-        newDiv.innerHTML = popupHtml;
-        document.body.appendChild(newDiv);
-      }
+    if (!document.getElementById(ID)) {
+      const popupHtml = `<html><head><title>Customization</title><script src="${chrome.runtime.getURL(
+        "content.js"
+      )}"></script></head><body></body></html>`;
+      const newDiv = document.createElement("div");
+      newDiv.id = ID;
+      newDiv.innerHTML = popupHtml;
+      document.body.appendChild(newDiv);
+    }
     }
   } catch (error) {
     console.log("[error]", error);
