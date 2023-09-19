@@ -493,12 +493,7 @@ Contributes:
 
       // Removing the number and the # from the text
       const textWithoutNumber = trimmedText.replace(regex, "");
-
-      // Replace dots (.) between numbers with dashes (-)
-      const textWithDashes = textWithoutNumber.replace(
-        /(\d)\.(\d)/g,
-        `$1${DOT_KEY}$2`
-      );
+      const textWithDashes = textWithoutNumber.replace(/\./g, DOT_KEY);
 
       // Converting the remaining text to the desired format
       const formattedText =
@@ -507,13 +502,14 @@ Contributes:
         textWithDashes
           .replace(/\s+/g, "-") // Replacing spaces with dashes
           .replace(/[^\w-]/g, "") // Removing non-alphanumeric characters except dashes
+          .replace(/_/g, "-") // replace underscore
           .toLowerCase(); // Converting to lowercase
 
       // Removing the trailing dash from the formatted text
       const finalFormattedText = formattedText
         .replace(/-+$/, "")
         .replace(/-+/g, "-")
-        .replace(DOT_KEY, ".");
+        .replace(new RegExp(DOT_KEY, "g"), ".");
 
       return finalFormattedText;
     }
