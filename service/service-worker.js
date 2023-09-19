@@ -575,15 +575,6 @@ Contributes:
       );
       const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)[0];
 
-      //common dropdown listener
-      window.addEventListener("click", function (event) {
-        if (!event.target.matches(".dropdown-button_x")) {
-          if (dropdownContent.style.display === "block") {
-            dropdownContent.style.display = "none";
-          }
-        }
-      });
-      //
       function initDropdown() {
         const toggleDropdown = document.getElementById("toggleDropdown");
         const dropdownContent = document.getElementById("dropdownContent");
@@ -609,7 +600,7 @@ Contributes:
       function init(initDropdownRef) {
         const profilesData = getProfileData();
         const newElement = document.createElement("span");
-        const plugin = `
+        newElement.innerHTML = `
         ${STYLES}
           <div id="fast-pr">
             <div class="main-content">
@@ -637,7 +628,6 @@ Contributes:
             </div>
           </div>
         `;
-        newElement.innerHTML = plugin;
         headerElement[0].appendChild(newElement);
 
         const button1 = document.getElementById("button1");
@@ -729,6 +719,14 @@ Contributes:
         } else {
           initDropdownRef();
         }
+        //common dropdown listener
+        window.addEventListener("click", function (event) {
+          if (!event.target.matches(".dropdown-button_x")) {
+            if (dropdownContent.style.display === "block") {
+              dropdownContent.style.display = "none";
+            }
+          }
+        });
         // dropdown>
       }
 
