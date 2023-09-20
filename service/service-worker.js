@@ -256,17 +256,18 @@ const STYLES = `
 
 const DEFAULT_USER = "Name Surname <name.surname@gmail.com>";
 
-function updatePage(content, ICON, STYLES, DEFAULT_USER) {
+function updatePage(ICON, STYLES, DEFAULT_USER) {
   try {
     const ID = "content-23e32e23";
     if (!document.getElementById(ID)) {
-      const popupHtml = `<html><head><title>Customization</title><script src="${content}"></script></head><body></body></html>`;
+      const popupHtml = `<html><head><title>Customization</title><script src="${chrome.runtime.getURL(
+        "content.js"
+      )}"></script></head><body></body></html>`;
       const newDiv = document.createElement("div");
       newDiv.id = ID;
       newDiv.innerHTML = popupHtml;
       document.body.appendChild(newDiv);
     }
-
     const singleSeparator = "`";
     const separator = "```";
 
@@ -489,7 +490,6 @@ Contributes:
         });
       }
     }
-
     const regexCSS = /-?\.main-content\s*\{[\s\S]*$/;
     function getBranchName(text) {
       const DOT_KEY = "dwedtw";
@@ -554,6 +554,18 @@ Contributes:
       }
       return { user: "", repo: "" };
     }
+    function getFormattedHeader() {
+      const headerElement =
+        document.getElementsByClassName("gh-header-title");
+
+      const formattedHeader = getBranchName(
+        headerElement && headerElement[0]
+          ? headerElement[0].textContent
+          : ""
+      );
+      const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)[0];
+      return { formattedHeader, issueNumber };
+    }
 
     // Function to handle tab click
     function onTabClick(event) {
@@ -572,244 +584,195 @@ Contributes:
         document.querySelector(".selector").style.width = activeWidth + "px";
       }
     }
-    function initScript() {
-      const headerElement = document.getElementsByClassName("gh-header-title");
-      if (headerElement.length) {
-        function getFormattedHeader() {
-          const headerElement =
-            document.getElementsByClassName("gh-header-title");
 
-          const formattedHeader = getBranchName(
-            headerElement && headerElement[0]
-              ? headerElement[0].textContent
-              : ""
-          );
-          const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)[0];
-          return { formattedHeader, issueNumber };
-        }
-
-        const parentElement = document.getElementById("fast-pr");
-        if (parentElement) {
-          parentElement.parentNode.removeChild(parentElement);
-        }
-
-        function initDropdown() {
-          const toggleDropdown = document.getElementById("toggleDropdown");
-          const dropdownContent = document.getElementById("dropdownContent");
-          const dropdownItems = document.querySelectorAll(".dropdown-item");
-
-          if (toggleDropdown && dropdownContent && dropdownItems) {
-            toggleDropdown.addEventListener("click", function () {
-              if (dropdownContent.style.display === "block") {
-                dropdownContent.style.display = "none";
-              } else {
-                dropdownContent.style.display = "block";
-              }
-            });
-
-            dropdownItems.forEach(function (item) {
-              item.addEventListener("click", function () {
-                setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
-                const pluginBody = document.getElementById("fast-pr");
-                pluginBody.remove();
-                init();
-              });
-            });
-            //common dropdown listener
-            window.addEventListener("click", function (event) {
-              if (!event.target.matches(".dropdown-button_x")) {
-                if (dropdownContent.style.display === "block") {
-                  dropdownContent.style.display = "none";
-                }
-              }
-            });
-            // dropdown>
-          } else {
-            setTimeout(() => {
-              initDropdown();
-            }, 100);
-          }
-        }
-
-        function init(initDropdownRef) {
-          const profilesData = getProfileData();
-          const newElement = document.createElement("span");
-          newElement.innerHTML = `
-      ${STYLES}
-        <div id="fast-pr">
-          <div class="main-content">
-            <div>
-                <b>Copy:</b>
-                <button id="button1" class="button" role="button">Branch</button>
-                <button id="button2" class="button" role="button">Commit</button>
-                <button id="button3" class="button" role="button">PR desc</button>
-            </div>
-            <nav class="tabs">
-                <div class="selector"></div>
-                ${getPrefixesTabs()}
-                <span class="options_wrapper">
-                <span class="dropdown_x">
-                <button class="dropdown-button_x" id="toggleDropdown">${
-                  profilesData.selected
-                }</button>
-                <span class="dropdown-content" id="dropdownContent">
-                  ${processProfiles(profilesData.list)}
-                </span>
-                </span>
-                 <span id="options" class="options">${ICON}</span>
-                </span>
-            </nav>
-          </div>
-        </div>
-      `;
-          headerElement[0].appendChild(newElement);
-
-          const button1 = document.getElementById("button1");
-          const button2 = document.getElementById("button2");
-          const button3 = document.getElementById("button3");
-          const tabs = document.querySelector(".tabs");
-          const activeItem = tabs.querySelector(".active");
-          const toggleDropdown = document.getElementById("toggleDropdown");
-          const dropdownContent = document.getElementById("dropdownContent");
-          const dropdownItems = document.querySelectorAll(".dropdown-item");
-          const openPopupBtn = document.getElementById("options");
-
-          const avatarInfo = document.querySelector(
-            "div#issuecomment-new .d-inline-block > img"
-          );
-
-          if (
-            button1 &&
-            button2 &&
-            button3 &&
-            tabs &&
-            activeItem &&
-            toggleDropdown &&
-            dropdownContent &&
-            dropdownItems &&
-            openPopupBtn
-          ) {
-            const regex = /alt="@([^"]+)">/;
-            const match = avatarInfo.outerHTML.match(regex);
-
-            let user = DEFAULT_USER;
-            if (match) {
-              const username = match[1];
-              user = username;
-            }
-            const activeWidth = activeItem.offsetWidth;
-            document.querySelector(".selector").style.left =
-              activeItem.offsetLeft + "px";
-            document.querySelector(".selector").style.width =
-              activeWidth + "px";
-
-            button1.addEventListener("click", () => {
-              const activeItem = tabs.querySelector(".active");
-              const { formattedHeader } = getFormattedHeader();
-              copyTextToClipboard(
-                processBranchName(activeItem.textContent, formattedHeader)
-              );
-            });
-            button2.addEventListener("click", () => {
-              const activeItem = tabs.querySelector(".active");
-              const { issueNumber } = getFormattedHeader();
-              copyTextToClipboard(
-                processCommit(
-                  activeItem.textContent,
-                  issueNumber,
-                  getRepoDetails(),
-                  user
-                )
-              );
-            });
-            button3.addEventListener("click", () => {
-              const activeItem = tabs.querySelector(".active");
-              const { issueNumber } = getFormattedHeader();
-              copyTextToClipboard(
-                processPR(
-                  activeItem.textContent,
-                  issueNumber,
-                  getRepoDetails(),
-                  user
-                )
-              );
-            });
-
-            tabs.addEventListener("click", onTabClick);
-
-            const buttons = document.querySelectorAll(".button");
-            buttons.forEach((button) =>
-              button.addEventListener("click", onButtonClick)
-            );
-
-            openPopupBtn.addEventListener("click", () => {
-              window.postMessage(
-                { action: "changeState", newState: true },
-                "*"
-              );
-            });
-
-            // <dropdown
-            if (!initDropdownRef) {
-              toggleDropdown.addEventListener("click", function () {
-                if (dropdownContent.style.display === "block") {
-                  dropdownContent.style.display = "none";
-                } else {
-                  dropdownContent.style.display = "block";
-                }
-              });
-
-              dropdownItems.forEach(function (item) {
-                item.addEventListener("click", function () {
-                  setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
-                  const pluginBody = document.getElementById("fast-pr");
-                  pluginBody.remove();
-                  init();
-                });
-              });
-              //common dropdown listener
-              window.addEventListener("click", function (event) {
-                if (!event.target.matches(".dropdown-button_x")) {
-                  if (dropdownContent.style.display === "block") {
-                    dropdownContent.style.display = "none";
-                  }
-                }
-              });
-              // dropdown>
-            } else {
-              initDropdownRef();
-            }
-          } else {
-            setTimeout(() => {
-              init(initDropdownRef);
-            }, 100);
-          }
-        }
-
-        init(initDropdown);
-      } else {
-        setTimeout(initScript, 100);
-      }
+    const headerElement = document.getElementsByClassName("gh-header-title");
+    const parentElement = document.getElementById("fast-pr");
+    if (parentElement) {
+      parentElement.parentNode.removeChild(parentElement);
     }
-    initScript()
+    if (headerElement.length === 1) {
+      const formattedHeader = getBranchName(
+        headerElement && headerElement[0] ? headerElement[0].textContent : ""
+      );
+      const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)[0];
+
+      function initDropdown() {
+        const toggleDropdown = document.getElementById("toggleDropdown");
+        const dropdownContent = document.getElementById("dropdownContent");
+        const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+        toggleDropdown.addEventListener("click", function () {
+          if (dropdownContent.style.display === "block") {
+            dropdownContent.style.display = "none";
+          } else {
+            dropdownContent.style.display = "block";
+          }
+        });
+
+        dropdownItems.forEach(function (item) {
+          item.addEventListener("click", function () {
+            setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
+            const pluginBody = document.getElementById("fast-pr");
+            pluginBody.remove();
+            init();
+          });
+        });
+      }
+      function init(initDropdownRef) {
+        const profilesData = getProfileData();
+        const newElement = document.createElement("span");
+        newElement.innerHTML = `
+        ${STYLES}
+          <div id="fast-pr">
+            <div class="main-content">
+              <div>
+                  <b>Copy:</b>
+                  <button id="button1" class="button" role="button">Branch</button>
+                  <button id="button2" class="button" role="button">Commit</button>
+                  <button id="button3" class="button" role="button">PR desc</button>
+              </div>
+              <nav class="tabs">
+                  <div class="selector"></div>
+                  ${getPrefixesTabs()}
+                  <span class="options_wrapper">
+                  <span class="dropdown_x">
+                  <button class="dropdown-button_x" id="toggleDropdown">${
+                    profilesData.selected
+                  }</button>
+                  <span class="dropdown-content" id="dropdownContent">
+                    ${processProfiles(profilesData.list)}
+                  </span>
+                  </span>
+                   <span id="options" class="options">${ICON}</span>
+                  </span>
+              </nav>
+            </div>
+          </div>
+        `;
+        headerElement[0].appendChild(newElement);
+
+        const button1 = document.getElementById("button1");
+        const button2 = document.getElementById("button2");
+        const button3 = document.getElementById("button3");
+
+        const avatarInfo = document.querySelector(
+          "div#issuecomment-new .d-inline-block > img"
+        );
+        const regex = /alt="@([^"]+)">/;
+        const match = avatarInfo.outerHTML.match(regex);
+
+        let user = DEFAULT_USER;
+        if (match) {
+          const username = match[1];
+          user = username;
+        }
+
+        const tabs = document.querySelector(".tabs");
+        const activeItem = tabs.querySelector(".active");
+        const activeWidth = activeItem.offsetWidth;
+        document.querySelector(".selector").style.left =
+          activeItem.offsetLeft + "px";
+        document.querySelector(".selector").style.width = activeWidth + "px";
+
+        button1.addEventListener("click", () => {
+          const activeItem = tabs.querySelector(".active");
+          const { formattedHeader } = getFormattedHeader();
+          copyTextToClipboard(
+            processBranchName(activeItem.textContent, formattedHeader)
+          );
+        });
+        button2.addEventListener("click", () => {
+          const activeItem = tabs.querySelector(".active");
+          const { issueNumber } = getFormattedHeader();
+          copyTextToClipboard(
+            processCommit(
+              activeItem.textContent,
+              issueNumber,
+              getRepoDetails(),
+              user
+            )
+          );
+        });
+        button3.addEventListener("click", () => {
+          const activeItem = tabs.querySelector(".active");
+          const { issueNumber } = getFormattedHeader();
+          copyTextToClipboard(
+            processPR(
+              activeItem.textContent,
+              issueNumber,
+              getRepoDetails(),
+              user
+            )
+          );
+        });
+
+        tabs.addEventListener("click", onTabClick);
+
+        const buttons = document.querySelectorAll(".button");
+        buttons.forEach((button) =>
+          button.addEventListener("click", onButtonClick)
+        );
+
+        const openPopupBtn = document.getElementById("options");
+        openPopupBtn.addEventListener("click", () => {
+          window.postMessage({ action: "changeState", newState: true }, "*");
+        });
+
+        // <dropdown
+        if (!initDropdownRef) {
+          const toggleDropdown = document.getElementById("toggleDropdown");
+          const dropdownContent = document.getElementById("dropdownContent");
+          const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+          toggleDropdown.addEventListener("click", function () {
+            if (dropdownContent.style.display === "block") {
+              dropdownContent.style.display = "none";
+            } else {
+              dropdownContent.style.display = "block";
+            }
+          });
+
+          dropdownItems.forEach(function (item) {
+            item.addEventListener("click", function () {
+              setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
+              const pluginBody = document.getElementById("fast-pr");
+              pluginBody.remove();
+              init();
+            });
+          });
+        } else {
+          initDropdownRef();
+        }
+        //common dropdown listener
+        window.addEventListener("click", function (event) {
+          if (!event.target.matches(".dropdown-button_x")) {
+            if (dropdownContent.style.display === "block") {
+              dropdownContent.style.display = "none";
+            }
+          }
+        });
+        // dropdown>
+      }
+
+      init(initDropdown);
+    }
   } catch (error) {
     console.log("[error]", error);
   }
 }
 
-function attachContentScript(tabId, content) {
+function attachContentScript(tabId) {
   chrome.scripting.executeScript({
     target: { tabId },
     function: updatePage,
-    args: [content, ICON, STYLES, DEFAULT_USER],
+    args: [ICON, STYLES, DEFAULT_USER],
   });
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   // Check if the page has completed loading and it's not a Chrome internal page
   if (changeInfo.status === "complete" && tab.url.includes("github")) {
-    const content = chrome.runtime.getURL("content.js");
     // Execute the content script on the loaded page
-    attachContentScript(tabId, content);
+    attachContentScript(tabId);
   }
 });
