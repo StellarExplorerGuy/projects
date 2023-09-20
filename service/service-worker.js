@@ -770,9 +770,7 @@ Contributes:
   // Create a MutationObserver to watch for changes in the DOM
   const observer = new MutationObserver(onHeaderElementAvailable);
   // Configure the observer to look for changes in the subtree of the document body
-  const observerConfig = { childList: true, subtree: true };
-  // Start observing the document
-  observer.observe(document.body, observerConfig);
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 
 function attachContentScript(tabId) {
