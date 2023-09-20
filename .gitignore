@@ -41,3 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 extension/content.js.LICENSE.txt
+extension/service-worker.js
