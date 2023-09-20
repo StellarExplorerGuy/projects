@@ -254,35 +254,38 @@ const STYLES = `
 </head>
 `;
 
-const DEFAULT_USER = "Name Surname <name.surname@gmail.com>";
+const DEFAULT_USER = "Name Surname <name.surname@org.com>";
 
 function updatePage(ICON, STYLES, DEFAULT_USER) {
-  try {
-    const ID = "content-23e32e23";
-    if (!document.getElementById(ID)) {
-      const popupHtml = `<html><head><title>Customization</title><script src="${chrome.runtime.getURL(
-        "content.js"
-      )}"></script></head><body></body></html>`;
-      const newDiv = document.createElement("div");
-      newDiv.id = ID;
-      newDiv.innerHTML = popupHtml;
-      document.body.appendChild(newDiv);
-    }
-    const singleSeparator = "`";
-    const separator = "```";
+  function onHeaderElementAvailable() {
+    const headerElement = document.getElementsByClassName("gh-header-title");
+    if (headerElement && headerElement.length > 0) {
+      try {
+        const ID = "content-23e32e23";
+        if (!document.getElementById(ID)) {
+          const popupHtml = `<html><head><title>Customization</title><script src="${chrome.runtime.getURL(
+            "content.js"
+          )}"></script></head><body></body></html>`;
+          const newDiv = document.createElement("div");
+          newDiv.id = ID;
+          newDiv.innerHTML = popupHtml;
+          document.body.appendChild(newDiv);
+        }
+        const singleSeparator = "`";
+        const separator = "```";
 
-    function getCommit(type, issue, repoDetails, user) {
-      return `${type}: 
+        function getCommit(type, issue, repoDetails, user) {
+          return `${type}: 
 
 <body>
 
 Contributes: ${repoDetails.user}/${repoDetails.repo}#${issue}
 
 Signed-off-by: ${user}`;
-    }
+        }
 
-    function getPR(params) {
-      return `<!-- Commit Message Title
+        function getPR(params) {
+          return `<!-- Commit Message Title
 * When opening this PR, the raiser should set the title of this PR to the first line of their desired commit message, e.g:
 ${separator}
 feat|fix|docs|style|refactor|perf|test|chore: changed function X
@@ -329,299 +332,296 @@ Contributes:
 - [x] Desired commit message set as PR title and description set above
 - [x] Link to relevant GitHub issue provided
 `;
-    }
-    const FASTER_PR_PROFILE_KEY = "FASTER_PR_KEY";
-    const FASTER_PR_PROFILE = "FASTER_PR_PROFILE";
-
-    /** Set default data when err */
-    function getLocalStorage(key) {
-      try {
-        const localData = JSON.parse(localStorage.getItem(key)) || {};
-        return localData;
-      } catch (error) {
-        return {};
-      }
-    }
-    function setLocalStorage(key, data) {
-      try {
-        localStorage.setItem(key, JSON.stringify(data));
-      } catch (error) {}
-    }
-
-    const DEFAULT_BRANCH_PREFIXES = [
-      "feat",
-      "fix",
-      "docs",
-      "style",
-      "refactor",
-      "test",
-      "chore",
-      "release",
-    ];
-    function getBranchPrefixes(prefixesList) {
-      let defaultPrefixes = "";
-      prefixesList.forEach(
-        (prefix, index) =>
-          (defaultPrefixes +=
-            index === 0
-              ? `<a class="active" href="#">${prefix}</a>`
-              : `<a href="#">${prefix}</a>`)
-      );
-      return defaultPrefixes;
-    }
-
-    function getPrefixesTabs() {
-      try {
-        const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
-        const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
-        const profile = allProfiles[profileKey];
-        if (profile.branchPrefixes) {
-          return getBranchPrefixes(profile.branchPrefixes);
         }
-        return getBranchPrefixes(DEFAULT_BRANCH_PREFIXES);
-      } catch (error) {
-        return getBranchPrefixes(DEFAULT_BRANCH_PREFIXES);
-      }
-    }
+        const FASTER_PR_PROFILE_KEY = "FASTER_PR_KEY";
+        const FASTER_PR_PROFILE = "FASTER_PR_PROFILE";
 
-    function getProfileData() {
-      try {
-        const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
-        const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
-
-        if (allProfiles.profiles) {
-          return { selected: profileKey, list: allProfiles.profiles };
-        }
-        return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] };
-      } catch (error) {
-        return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] };
-      }
-    }
-
-    function processProfiles(list) {
-      let data = "";
-      list.forEach(
-        (item) => (data += `<div class="dropdown-item">${item}</div>`)
-      );
-      return data;
-    }
-
-    function processBranchName(prefix, suffix) {
-      try {
-        const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
-        const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
-        const profile = allProfiles[profileKey];
-        let branchSeparator = "/";
-
-        if (profile.uppercase) {
-          prefix = prefix.toUpperCase();
-        }
-        if (profile.branchSeparator) {
-          branchSeparator = profile.branchSeparator;
-        }
-        return `${prefix}${branchSeparator}${suffix}`;
-      } catch (error) {
-        return {};
-      }
-    }
-
-    function processCommit(type, issue, repoDetails, user) {
-      try {
-        const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
-        const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
-        const profile = allProfiles[profileKey];
-        if (profile) {
-          let signature = user;
-
-          if (profile.signature) {
-            signature = profile.signature;
+        /** Set default data when err */
+        function getLocalStorage(key) {
+          try {
+            const localData = JSON.parse(localStorage.getItem(key)) || {};
+            return localData;
+          } catch (error) {
+            return {};
           }
-
-          const formattedCommit = profile.commit
-            .replace(/ISSUE_TYPE/g, type)
-            .replace(/ISSUE/g, issue)
-            .replace(/REPO_ORG/g, repoDetails.user)
-            .replace(/REPO_NAME/g, repoDetails.repo)
-            .replace(/SIGNATURE/g, signature);
-
-          return formattedCommit;
+        }
+        function setLocalStorage(key, data) {
+          try {
+            localStorage.setItem(key, JSON.stringify(data));
+          } catch (error) {}
         }
 
-        return getCommit(type, issue, repoDetails, user);
-      } catch (error) {
-        return getCommit(type, issue, repoDetails, user);
-      }
-    }
-
-    function processPR(type, issue, repoDetails, user) {
-      try {
-        const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
-        const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
-        const profile = allProfiles[profileKey];
-        if (profile) {
-          let signature = user;
-
-          if (profile.signature) {
-            signature = profile.signature;
-          }
-
-          const formattedPR = profile.pr
-            .replace(/ISSUE_TYPE/g, type)
-            .replace(/ISSUE/g, issue)
-            .replace(/REPO_ORG/g, repoDetails.user)
-            .replace(/REPO_NAME/g, repoDetails.repo)
-            .replace(/SIGNATURE/g, signature);
-
-          return formattedPR;
+        const DEFAULT_BRANCH_PREFIXES = [
+          "feat",
+          "fix",
+          "docs",
+          "style",
+          "refactor",
+          "test",
+          "chore",
+          "release",
+        ];
+        function getBranchPrefixes(prefixesList) {
+          let defaultPrefixes = "";
+          prefixesList.forEach(
+            (prefix, index) =>
+              (defaultPrefixes +=
+                index === 0
+                  ? `<a class="active" href="#">${prefix}</a>`
+                  : `<a href="#">${prefix}</a>`)
+          );
+          return defaultPrefixes;
         }
 
-        return getPR({
-          type: activeItem.textContent,
-          issueNumber: issue,
-          repoDetails: getRepoDetails(),
-          user,
-        });
-      } catch (error) {
-        return getPR({
-          type: activeItem.textContent,
-          issueNumber: issue,
-          repoDetails: getRepoDetails(),
-          user,
-        });
-      }
-    }
-    const regexCSS = /-?\.main-content\s*\{[\s\S]*$/;
-    function getBranchName(text) {
-      const DOT_KEY = "dwedtw";
-      const trimmedText = text.replace(regexCSS, "").trim();
-
-      // Extracting the number from the text using regex
-      const regex = /#(\d+)/;
-      const matches = trimmedText.match(regex);
-      const number = matches ? matches[1] : "";
-
-      // Removing the number and the # from the text
-      const textWithoutNumber = trimmedText.replace(regex, "");
-      const textWithDashes = textWithoutNumber.replace(/\./g, DOT_KEY);
-
-      // Converting the remaining text to the desired format
-      const formattedText =
-        number +
-        "-" +
-        textWithDashes
-          .replace(/\s+/g, "-") // Replacing spaces with dashes
-          .replace(/[^\w-]/g, "") // Removing non-alphanumeric characters except dashes
-          .replace(/_/g, "-") // replace underscore
-          .toLowerCase(); // Converting to lowercase
-
-      // Removing the trailing dash from the formatted text
-      const finalFormattedText = formattedText
-        .replace(/-+$/, "")
-        .replace(/-+/g, "-")
-        .replace(new RegExp(DOT_KEY, "g"), ".");
-
-      return finalFormattedText;
-    }
-
-    // Function to copy text to clipboard
-    function copyTextToClipboard(text) {
-      const textarea = document.createElement("textarea");
-      textarea.value = text;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
-    }
-
-    // Function to handle button click
-    function onButtonClick(event) {
-      const button = event.target;
-      button.classList.add("active");
-      setTimeout(() => {
-        button.classList.remove("active");
-      }, 1000); // Set the timeout to match the animation duration (1 second)
-    }
-
-    function getRepoDetails() {
-      const url = window.location.href;
-      const regex = /([^/]+)\/([^/]+)\/issues/;
-      const match = url.match(regex);
-
-      if (match && match.length >= 3) {
-        const user = match[1];
-        const repo = match[2];
-        return { user, repo };
-      }
-      return { user: "", repo: "" };
-    }
-    function getFormattedHeader() {
-      const headerElement =
-        document.getElementsByClassName("gh-header-title");
-
-      const formattedHeader = getBranchName(
-        headerElement && headerElement[0]
-          ? headerElement[0].textContent
-          : ""
-      );
-      const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)[0];
-      return { formattedHeader, issueNumber };
-    }
-
-    // Function to handle tab click
-    function onTabClick(event) {
-      event.preventDefault();
-
-      if (event.target.tagName === "A") {
-        const tabLinks = document.querySelectorAll(".tabs a");
-        tabLinks.forEach((link) => link.classList.remove("active"));
-
-        const targetTab = event.target;
-        targetTab.classList.add("active");
-
-        const activeWidth = targetTab.offsetWidth;
-        const itemPos = targetTab.offsetLeft;
-        document.querySelector(".selector").style.left = itemPos + "px";
-        document.querySelector(".selector").style.width = activeWidth + "px";
-      }
-    }
-
-    const headerElement = document.getElementsByClassName("gh-header-title");
-    const parentElement = document.getElementById("fast-pr");
-    if (parentElement) {
-      parentElement.parentNode.removeChild(parentElement);
-    }
-    if (headerElement.length === 1) {
-      const formattedHeader = getBranchName(
-        headerElement && headerElement[0] ? headerElement[0].textContent : ""
-      );
-      const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)[0];
-
-      function initDropdown() {
-        const toggleDropdown = document.getElementById("toggleDropdown");
-        const dropdownContent = document.getElementById("dropdownContent");
-        const dropdownItems = document.querySelectorAll(".dropdown-item");
-
-        toggleDropdown.addEventListener("click", function () {
-          if (dropdownContent.style.display === "block") {
-            dropdownContent.style.display = "none";
-          } else {
-            dropdownContent.style.display = "block";
+        function getPrefixesTabs() {
+          try {
+            const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
+            const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
+            const profile = allProfiles[profileKey];
+            if (profile.branchPrefixes) {
+              return getBranchPrefixes(profile.branchPrefixes);
+            }
+            return getBranchPrefixes(DEFAULT_BRANCH_PREFIXES);
+          } catch (error) {
+            return getBranchPrefixes(DEFAULT_BRANCH_PREFIXES);
           }
-        });
+        }
 
-        dropdownItems.forEach(function (item) {
-          item.addEventListener("click", function () {
-            setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
-            const pluginBody = document.getElementById("fast-pr");
-            pluginBody.remove();
-            init();
-          });
-        });
-      }
-      function init(initDropdownRef) {
-        const profilesData = getProfileData();
-        const newElement = document.createElement("span");
-        newElement.innerHTML = `
+        function getProfileData() {
+          try {
+            const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
+            const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
+
+            if (allProfiles.profiles) {
+              return { selected: profileKey, list: allProfiles.profiles };
+            }
+            return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] };
+          } catch (error) {
+            return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] };
+          }
+        }
+
+        function processProfiles(list) {
+          let data = "";
+          list.forEach(
+            (item) => (data += `<div class="dropdown-item">${item}</div>`)
+          );
+          return data;
+        }
+
+        function processBranchName(prefix, suffix) {
+          try {
+            const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
+            const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
+            const profile = allProfiles[profileKey];
+            let branchSeparator = "/";
+
+            if (profile.uppercase) {
+              prefix = prefix.toUpperCase();
+            }
+            if (profile.branchSeparator) {
+              branchSeparator = profile.branchSeparator;
+            }
+            return `${prefix}${branchSeparator}${suffix}`;
+          } catch (error) {
+            return {};
+          }
+        }
+
+        function processCommit(type, issue, repoDetails, user) {
+          try {
+            const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
+            const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
+            const profile = allProfiles[profileKey];
+            if (profile) {
+              let signature = user;
+
+              if (profile.signature) {
+                signature = profile.signature;
+              }
+
+              const formattedCommit = profile.commit
+                .replace(/ISSUE_TYPE/g, type)
+                .replace(/ISSUE/g, issue)
+                .replace(/REPO_ORG/g, repoDetails.user)
+                .replace(/REPO_NAME/g, repoDetails.repo)
+                .replace(/SIGNATURE/g, signature);
+
+              return formattedCommit;
+            }
+
+            return getCommit(type, issue, repoDetails, user);
+          } catch (error) {
+            return getCommit(type, issue, repoDetails, user);
+          }
+        }
+
+        function processPR(type, issue, repoDetails, user) {
+          try {
+            const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY);
+            const allProfiles = getLocalStorage(FASTER_PR_PROFILE);
+            const profile = allProfiles[profileKey];
+            if (profile) {
+              let signature = user;
+
+              if (profile.signature) {
+                signature = profile.signature;
+              }
+
+              const formattedPR = profile.pr
+                .replace(/ISSUE_TYPE/g, type)
+                .replace(/ISSUE/g, issue)
+                .replace(/REPO_ORG/g, repoDetails.user)
+                .replace(/REPO_NAME/g, repoDetails.repo)
+                .replace(/SIGNATURE/g, signature);
+
+              return formattedPR;
+            }
+
+            return getPR({
+              type: activeItem.textContent,
+              issueNumber: issue,
+              repoDetails: getRepoDetails(),
+              user,
+            });
+          } catch (error) {
+            return getPR({
+              type: activeItem.textContent,
+              issueNumber: issue,
+              repoDetails: getRepoDetails(),
+              user,
+            });
+          }
+        }
+        const regexCSS = /-?\.main-content\s*\{[\s\S]*$/;
+        function getBranchName(text) {
+          const DOT_KEY = "dwedtw";
+          const trimmedText = text.replace(regexCSS, "").trim();
+
+          // Extracting the number from the text using regex
+          const regex = /#(\d+)/;
+          const matches = trimmedText.match(regex);
+          const number = matches ? matches[1] : "";
+
+          // Removing the number and the # from the text
+          const textWithoutNumber = trimmedText.replace(regex, "");
+          const textWithDashes = textWithoutNumber.replace(/\./g, DOT_KEY);
+
+          // Converting the remaining text to the desired format
+          const formattedText =
+            number +
+            "-" +
+            textWithDashes
+              .replace(/\s+/g, "-") // Replacing spaces with dashes
+              .replace(/[^\w-]/g, "") // Removing non-alphanumeric characters except dashes
+              .replace(/_/g, "-") // replace underscore
+              .toLowerCase(); // Converting to lowercase
+
+          // Removing the trailing dash from the formatted text
+          const finalFormattedText = formattedText
+            .replace(/-+$/, "")
+            .replace(/-+/g, "-")
+            .replace(new RegExp(DOT_KEY, "g"), ".");
+
+          return finalFormattedText;
+        }
+
+        // Function to copy text to clipboard
+        function copyTextToClipboard(text) {
+          const textarea = document.createElement("textarea");
+          textarea.value = text;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+        }
+
+        // Function to handle button click
+        function onButtonClick(event) {
+          const button = event.target;
+          button.classList.add("active");
+          setTimeout(() => {
+            button.classList.remove("active");
+          }, 1000); // Set the timeout to match the animation duration (1 second)
+        }
+
+        function getRepoDetails() {
+          const url = window.location.href;
+          const regex = /([^/]+)\/([^/]+)\/issues/;
+          const match = url.match(regex);
+
+          if (match && match.length >= 3) {
+            const user = match[1];
+            const repo = match[2];
+            return { user, repo };
+          }
+          return { user: "", repo: "" };
+        }
+        function getFormattedHeader() {
+          const headerElement =
+            document.getElementsByClassName("gh-header-title");
+
+          const formattedHeader = getBranchName(
+            headerElement && headerElement[0]
+              ? headerElement[0].textContent
+              : ""
+          );
+          const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)[0];
+          return { formattedHeader, issueNumber };
+        }
+
+        // Function to handle tab click
+        function onTabClick(event) {
+          event.preventDefault();
+
+          if (event.target.tagName === "A") {
+            const tabLinks = document.querySelectorAll(".tabs a");
+            tabLinks.forEach((link) => link.classList.remove("active"));
+
+            const targetTab = event.target;
+            targetTab.classList.add("active");
+
+            const activeWidth = targetTab.offsetWidth;
+            const itemPos = targetTab.offsetLeft;
+            document.querySelector(".selector").style.left = itemPos + "px";
+            document.querySelector(".selector").style.width =
+              activeWidth + "px";
+          }
+        }
+
+        const headerElement =
+          document.getElementsByClassName("gh-header-title");
+        const parentElement = document.getElementById("fast-pr");
+        if (parentElement) {
+          parentElement.parentNode.removeChild(parentElement);
+        }
+        if (headerElement.length === 1) {
+          function initDropdown() {
+            const toggleDropdown = document.getElementById("toggleDropdown");
+            const dropdownContent = document.getElementById("dropdownContent");
+            const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+            toggleDropdown.addEventListener("click", function () {
+              if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+              } else {
+                dropdownContent.style.display = "block";
+              }
+            });
+
+            dropdownItems.forEach(function (item) {
+              item.addEventListener("click", function () {
+                setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
+                const pluginBody = document.getElementById("fast-pr");
+                pluginBody.remove();
+                init();
+              });
+            });
+          }
+          function init(initDropdownRef) {
+            const profilesData = getProfileData();
+            const newElement = document.createElement("span");
+            newElement.innerHTML = `
         ${STYLES}
           <div id="fast-pr">
             <div class="main-content">
@@ -649,116 +649,130 @@ Contributes:
             </div>
           </div>
         `;
-        headerElement[0].appendChild(newElement);
+            headerElement[0].appendChild(newElement);
 
-        const button1 = document.getElementById("button1");
-        const button2 = document.getElementById("button2");
-        const button3 = document.getElementById("button3");
+            const button1 = document.getElementById("button1");
+            const button2 = document.getElementById("button2");
+            const button3 = document.getElementById("button3");
 
-        const avatarInfo = document.querySelector(
-          "div#issuecomment-new .d-inline-block > img"
-        );
-        const regex = /alt="@([^"]+)">/;
-        const match = avatarInfo.outerHTML.match(regex);
+            const avatarInfo = document.querySelector(
+              "div#issuecomment-new .d-inline-block > img"
+            );
+            const regex = /alt="@([^"]+)">/;
+            const match = avatarInfo.outerHTML.match(regex);
 
-        let user = DEFAULT_USER;
-        if (match) {
-          const username = match[1];
-          user = username;
-        }
-
-        const tabs = document.querySelector(".tabs");
-        const activeItem = tabs.querySelector(".active");
-        const activeWidth = activeItem.offsetWidth;
-        document.querySelector(".selector").style.left =
-          activeItem.offsetLeft + "px";
-        document.querySelector(".selector").style.width = activeWidth + "px";
-
-        button1.addEventListener("click", () => {
-          const activeItem = tabs.querySelector(".active");
-          const { formattedHeader } = getFormattedHeader();
-          copyTextToClipboard(
-            processBranchName(activeItem.textContent, formattedHeader)
-          );
-        });
-        button2.addEventListener("click", () => {
-          const activeItem = tabs.querySelector(".active");
-          const { issueNumber } = getFormattedHeader();
-          copyTextToClipboard(
-            processCommit(
-              activeItem.textContent,
-              issueNumber,
-              getRepoDetails(),
-              user
-            )
-          );
-        });
-        button3.addEventListener("click", () => {
-          const activeItem = tabs.querySelector(".active");
-          const { issueNumber } = getFormattedHeader();
-          copyTextToClipboard(
-            processPR(
-              activeItem.textContent,
-              issueNumber,
-              getRepoDetails(),
-              user
-            )
-          );
-        });
-
-        tabs.addEventListener("click", onTabClick);
-
-        const buttons = document.querySelectorAll(".button");
-        buttons.forEach((button) =>
-          button.addEventListener("click", onButtonClick)
-        );
-
-        const openPopupBtn = document.getElementById("options");
-        openPopupBtn.addEventListener("click", () => {
-          window.postMessage({ action: "changeState", newState: true }, "*");
-        });
-
-        // <dropdown
-        if (!initDropdownRef) {
-          const toggleDropdown = document.getElementById("toggleDropdown");
-          const dropdownContent = document.getElementById("dropdownContent");
-          const dropdownItems = document.querySelectorAll(".dropdown-item");
-
-          toggleDropdown.addEventListener("click", function () {
-            if (dropdownContent.style.display === "block") {
-              dropdownContent.style.display = "none";
-            } else {
-              dropdownContent.style.display = "block";
+            let user = DEFAULT_USER;
+            if (match) {
+              const username = match[1];
+              user = username;
             }
-          });
 
-          dropdownItems.forEach(function (item) {
-            item.addEventListener("click", function () {
-              setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
-              const pluginBody = document.getElementById("fast-pr");
-              pluginBody.remove();
-              init();
+            const tabs = document.querySelector(".tabs");
+            const activeItem = tabs.querySelector(".active");
+            const activeWidth = activeItem.offsetWidth;
+            document.querySelector(".selector").style.left =
+              activeItem.offsetLeft + "px";
+            document.querySelector(".selector").style.width =
+              activeWidth + "px";
+
+            button1.addEventListener("click", () => {
+              const activeItem = tabs.querySelector(".active");
+              const { formattedHeader } = getFormattedHeader();
+              copyTextToClipboard(
+                processBranchName(activeItem.textContent, formattedHeader)
+              );
             });
-          });
-        } else {
-          initDropdownRef();
-        }
-        //common dropdown listener
-        window.addEventListener("click", function (event) {
-          if (!event.target.matches(".dropdown-button_x")) {
-            if (dropdownContent.style.display === "block") {
-              dropdownContent.style.display = "none";
-            }
-          }
-        });
-        // dropdown>
-      }
+            button2.addEventListener("click", () => {
+              const activeItem = tabs.querySelector(".active");
+              const { issueNumber } = getFormattedHeader();
+              copyTextToClipboard(
+                processCommit(
+                  activeItem.textContent,
+                  issueNumber,
+                  getRepoDetails(),
+                  user
+                )
+              );
+            });
+            button3.addEventListener("click", () => {
+              const activeItem = tabs.querySelector(".active");
+              const { issueNumber } = getFormattedHeader();
+              copyTextToClipboard(
+                processPR(
+                  activeItem.textContent,
+                  issueNumber,
+                  getRepoDetails(),
+                  user
+                )
+              );
+            });
 
-      init(initDropdown);
+            tabs.addEventListener("click", onTabClick);
+
+            const buttons = document.querySelectorAll(".button");
+            buttons.forEach((button) =>
+              button.addEventListener("click", onButtonClick)
+            );
+
+            const openPopupBtn = document.getElementById("options");
+            openPopupBtn.addEventListener("click", () => {
+              window.postMessage(
+                { action: "changeState", newState: true },
+                "*"
+              );
+            });
+
+            // <dropdown
+            if (!initDropdownRef) {
+              const toggleDropdown = document.getElementById("toggleDropdown");
+              const dropdownContent =
+                document.getElementById("dropdownContent");
+              const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+              toggleDropdown.addEventListener("click", function () {
+                if (dropdownContent.style.display === "block") {
+                  dropdownContent.style.display = "none";
+                } else {
+                  dropdownContent.style.display = "block";
+                }
+              });
+
+              dropdownItems.forEach(function (item) {
+                item.addEventListener("click", function () {
+                  setLocalStorage(FASTER_PR_PROFILE_KEY, item.textContent);
+                  const pluginBody = document.getElementById("fast-pr");
+                  pluginBody.remove();
+                  init();
+                });
+              });
+            } else {
+              initDropdownRef();
+            }
+            //common dropdown listener
+            window.addEventListener("click", function (event) {
+              if (!event.target.matches(".dropdown-button_x")) {
+                if (dropdownContent.style.display === "block") {
+                  dropdownContent.style.display = "none";
+                }
+              }
+            });
+            // dropdown>
+          }
+
+          init(initDropdown);
+        }
+      } catch (error) {
+        console.log("[error]", error);
+      }
+      observer.disconnect();
     }
-  } catch (error) {
-    console.log("[error]", error);
   }
+  // Create a MutationObserver to watch for changes in the DOM
+  const observer = new MutationObserver(onHeaderElementAvailable);
+  // Configure the observer to look for changes in the subtree of the document body
+  const observerConfig = { childList: true, subtree: true };
+  // Start observing the document
+  observer.observe(document.body, observerConfig);
 }
 
 function attachContentScript(tabId) {
