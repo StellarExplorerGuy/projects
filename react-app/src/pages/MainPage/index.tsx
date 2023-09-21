@@ -14,7 +14,7 @@ import ResetProfile from 'components/modals/ResetProfile'
 import Tip from 'components/modals/Tip'
 import { DIALOG, ItemType } from 'types'
 import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, HOME_URL } from 'utils/constants'
-import { defaultProfile, showAlertInfo, updateKey, updateLocalStorage } from 'utils/data'
+import { decodeUrl, defaultProfile, showAlertInfo, updateKey, updateLocalStorage } from 'utils/data'
 
 import { useEffect, useState } from 'react'
 
@@ -677,7 +677,7 @@ function Main(): JSX.Element {
                       borderRadius: 8,
                     }}
                     variant="outlined"
-                    onClick={() => window.open(HOME_URL, '_blank')}
+                    onClick={() => window.open(decodeUrl(HOME_URL), '_blank')}
                   >
                     <FavoriteRoundedIcon sx={{ color: 'red' }} fontSize="small" />
                   </IconButton>

@@ -143,3 +143,9 @@ export const updateKey = (key: string, data: string): void => {
     localStorage.setItem(key, JSON.stringify(data))
   } catch (error) {}
 }
+
+export const decodeUrl = (encodedText: string): string => {
+  const doubleReversedText = atob(encodedText)
+  const reversedText = doubleReversedText.split('').reverse().join('')
+  return reversedText.split('').reverse().join('')
+}

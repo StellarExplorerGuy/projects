@@ -1,4 +1,6 @@
 import { Box, Link, Typography } from '@mui/joy'
+import { GIT_URL } from 'utils/constants'
+import { decodeUrl } from 'utils/data'
 
 export const TIP_HEADERS = [
   'Good PR',
@@ -107,7 +109,7 @@ export function getTips() {
       <br />
       <Box sx={{ ml: -2 }}>
         Detailed setup can be found{' '}
-        <Link target="_blank" href="https://github.com/StellarExplorerGuy/projects/blob/main/docs/commit/commit.md">
+        <Link target="_blank" href={decodeUrl(GIT_URL)}>
           here
         </Link>
         .
