@@ -653,81 +653,79 @@ function Main(): JSX.Element {
   return (
     <>
       <CssBaseline />
-      {open ? (
-        <Modal open={open} onClose={() => setClose(false)}>
-          <ModalDialog layout="fullscreen" variant="plain" role="alertdialog">
-            <Grid
-              sx={{ mb: 0.5 }}
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="flex-end"
-              spacing={2}
-            >
-              <Grid xs={2}>
-                <Typography id="basic-modal-dialog-title" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
-                  Customization
-                </Typography>
-              </Grid>
-              <Grid xs={10}>
-                <Grid container direction="row" justifyContent="flex-end" alignItems="flex-start">
-                  <IconButton
-                    sx={{
-                      mr: 2,
-                      borderRadius: 8,
-                    }}
-                    variant="outlined"
-                    onClick={() => window.open(decodeUrl(HOME_URL), '_blank')}
-                  >
-                    <FavoriteRoundedIcon sx={{ color: 'red' }} fontSize="small" />
-                  </IconButton>
-                  <ModeToggle />
-                </Grid>
+      <Modal keepMounted open={open} onClose={() => setClose(false)}>
+        <ModalDialog layout="fullscreen" variant="plain" role="alertdialog">
+          <Grid
+            sx={{ mb: 0.5 }}
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="flex-end"
+            spacing={2}
+          >
+            <Grid xs={2}>
+              <Typography id="basic-modal-dialog-title" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
+                Customization
+              </Typography>
+            </Grid>
+            <Grid xs={10}>
+              <Grid container direction="row" justifyContent="flex-end" alignItems="flex-start">
+                <IconButton
+                  sx={{
+                    mr: 2,
+                    borderRadius: 8,
+                  }}
+                  variant="outlined"
+                  onClick={() => window.open(decodeUrl(HOME_URL), '_blank')}
+                >
+                  <FavoriteRoundedIcon sx={{ color: 'red' }} fontSize="small" />
+                </IconButton>
+                <ModeToggle />
               </Grid>
             </Grid>
+          </Grid>
 
-            <Divider sx={{ height: 4, background: 'var(--joy-palette-primary-500)' }} />
-            <Content
-              openDialogs={openDialogs}
-              dialogValue={dialogValue}
-              setAlertInfo={setAlertInfo}
-              handleClose={handleClose}
-              setDialogValue={setDialogValue}
-              handleOpen={handleOpen}
-            />
-            <Grid sx={{ mt: 1 }} container direction="row" justifyContent="space-between" alignItems="flex-end">
-              <IconButton
-                sx={{
-                  borderRadius: 8,
-                  ':hover': {
-                    background: 'yellow',
-                  },
-                }}
-                variant="outlined"
-                onClick={() => handleOpen(DIALOG.TIP)}
-              >
-                <EmojiObjectsTwoToneIcon color="primary" fontSize="small" />
-              </IconButton>
-              <Stack spacing={2}>
-                <Stack direction="row" justifyContent="flex-end" spacing={2} height={{ height: 42 }}>
-                  {alertInfo.visible && (
-                    <Alert variant="soft" color={alertInfo.type as any} sx={{ width: 'fit-content' }}>
-                      {alertInfo.msg}
-                    </Alert>
-                  )}
-                  <Button variant="outlined" onClick={() => setClose(false)}>
-                    Close
-                    <Typography sx={{ pl: 1 }} color="neutral">
-                      [esc]
-                    </Typography>
-                  </Button>
-                  <Button onClick={() => save(dialogValue, setAlertInfo)}>Save</Button>
-                </Stack>
+          <Divider sx={{ height: 4, background: 'var(--joy-palette-primary-500)' }} />
+          <Content
+            openDialogs={openDialogs}
+            dialogValue={dialogValue}
+            setAlertInfo={setAlertInfo}
+            handleClose={handleClose}
+            setDialogValue={setDialogValue}
+            handleOpen={handleOpen}
+          />
+          <Grid sx={{ mt: 1 }} container direction="row" justifyContent="space-between" alignItems="flex-end">
+            <IconButton
+              sx={{
+                borderRadius: 8,
+                ':hover': {
+                  background: 'yellow',
+                },
+              }}
+              variant="outlined"
+              onClick={() => handleOpen(DIALOG.TIP)}
+            >
+              <EmojiObjectsTwoToneIcon color="primary" fontSize="small" />
+            </IconButton>
+            <Stack spacing={2}>
+              <Stack direction="row" justifyContent="flex-end" spacing={2} height={{ height: 42 }}>
+                {alertInfo.visible && (
+                  <Alert variant="soft" color={alertInfo.type as any} sx={{ width: 'fit-content' }}>
+                    {alertInfo.msg}
+                  </Alert>
+                )}
+                <Button variant="outlined" onClick={() => setClose(false)}>
+                  Close
+                  <Typography sx={{ pl: 1 }} color="neutral">
+                    [esc]
+                  </Typography>
+                </Button>
+                <Button onClick={() => save(dialogValue, setAlertInfo)}>Save</Button>
               </Stack>
-            </Grid>
-          </ModalDialog>
-        </Modal>
-      ) : null}
+            </Stack>
+          </Grid>
+        </ModalDialog>
+      </Modal>
     </>
   )
 }
