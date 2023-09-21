@@ -653,7 +653,7 @@ function Main(): JSX.Element {
   return (
     <>
       <CssBaseline />
-      <Modal keepMounted open={open} onClose={() => setClose(false)}>
+      <Modal disableEscapeKeyDown={alertInfo.visible} keepMounted open={open} onClose={() => setClose(false)}>
         <ModalDialog layout="fullscreen" variant="plain" role="alertdialog">
           <Grid
             sx={{ mb: 0.5 }}
@@ -714,13 +714,15 @@ function Main(): JSX.Element {
                     {alertInfo.msg}
                   </Alert>
                 )}
-                <Button variant="outlined" onClick={() => setClose(false)}>
+                <Button disabled={alertInfo.visible} variant="outlined" onClick={() => setClose(false)}>
                   Close
                   <Typography sx={{ pl: 1 }} color="neutral">
                     [esc]
                   </Typography>
                 </Button>
-                <Button onClick={() => save(dialogValue, setAlertInfo)}>Save</Button>
+                <Button disabled={alertInfo.visible} onClick={() => save(dialogValue, setAlertInfo)}>
+                  Save
+                </Button>
               </Stack>
             </Stack>
           </Grid>
