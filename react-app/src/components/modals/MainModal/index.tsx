@@ -1,0 +1,232 @@
+import ModeToggle from 'components/ModeToggle'
+import { DIALOG, ItemType } from 'types'
+import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, HOME_URL } from 'utils/constants'
+import { decodeUrl, defaultProfile, showAlertInfo, updateLocalStorage } from 'utils/data'
+
+import { useEffect, useState } from 'react'
+
+import EmojiObjectsTwoToneIcon from '@mui/icons-material/EmojiObjectsTwoTone'
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded'
+import { Alert, Divider, Modal, ModalDialog } from '@mui/joy'
+import Button from '@mui/joy/Button'
+import CssBaseline from '@mui/joy/CssBaseline'
+import Grid from '@mui/joy/Grid'
+import IconButton from '@mui/joy/IconButton'
+import Stack from '@mui/joy/Stack'
+import Typography from '@mui/joy/Typography'
+import Content from 'components/Content'
+
+const save = (
+  dialogValue: ItemType,
+  setAlertInfo: React.Dispatch<
+    React.SetStateAction<{
+      visible: boolean
+      msg: string
+      type: string
+    }>
+  >,
+): void => {
+  const raw = window.localStorage.getItem(FASTER_PR_PROFILE)!
+  const profiles = JSON.parse(raw)
+
+  const selectedProfile = {
+    ...profiles,
+    profiles: dialogValue.profiles,
+    [dialogValue.profile]: {
+      profile: dialogValue.profile,
+      uppercase: dialogValue.uppercase,
+      branchSeparator: dialogValue.branchSeparator,
+      branchPrefixes: dialogValue.branchPrefixes,
+      signature: dialogValue.signature,
+      checked: dialogValue.checked,
+      commit: dialogValue.commit,
+      pr: dialogValue.pr,
+    },
+  }
+
+  updateLocalStorage(FASTER_PR_PROFILE, selectedProfile)
+  showAlertInfo(
+    {
+      visible: true,
+      msg: 'Saved!',
+      type: 'success',
+    },
+    setAlertInfo,
+  )
+
+  setTimeout(() => {
+    window.location.reload()
+  }, 2000)
+}
+
+function MainModal(): JSX.Element {
+  const [open, setClose] = useState(false)
+  const [dialogValue, setDialogValue] = useState<ItemType>(() => {
+    const localKey = localStorage.getItem(FASTER_PR_PROFILE_KEY)
+    const profileKey = localKey === null ? DEFAULT_PROFILE : JSON.parse(localKey)
+
+    const localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
+    let selectedProfile = null
+    if (!localKey || (!localProfile && !JSON.parse(localProfile)?.profile)) {
+      selectedProfile = { ...defaultProfile() }
+
+      window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE))
+      window.localStorage.setItem(
+        FASTER_PR_PROFILE,
+        JSON.stringify({
+          profiles: [DEFAULT_PROFILE],
+          [DEFAULT_PROFILE]: {
+            profile: selectedProfile.profile,
+            signature: selectedProfile.signature,
+            branchSeparator: selectedProfile.branchSeparator,
+            branchPrefixes: selectedProfile.branchPrefixes,
+            checked: selectedProfile.checked,
+            uppercase: selectedProfile.uppercase,
+            commit: selectedProfile.commit,
+            pr: selectedProfile.pr,
+          },
+        }),
+      )
+      return {
+        profiles: selectedProfile.profiles,
+        profile: selectedProfile.profile,
+        signature: selectedProfile.signature,
+        branchSeparator: selectedProfile.branchSeparator,
+        branchPrefixes: selectedProfile.branchPrefixes,
+        checked: selectedProfile.checked,
+        uppercase: selectedProfile.uppercase,
+        commit: selectedProfile.commit,
+        pr: selectedProfile.pr,
+      }
+    }
+
+    const allProfiles = JSON.parse(localProfile)
+    selectedProfile = allProfiles[profileKey]
+    return {
+      profiles: allProfiles.profiles ? allProfiles.profiles : [DEFAULT_PROFILE],
+      profile: selectedProfile.profile,
+      signature: selectedProfile.signature,
+      branchSeparator: selectedProfile.branchSeparator,
+      branchPrefixes: selectedProfile.branchPrefixes,
+      checked: selectedProfile.checked,
+      uppercase: selectedProfile.uppercase,
+      commit: selectedProfile.commit,
+      pr: selectedProfile.pr,
+    }
+  })
+  const [openDialogs, setOpenDialogs] = useState({
+    newProfile: false,
+    editProfile: false,
+    deleteProfile: false,
+    resetDefault: false,
+    editBranch: false,
+    tip: false,
+  })
+  const [alertInfo, setAlertInfo] = useState({
+    visible: false,
+    msg: '',
+    type: 'success',
+  })
+  const handleClose = (field: DIALOG): void => {
+    setOpenDialogs({ ...openDialogs, [field]: false })
+  }
+  const handleOpen = (field: DIALOG): void => {
+    setOpenDialogs({ ...openDialogs, [field]: true })
+  }
+
+  useEffect(() => {
+    const handleMessage = (event: any) => {
+      if (event?.data?.action === 'changeState') {
+        setClose(event.data.newState)
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+
+    return () => {
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [])
+
+  return (
+    <>
+      <CssBaseline />
+      <Modal disableEscapeKeyDown={alertInfo.visible} keepMounted open={open} onClose={() => setClose(false)}>
+        <ModalDialog layout="fullscreen" variant="plain" role="alertdialog">
+          <Grid
+            sx={{ mb: 0.5 }}
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="flex-end"
+            spacing={2}
+          >
+            <Grid xs={2}>
+              <Typography id="basic-modal-dialog-title" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
+                Customization
+              </Typography>
+            </Grid>
+            <Grid xs={10}>
+              <Grid container direction="row" justifyContent="flex-end" alignItems="flex-start">
+                <IconButton
+                  sx={{
+                    mr: 2,
+                    borderRadius: 8,
+                  }}
+                  variant="outlined"
+                  onClick={() => window.open(decodeUrl(HOME_URL), '_blank')}
+                >
+                  <FavoriteRoundedIcon sx={{ color: 'red' }} fontSize="small" />
+                </IconButton>
+                <ModeToggle />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Divider sx={{ height: 4, background: 'var(--joy-palette-primary-500)' }} />
+          <Content
+            openDialogs={openDialogs}
+            dialogValue={dialogValue}
+            setAlertInfo={setAlertInfo}
+            handleClose={handleClose}
+            setDialogValue={setDialogValue}
+            handleOpen={handleOpen}
+          />
+          <Grid sx={{ mt: 1 }} container direction="row" justifyContent="space-between" alignItems="flex-end">
+            <IconButton
+              sx={{
+                borderRadius: 8,
+                ':hover': {
+                  background: 'yellow',
+                },
+              }}
+              variant="outlined"
+              onClick={() => handleOpen(DIALOG.TIP)}
+            >
+              <EmojiObjectsTwoToneIcon color="primary" fontSize="small" />
+            </IconButton>
+            <Stack spacing={2}>
+              <Stack direction="row" justifyContent="flex-end" spacing={2} height={{ height: 42 }}>
+                {alertInfo.visible && (
+                  <Alert variant="soft" color={alertInfo.type as any} sx={{ width: 'fit-content' }}>
+                    {alertInfo.msg}
+                  </Alert>
+                )}
+                <Button disabled={alertInfo.visible} variant="outlined" onClick={() => setClose(false)}>
+                  Close
+                  <Typography sx={{ pl: 1 }} color="neutral">
+                    [esc]
+                  </Typography>
+                </Button>
+                <Button disabled={alertInfo.visible} onClick={() => save(dialogValue, setAlertInfo)}>
+                  Save
+                </Button>
+              </Stack>
+            </Stack>
+          </Grid>
+        </ModalDialog>
+      </Modal>
+    </>
+  )
+}
+
+export default MainModal
