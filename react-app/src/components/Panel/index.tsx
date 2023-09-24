@@ -308,12 +308,9 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
   const [selectedPrefix, setSelectedPrefix] = useState(prefixes[0])
 
   const [profilesData, setProfilesData] = useState(() => getProfileData())
-  const [selectedIndex, setSelectedIndex] = useState<number>(0)
-  const createHandleClose = (item: string, index: number) => () => {
-    if (typeof index === 'number') {
-      updateKey(FASTER_PR_PROFILE_KEY, item)
-      setSelectedIndex(index)
-    }
+  const createHandleClose = (item: string) => () => {
+    updateKey(FASTER_PR_PROFILE_KEY, item)
+    setProfilesData({ ...profilesData, selected: item })
   }
 
   useEffect(() => {
@@ -321,7 +318,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
     setSelectedPrefix(prefixes[0])
     setPrefixes(prefixes)
     setProfilesData(getProfileData())
-  }, [alertInfo.visible, selectedIndex])
+  }, [alertInfo.visible, profilesData.selected])
 
   const user = getUsername()
   return (
@@ -387,11 +384,11 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               </Typography>
             </MenuButton>
             <Menu>
-              {profilesData.list.map((item: string, index: number) => (
+              {profilesData.list.map((item: string) => (
                 <MenuItem
                   key={item}
-                  {...(selectedIndex === index && { selected: true, variant: 'soft' })}
-                  onClick={createHandleClose(item, index)}
+                  {...(profilesData.selected === item && { selected: true, variant: 'soft' })}
+                  onClick={createHandleClose(item)}
                 >
                   {item}
                 </MenuItem>
@@ -399,7 +396,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
             </Menu>
           </Dropdown>
           <IconButton onClick={() => setClose(true)}>
-            <Settings />
+            <Settings color='primary' />
           </IconButton>
         </ButtonGroup>
       </div>
