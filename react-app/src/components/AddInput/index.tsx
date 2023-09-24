@@ -1,7 +1,5 @@
 import FormItem from 'components/FormItem'
-
 import * as React from 'react'
-
 import { UniqueIdentifier } from '@dnd-kit/core'
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
 import Button from '@mui/joy/Button'
@@ -17,16 +15,20 @@ type AddInputProps = {
 function AddInput({ items, setItems }: AddInputProps) {
   const [data, setData] = React.useState<{
     input: string
-    status: 'initial' | 'loading' | 'failure' | 'sent'
   }>({
     input: '',
-    status: 'initial',
   })
 
   const handleSubmit = () => {
-    if(!data.input.trim().length) return
-    setItems([data.input, ...items])
-    setData({ input: '', status: 'initial' })
+    if (!data.input.trim().length) return
+
+    // Check if the input value already exists in the items array
+    const isDuplicate = items.some((item) => item === data.input)
+    if (!isDuplicate) {
+      setItems([data.input, ...items])
+    }
+
+    setData({ input: '' })
   }
 
   return (
@@ -40,17 +42,15 @@ function AddInput({ items, setItems }: AddInputProps) {
         color="primary"
         required
         value={data.input}
-        onChange={(event) => setData({ input: event.target.value, status: 'initial' })}
-        error={data.status === 'failure'}
+        onChange={(event) => setData({ input: event.target.value })}
         endDecorator={
           <>
-            <IconButton onClick={() => setData({ input: '', status: 'initial' })}>
-              <ClearOutlinedIcon color="info" fontSize="small" />
+            <IconButton onClick={() => setData({ input: '' })}>
+              <ClearOutlinedIcon color="info" sx={{ fontSize: 'var(--joy-fontSize-md)' }} />
             </IconButton>
             <Button
               variant="solid"
               color="primary"
-              loading={data.status === 'loading'}
               onClick={handleSubmit}
               sx={{ ml: 1.5, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
             >

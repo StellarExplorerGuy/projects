@@ -19,8 +19,12 @@ interface CustomSeparatorButtonGroupProps {
   setItems: React.Dispatch<React.SetStateAction<UniqueIdentifier[]>>
 }
 function CustomSeparatorButtonGroup({ items, setItems }: CustomSeparatorButtonGroupProps) {
-  const handleChange = (item: any) => {
-    setItems([item, ...items])
+  const handleChange = (inputItem: any) => {
+    const isDuplicate = items.some((item) => item === inputItem)
+    if (!isDuplicate) {
+      setItems([inputItem, ...items])
+    }
+
   }
 
   return (
