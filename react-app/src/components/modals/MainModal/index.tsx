@@ -131,7 +131,6 @@ function MainModal({ open, setClose }: any): JSX.Element {
 
   return (
     <>
-      <CssBaseline />
       <Modal disableEscapeKeyDown={alertInfo.visible} keepMounted open={open} onClose={() => setClose(false)}>
         <ModalDialog layout="fullscreen" variant="plain" role="alertdialog">
           <Grid

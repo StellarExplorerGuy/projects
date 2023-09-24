@@ -5,7 +5,7 @@ import { CssVarsProvider } from '@mui/joy/styles'
 
 function App() {
   return (
-    <CssVarsProvider>
+    <CssVarsProvider defaultMode='system'>
       <Main />
     </CssVarsProvider>
   )
