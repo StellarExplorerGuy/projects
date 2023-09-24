@@ -4,10 +4,15 @@ import MainModal from 'components/modals/MainModal'
 
 function Main(): JSX.Element {
   const [open, setClose] = useState(false)
+  const [alertInfo, setAlertInfo] = useState({
+    visible: false,
+    msg: '',
+    type: 'success',
+  })
   return (
     <>
-      <Panel setClose={setClose} />
-      <MainModal open={open} setClose={setClose} />
+      <Panel alertInfo={alertInfo} setClose={setClose} />
+      <MainModal alertInfo={alertInfo} open={open} setClose={setClose} setAlertInfo={setAlertInfo} />
     </>
   )
 }

@@ -303,7 +303,7 @@ function getUsername(): string {
   return user
 }
 
-function Panel({ setClose }: any): JSX.Element {
+function Panel({ alertInfo, setClose }: any): JSX.Element {
   const [prefixes, setPrefixes] = useState(() => getPrefixesTabs())
   const [selectedPrefix, setSelectedPrefix] = useState(prefixes[0])
 
@@ -321,7 +321,7 @@ function Panel({ setClose }: any): JSX.Element {
     setSelectedPrefix(prefixes[0])
     setPrefixes(prefixes)
     setProfilesData(getProfileData())
-  }, [selectedIndex])
+  }, [alertInfo.visible, selectedIndex])
 
   const user = getUsername()
   return (
