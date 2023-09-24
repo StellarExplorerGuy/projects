@@ -98,6 +98,7 @@
 
   .button,
   .button:after {
+    transition: 'transform 0.3s, border 0.3s';
     cursor: pointer;
     width: 140px;
     height: 47px;
@@ -111,5 +112,6 @@
 }
 
 .button:hover {
+  transform: translateY(-2px);
   background: linear-gradient(45deg, transparent 5%, #2196F3 50%, #00DDEB);
 }
