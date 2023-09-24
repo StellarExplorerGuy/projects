@@ -3,7 +3,7 @@ import { DIALOG, ItemType } from 'types'
 import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, HOME_URL } from 'utils/constants'
 import { decodeUrl, defaultProfile, showAlertInfo, updateLocalStorage } from 'utils/data'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import EmojiObjectsTwoToneIcon from '@mui/icons-material/EmojiObjectsTwoTone'
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded'
@@ -53,14 +53,9 @@ const save = (
     },
     setAlertInfo,
   )
-
-  setTimeout(() => {
-    window.location.reload()
-  }, 2000)
 }
 
-function MainModal(): JSX.Element {
-  const [open, setClose] = useState(false)
+function MainModal({ open, setClose }: any): JSX.Element {
   const [dialogValue, setDialogValue] = useState<ItemType>(() => {
     const localKey = localStorage.getItem(FASTER_PR_PROFILE_KEY)
     const profileKey = localKey === null ? DEFAULT_PROFILE : JSON.parse(localKey)
@@ -134,20 +129,6 @@ function MainModal(): JSX.Element {
     setOpenDialogs({ ...openDialogs, [field]: true })
   }
 
-  useEffect(() => {
-    const handleMessage = (event: any) => {
-      if (event?.data?.action === 'changeState') {
-        setClose(event.data.newState)
-      }
-    }
-
-    window.addEventListener('message', handleMessage)
-
-    return () => {
-      window.removeEventListener('message', handleMessage)
-    }
-  }, [])
-
   return (
     <>
       <CssBaseline />
@@ -211,13 +192,13 @@ function MainModal(): JSX.Element {
                     {alertInfo.msg}
                   </Alert>
                 )}
-                <Button disabled={alertInfo.visible} variant="outlined" onClick={() => setClose(false)}>
+                <Button variant="outlined" onClick={() => setClose(false)}>
                   Close
                   <Typography sx={{ pl: 1 }} color="neutral">
                     [esc]
                   </Typography>
                 </Button>
-                <Button disabled={alertInfo.visible} onClick={() => save(dialogValue, setAlertInfo)}>
+                <Button onClick={() => save(dialogValue, setAlertInfo)}>
                   Save
                 </Button>
               </Stack>
