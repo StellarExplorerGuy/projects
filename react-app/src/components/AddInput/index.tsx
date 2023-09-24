@@ -10,9 +10,16 @@ import Input from '@mui/joy/Input'
 type AddInputProps = {
   items: UniqueIdentifier[]
   setItems: React.Dispatch<React.SetStateAction<UniqueIdentifier[]>>
+  setAlertInfo: React.Dispatch<
+  React.SetStateAction<{
+    visible: boolean
+    msg: string
+    type: string
+  }>
+>
 }
 
-function AddInput({ items, setItems }: AddInputProps) {
+function AddInput({ items, setItems, setAlertInfo }: AddInputProps) {
   const [data, setData] = React.useState<{
     input: string
   }>({
@@ -26,6 +33,19 @@ function AddInput({ items, setItems }: AddInputProps) {
     const isDuplicate = items.some((item) => item === data.input)
     if (!isDuplicate) {
       setItems([data.input, ...items])
+    } else {
+      setAlertInfo({
+        visible: true,
+        msg: `Item is already added [${data.input}]`,
+        type: 'warning',
+      })
+      setTimeout(() => {
+        setAlertInfo({
+          visible: false,
+          msg: '',
+          type: 'warning',
+        })
+      }, 5000)
     }
 
     setData({ input: '' })

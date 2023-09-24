@@ -4,7 +4,7 @@ import RemovableItems from 'components/RemovableItems'
 import { useState } from 'react'
 
 import { UniqueIdentifier } from '@dnd-kit/core'
-import { Box } from '@mui/joy'
+import { Alert, Box } from '@mui/joy'
 import Button from '@mui/joy/Button'
 import ButtonGroup from '@mui/joy/ButtonGroup'
 import Divider from '@mui/joy/Divider'
@@ -17,14 +17,33 @@ import Typography from '@mui/joy/Typography'
 interface CustomSeparatorButtonGroupProps {
   items: UniqueIdentifier[]
   setItems: React.Dispatch<React.SetStateAction<UniqueIdentifier[]>>
+  setAlertInfo: React.Dispatch<
+    React.SetStateAction<{
+      visible: boolean
+      msg: string
+      type: string
+    }>
+  >
 }
-function CustomSeparatorButtonGroup({ items, setItems }: CustomSeparatorButtonGroupProps) {
+function CustomSeparatorButtonGroup({ items, setItems, setAlertInfo }: CustomSeparatorButtonGroupProps) {
   const handleChange = (inputItem: any) => {
     const isDuplicate = items.some((item) => item === inputItem)
     if (!isDuplicate) {
       setItems([inputItem, ...items])
+    } else {
+      setAlertInfo({
+        visible: true,
+        msg: `Item is already added [${inputItem}]`,
+        type: 'warning',
+      })
+      setTimeout(() => {
+        setAlertInfo({
+          visible: false,
+          msg: '',
+          type: 'warning',
+        })
+      }, 5000)
     }
-
   }
 
   return (
@@ -73,6 +92,11 @@ interface EditBranchProps {
 
 function EditBranch({ open, handleClose, items, handleSave }: EditBranchProps) {
   const [data, setItemsData] = useState(items)
+  const [alertInfo, setAlertInfo] = useState({
+    visible: false,
+    msg: '',
+    type: 'warning',
+  })
 
   return (
     <Modal open={open}>
@@ -81,25 +105,31 @@ function EditBranch({ open, handleClose, items, handleSave }: EditBranchProps) {
           Edit branch details
         </Typography>
         <Typography id="basic-modal-dialog-description" mt={0.5} mb={2} textColor="text.tertiary">
-          You can generate and arrange prefixes for branches, which correspond to different types of
-          issues.
-          <CustomSeparatorButtonGroup items={data} setItems={setItemsData} />
+          You can generate and arrange prefixes for branches, which correspond to different types of issues.
+          <CustomSeparatorButtonGroup items={data} setItems={setItemsData} setAlertInfo={setAlertInfo} />
         </Typography>
         <Grid container>
           <Grid xs={12}>
-            <AddInput items={data} setItems={setItemsData} />
+            <AddInput items={data} setItems={setItemsData} setAlertInfo={setAlertInfo} />
           </Grid>
-          <Grid sx={{mb: 5}} xs={12}>
+          <Grid sx={{ mb: 5 }} xs={12}>
             <RemovableItems items={data} setItems={setItemsData} />
           </Grid>
         </Grid>
-        <Stack direction="row" justifyContent="flex-end" spacing={2}>
-          <Button variant="outlined" color="neutral" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button disabled={data.length === 0} onClick={() => handleSave(data)}>
-            Save
-          </Button>
+        <Stack spacing={2}>
+          <Stack direction="row" justifyContent="flex-end" spacing={2} height={{ height: 42 }}>
+            {alertInfo.visible && (
+              <Alert variant="soft" color={alertInfo.type as any} sx={{ width: 'fit-content' }}>
+                {alertInfo.msg}
+              </Alert>
+            )}
+            <Button variant="outlined" color="neutral" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button disabled={data.length === 0} onClick={() => handleSave(data)}>
+              Save
+            </Button>
+          </Stack>
         </Stack>
       </ModalDialog>
     </Modal>
