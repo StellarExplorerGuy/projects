@@ -93,6 +93,14 @@ function getLocalStorage(key: string) {
   }
 }
 
+function onButtonClick(event: { target: any }) {
+  const button = event.target
+  button.classList.add(styles['active'])
+  setTimeout(() => {
+    button.classList.remove(styles['active'])
+  }, 1000)
+}
+
 function getPrefixesTabs(): string[] {
   try {
     const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY)
@@ -298,11 +306,6 @@ function getUsername(): string {
 function Panel({ setClose }: any): JSX.Element {
   const [prefixes, setPrefixes] = useState(() => getPrefixesTabs())
   const [selectedPrefix, setSelectedPrefix] = useState(prefixes[0])
-  const [showGlitch, setShowGlitch] = useState({
-    branch: false,
-    commit: false,
-    pr: false,
-  })
 
   const [profilesData, setProfilesData] = useState(() => getProfileData())
   const [selectedIndex, setSelectedIndex] = useState<number>(0)
@@ -327,55 +330,28 @@ function Panel({ setClose }: any): JSX.Element {
         <Typography level="h4">
           Copy:{' '}
           <button
-            className={showGlitch.branch ? styles['button'] + ' ' + styles['active'] : styles['button']}
-            onClick={() => {
-              setShowGlitch({
-                ...showGlitch,
-                branch: true,
-              })
+            className={styles['button']}
+            onClick={(event) => {
               getBranchData(selectedPrefix)
-              setTimeout(() => {
-                setShowGlitch({
-                  ...showGlitch,
-                  branch: false,
-                })
-              }, 1000)
+              onButtonClick(event)
             }}
           >
             Branch
           </button>
           <button
-            className={showGlitch.commit ? styles['button'] + ' ' + styles['active'] : styles['button']}
-            onClick={() => {
-              setShowGlitch({
-                ...showGlitch,
-                commit: true,
-              })
+            className={styles['button']}
+            onClick={(event) => {
               getCommitData(selectedPrefix, user)
-              setTimeout(() => {
-                setShowGlitch({
-                  ...showGlitch,
-                  commit: false,
-                })
-              }, 1000)
+              onButtonClick(event)
             }}
           >
             Commit
           </button>
           <button
-            className={showGlitch.pr ? styles['button'] + ' ' + styles['active'] : styles['button']}
-            onClick={() => {
-              setShowGlitch({
-                ...showGlitch,
-                pr: true,
-              })
+            className={styles['button']}
+            onClick={(event) => {
               getPrData(selectedPrefix, user)
-              setTimeout(() => {
-                setShowGlitch({
-                  ...showGlitch,
-                  pr: false,
-                })
-              }, 1000)
+              onButtonClick(event)
             }}
           >
             PR desc
