@@ -381,8 +381,10 @@ function Panel({ setClose }: any): JSX.Element {
             </Button>
           ))}
           <Dropdown>
-            <MenuButton startDecorator={<AccountCircleIcon color="primary" fontSize="small" />}>
-              {profilesData.selected}
+            <MenuButton sx={{ maxWidth: 120 }} startDecorator={<AccountCircleIcon color="primary" fontSize="small" />}>
+              <Typography sx={{ width: 80 }} level="body-sm" noWrap>
+                {profilesData.selected}
+              </Typography>
             </MenuButton>
             <Menu>
               {profilesData.list.map((item: string, index: number) => (
