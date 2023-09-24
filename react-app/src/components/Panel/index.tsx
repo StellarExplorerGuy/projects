@@ -322,7 +322,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
 
   const user = getUsername()
   return (
-    <Card sx={{ minWidth: 800 }}>
+    <Card>
       <div>
         <Typography level="h4">
           Copy:{' '}
@@ -355,51 +355,58 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
           </button>
         </Typography>
       </div>
-      <div>
-        <ButtonGroup
-          color="primary"
-          buttonFlex={1}
-          variant="outlined"
-          aria-label="flex button group"
-          sx={{
-            p: 0,
-            maxWidth: '100%',
-            overflow: 'auto',
-            resize: 'horizontal',
-          }}
-        >
-          {prefixes.map((prefix: string) => (
-            <Button
-              key={prefix}
-              onClick={() => setSelectedPrefix(prefix)}
-              variant={prefix === selectedPrefix ? 'solid' : 'outlined'}
+      <ButtonGroup
+        color="primary"
+        size="sm"
+        buttonFlex="0 1 100px"
+        variant="outlined"
+        aria-label="flex button group"
+        sx={{
+          p: 0,
+          '--ButtonGroup-radius': '40px',
+          maxWidth: '100%',
+          overflow: 'auto',
+          resize: 'horizontal',
+        }}
+      >
+        {prefixes.map((prefix: string) => (
+          <Button
+            key={prefix}
+            onClick={() => setSelectedPrefix(prefix)}
+            variant={prefix === selectedPrefix ? 'solid' : 'outlined'}
+          >
+            <Typography
+              color="primary"
+              sx={{ width: 64, color: prefix === selectedPrefix ? 'common.white' : 'inherit' }}
+              level="body-sm"
+              noWrap
             >
               {prefix}
-            </Button>
-          ))}
-          <Dropdown>
-            <MenuButton sx={{ maxWidth: 120 }} startDecorator={<AccountCircleIcon color="primary" fontSize="small" />}>
-              <Typography sx={{ width: 80 }} level="body-sm" noWrap>
-                {profilesData.selected}
-              </Typography>
-            </MenuButton>
-            <Menu>
-              {profilesData.list.map((item: string) => (
-                <MenuItem
-                  key={item}
-                  {...(profilesData.selected === item && { selected: true, variant: 'soft' })}
-                  onClick={createHandleClose(item)}
-                >
-                  {item}
-                </MenuItem>
-              ))}
-            </Menu>
-          </Dropdown>
-          <IconButton onClick={() => setClose(true)}>
-            <Settings color='primary' />
-          </IconButton>
-        </ButtonGroup>
-      </div>
+            </Typography>
+          </Button>
+        ))}
+        <Dropdown>
+          <MenuButton sx={{ maxWidth: 120 }} startDecorator={<AccountCircleIcon color="primary" fontSize="small" />}>
+            <Typography sx={{ width: 80 }} level="body-sm" noWrap>
+              {profilesData.selected}
+            </Typography>
+          </MenuButton>
+          <Menu>
+            {profilesData.list.map((item: string) => (
+              <MenuItem
+                key={item}
+                {...(profilesData.selected === item && { selected: true, variant: 'soft' })}
+                onClick={createHandleClose(item)}
+              >
+                {item}
+              </MenuItem>
+            ))}
+          </Menu>
+        </Dropdown>
+        <IconButton onClick={() => setClose(true)}>
+          <Settings color="primary" />
+        </IconButton>
+      </ButtonGroup>
     </Card>
   )
 }
