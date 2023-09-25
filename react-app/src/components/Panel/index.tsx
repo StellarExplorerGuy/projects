@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 
 import styles from './Panel.module.scss'
 
-import Button from '@mui/joy/Button'
 import ButtonGroup from '@mui/joy/ButtonGroup'
 import IconButton from '@mui/joy/IconButton'
 import Settings from '@mui/icons-material/Settings'
@@ -12,8 +11,14 @@ import MenuItem from '@mui/joy/MenuItem'
 import Dropdown from '@mui/joy/Dropdown'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Card from '@mui/joy/Card'
-import { Typography } from '@mui/joy'
+import Tabs, { tabsClasses } from '@mui/material/Tabs'
+import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles'
+
+import Tab from '@mui/material/Tab'
+
 import { updateKey } from 'utils/data'
+import { Typography } from '@mui/joy'
+import { Box } from '@mui/material'
 
 const singleSeparator = '`'
 const separator = '```'
@@ -321,6 +326,10 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
   }, [alertInfo.visible, profilesData.selected])
 
   const user = getUsername()
+
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
+    setSelectedPrefix(newValue)
+  }
   return (
     <Card>
       <div>
@@ -364,27 +373,48 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
         sx={{
           p: 0,
           '--ButtonGroup-radius': '40px',
-          maxWidth: '100%',
-          overflow: 'auto',
-          resize: 'horizontal',
         }}
       >
-        {prefixes.map((prefix: string) => (
-          <Button
-            key={prefix}
-            onClick={() => setSelectedPrefix(prefix)}
-            variant={prefix === selectedPrefix ? 'solid' : 'outlined'}
+        <CssVarsProvider>
+          <Box
+            sx={{
+              root: {
+                background: 'red',
+              },
+              flexGrow: 1,
+              maxWidth: 800,
+              border: 'var(--ButtonGroup-separatorSize) solid var(--ButtonGroup-separatorColor)',
+            }}
           >
-            <Typography
-              color="primary"
-              sx={{ width: 64, color: prefix === selectedPrefix ? 'common.white' : 'inherit' }}
-              level="body-sm"
-              noWrap
+            <Tabs
+              value={selectedPrefix}
+              onChange={handleChange}
+              variant="scrollable"
+              scrollButtons
+              textColor="primary"
+              indicatorColor="primary"
+              aria-label="tabs"
+              sx={{
+                [`& .${tabsClasses.scrollButtons}`]: {
+                  '&.Mui-disabled': { opacity: 0.3 },
+                },
+              }}
             >
-              {prefix}
-            </Typography>
-          </Button>
-        ))}
+              {prefixes.map((prefix: string) => (
+                <Tab
+                  sx={{
+                    textTransform: 'none',
+                    fontSize: 14,
+                    color: prefix === selectedPrefix ? 'common.white' : 'inherit',
+                  }}
+                  key={prefix}
+                  label={prefix}
+                  value={prefix}
+                />
+              ))}
+            </Tabs>
+          </Box>
+        </CssVarsProvider>
         <Dropdown>
           <MenuButton sx={{ maxWidth: 120 }} startDecorator={<AccountCircleIcon color="primary" fontSize="small" />}>
             <Typography sx={{ width: 80 }} level="body-sm" noWrap>
