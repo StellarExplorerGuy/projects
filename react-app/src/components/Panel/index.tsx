@@ -378,9 +378,6 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
         <CssVarsProvider>
           <Box
             sx={{
-              root: {
-                background: 'red',
-              },
               flexGrow: 1,
               maxWidth: 800,
               border: 'var(--ButtonGroup-separatorSize) solid var(--ButtonGroup-separatorColor)',
