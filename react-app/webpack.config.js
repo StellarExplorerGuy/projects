@@ -9,7 +9,8 @@ module.exports = {
       new TerserPlugin({
         parallel: true,
         terserOptions: {
-          ecma: 6,
+          ecma: 2020,
+          compress: true,
           output: {
              ascii_only: true
           },
