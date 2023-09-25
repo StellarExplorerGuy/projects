@@ -166,7 +166,7 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
 function getBranchName(text: string) {
   const DOT_KEY = 'dwedtw'
   // get first line that is branch name
-  const trimmedText = text.trim().split('\n')[0]
+  const trimmedText = text.replace(/Copy: BranchCommitPR[\s\S]*$/, '');
 
   // Extracting the number from the text using regex
   const regex = /#(\d+)/
