@@ -41,7 +41,8 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '@mui/material': '@mui/joy',
+      '@mui/joy': '@mui/joy',
+      '@mui/material': '@mui/material',
     },
     extensions: ['.tsx', '.ts', '.js'],
     plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
