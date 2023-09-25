@@ -16,78 +16,16 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 
 import Tab from '@mui/material/Tab'
 
-import { updateKey } from 'utils/data'
+import { getCommit, getPR, updateKey } from 'utils/data'
 import { Typography } from '@mui/joy'
 import { Box } from '@mui/material'
 
-const singleSeparator = '`'
-const separator = '```'
 const DEFAULT_USER = 'Name Surname <name.surname@org.com>'
 const FASTER_PR_PROFILE_KEY = 'FASTER_PR_KEY'
 const FASTER_PR_PROFILE = 'FASTER_PR_PROFILE'
 const DEFAULT_BRANCH_PREFIXES = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'release']
 const avatarRegex = /alt="@([^"]+)">/
 const repoRegex = /([^/]+)\/([^/]+)\/issues/
-
-function getCommit(type: any, issue: any, repoDetails: { user: any; repo: any }, user: any) {
-  return `${type}: 
-
-<body>
-
-Contributes: ${repoDetails.user}/${repoDetails.repo}#${issue}
-
-Signed-off-by: ${user}`
-}
-
-function getPR(params: { type: any; issueNumber: any; repoDetails: any; user: any }) {
-  return `<!-- Commit Message Title
-* When opening this PR, the raiser should set the title of this PR to the first line of their desired commit message, e.g:
-${separator}
-feat|fix|docs|style|refactor|perf|test|chore: changed function X
-${separator}
-* The reviewer should ensure that the first commit message field is of this form when performing the ${singleSeparator}squash and merge${singleSeparator} from this page.
--->
-
-## Status
-**READY**
-
-## Description
-${separator}
-- ${params.type}: 
-
-Contributes:
-- ${params.repoDetails.user}/${params.repoDetails.repo}#${params.issueNumber}
-
-Signed-off-by: ${params.user}
-${separator}
-
-## Impacted Areas in Application
-<!-- List general components of the application that this PR will affect: -->
-
-### Screenshots
-<!-- For UI items, please provide screenshots demonstrating the work completed -->
-
-## Which issue(s) does this pull-request fix?
-<!-- Please include a link to the issue -->
-<!-- Contributes to: your-org/your-project# -->
-<!-- Closes: your-org/your-project# -->
-
-Contributes:
-- ${params.repoDetails.user}/${params.repoDetails.repo}#${params.issueNumber}
-
-## Any special notes for your reviewer?
-
---- 
-
-## Checklist
-- [ ] ~Automated tests exist~
-- [ ] ~Local unit tests performed~
-- [ ] ~Documentation exists [link]()~
-- [x] Local git lint performed
-- [x] Desired commit message set as PR title and description set above
-- [x] Link to relevant GitHub issue provided
-`
-}
 
 function getLocalStorage(key: string) {
   try {
@@ -174,10 +112,11 @@ function processCommit(type: any, issue: any, repoDetails: { user: any; repo: an
 
       return formattedCommit
     }
-
-    return getCommit(type, issue, repoDetails, user)
+    const { user: repoName, repo: repoOrg } = getRepoDetails()
+    return getCommit({ type, issue, repoOrg, repoName, user })
   } catch (error) {
-    return getCommit(type, issue, repoDetails, user)
+    const { user: repoName, repo: repoOrg } = getRepoDetails()
+    return getCommit({ type, issue, repoOrg, repoName, user })
   }
 }
 
@@ -203,17 +142,22 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
       return formattedPR
     }
 
+    const { user: repoName, repo: repoOrg } = getRepoDetails()
     return getPR({
       type,
-      issueNumber: issue,
-      repoDetails: getRepoDetails(),
+      issue,
+      repoOrg,
+      repoName,
       user,
     })
   } catch (error) {
+    const { user: repoName, repo: repoOrg } = getRepoDetails()
+
     return getPR({
       type,
-      issueNumber: issue,
-      repoDetails: getRepoDetails(),
+      issue,
+      repoOrg,
+      repoName,
       user,
     })
   }
