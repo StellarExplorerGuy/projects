@@ -19,11 +19,8 @@ import Tab from '@mui/material/Tab'
 import { getCommit, getPR, updateKey } from 'utils/data'
 import { Typography } from '@mui/joy'
 import { Box } from '@mui/material'
+import { FASTER_PR_PROFILE_KEY, FASTER_PR_PROFILE, BRANCH_PREFIXES, DEFAULT_USER } from 'utils/constants'
 
-const DEFAULT_USER = 'Name Surname <name.surname@org.com>'
-const FASTER_PR_PROFILE_KEY = 'FASTER_PR_KEY'
-const FASTER_PR_PROFILE = 'FASTER_PR_PROFILE'
-const DEFAULT_BRANCH_PREFIXES = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'release']
 const avatarRegex = /alt="@([^"]+)">/
 const repoRegex = /([^/]+)\/([^/]+)\/issues/
 
@@ -52,9 +49,9 @@ function getPrefixesTabs(): string[] {
     if (profile.branchPrefixes) {
       return profile.branchPrefixes
     }
-    return DEFAULT_BRANCH_PREFIXES
+    return BRANCH_PREFIXES
   } catch (error) {
-    return DEFAULT_BRANCH_PREFIXES
+    return BRANCH_PREFIXES
   }
 }
 
