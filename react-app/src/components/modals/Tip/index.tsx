@@ -35,8 +35,11 @@ function Tip({ open, handleClose }: TipProps) {
             position: 'absolute',
           }}
         >
-          <Button variant="outlined" color="neutral" onClick={handleClose}>
+          <Button variant="outlined" onClick={handleClose}>
             Close
+            <Typography sx={{ pl: 1 }} color="neutral">
+              [esc]
+            </Typography>
           </Button>
         </Box>
       </ModalDialog>
