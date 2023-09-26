@@ -163,7 +163,7 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
 function getBranchName(text: string) {
   const DOT_KEY = 'dwedtw'
   // get first line that is branch name
-  const trimmedText = text.replace(/Copy: BranchCommitPR[\s\S]*$/, '');
+  const trimmedText = text.replace(/Copy: BranchCommitPR[\s\S]*$/, '')
 
   // Extracting the number from the text using regex
   const regex = /#(\d+)/
@@ -272,7 +272,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
     setSelectedPrefix(newValue)
   }
   return (
-    <Card>
+    <Card sx={{ maxWidth: 980 }}>
       <div>
         <Typography level="h4">
           Copy:{' '}
@@ -346,7 +346,11 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
                     color: prefix === selectedPrefix ? 'common.white' : 'inherit',
                   }}
                   key={prefix}
-                  label={prefix}
+                  label={
+                    <Typography sx={{ width: 60 }} level="body-sm" noWrap>
+                      {prefix}
+                    </Typography>
+                  }
                   value={prefix}
                 />
               ))}
