@@ -5,6 +5,7 @@ import App from './App'
 
 const ID = '23e32e23'
 
+//PROD
 function onInitAvailable() {
   const headerElement = document.getElementsByClassName('gh-header-title')
 
@@ -30,6 +31,7 @@ observerInit.observe(document.body, {
 
 
 ///////////
+// DEV
 // const rootElement = document.createElement('div')
 // rootElement.id = '3e23e23e-root'
 // document.body.appendChild(rootElement)
