@@ -277,6 +277,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
         <Typography level="h4">
           Copy:{' '}
           <button
+            id="wjdkwed1"
             className={styles['button']}
             onClick={(event) => {
               getBranchData(selectedPrefix)

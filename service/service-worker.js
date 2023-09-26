@@ -11,6 +11,18 @@ function updatePage() {
 
         headerElement[0].appendChild(popupHtml);
         observer.disconnect();
+
+        const button1 = document.getElementById("wjdkwed1");
+        if (button1) {
+          const hasClickEvent =
+            button1.onclick !== null || button1.hasAttribute("onclick");
+
+          if (!hasClickEvent) {
+            window.location.reload();
+          }
+        } else {
+          window.location.reload();
+        }
       } catch (error) {
         console.error("[error]", error);
       }
@@ -31,8 +43,11 @@ function attachContentScript(tabId) {
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  // Check if the page has completed loading and it's not a Chrome internal page
-  if (changeInfo.status === "complete" && tab.url.includes("github")) {
-    attachContentScript(tabId);
+  try {
+    if (changeInfo.status === "complete" && tab.url.includes("github")) {
+      attachContentScript(tabId);
+    }
+  } catch (error) {
+    console.error(error);
   }
 });
