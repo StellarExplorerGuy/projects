@@ -299,7 +299,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
   }
 
   return (
-    <Card sx={{ maxWidth: 980 }}>
+    <Card sx={{ maxWidth: '100%' }}>
       <div>
         <Grid container direction="row" justifyContent="space-between" alignItems="flex-end" spacing={0}>
           <Grid xs={8}>
@@ -361,7 +361,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
           <Box
             sx={{
               flexGrow: 1,
-              maxWidth: 800,
+              maxWidth: 950,
               border: 'none !important',
             }}
           >
