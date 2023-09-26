@@ -192,8 +192,9 @@ function getBranchName(text: string) {
 
   // Removing the trailing dash from the formatted text
   const finalFormattedText = formattedText.replace(/-+$/, '').replace(/-+/g, '-').replace(new RegExp(DOT_KEY, 'g'), '.')
-
-  return finalFormattedText
+  const dotRegex = /[.,!]+$/ // Match one or more dots at the end
+  const finalText = finalFormattedText.replace(dotRegex, '')
+  return finalText
 }
 
 function copyTextToClipboard(text: string) {
@@ -361,7 +362,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
             sx={{
               flexGrow: 1,
               maxWidth: 800,
-              border: 'none !important'
+              border: 'none !important',
             }}
           >
             <Tabs
@@ -374,7 +375,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               aria-label="tabs"
               sx={{
                 border: '1px solid var(--ButtonGroup-separatorColor)',
-                borderTopLeftRadius:' 40px !important',
+                borderTopLeftRadius: ' 40px !important',
                 borderBottomLeftRadius: '40px !important',
                 [`& .${tabsClasses.scrollButtons}`]: {
                   '&.Mui-disabled': { opacity: 0.3 },
