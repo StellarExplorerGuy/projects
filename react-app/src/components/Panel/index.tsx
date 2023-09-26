@@ -361,7 +361,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
             sx={{
               flexGrow: 1,
               maxWidth: 800,
-              border: 'var(--ButtonGroup-separatorSize) solid var(--ButtonGroup-separatorColor)',
+              border: 'none !important'
             }}
           >
             <Tabs
@@ -373,6 +373,9 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               indicatorColor="primary"
               aria-label="tabs"
               sx={{
+                border: '1px solid var(--ButtonGroup-separatorColor)',
+                borderTopLeftRadius:' 40px !important',
+                borderBottomLeftRadius: '40px !important',
                 [`& .${tabsClasses.scrollButtons}`]: {
                   '&.Mui-disabled': { opacity: 0.3 },
                 },
