@@ -17,9 +17,15 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 import Tab from '@mui/material/Tab'
 
 import { getCommit, getPR, updateKey } from 'utils/data'
-import { Typography } from '@mui/joy'
+import { Alert, Grid, Typography } from '@mui/joy'
 import { Box } from '@mui/material'
-import { FASTER_PR_PROFILE_KEY, FASTER_PR_PROFILE, BRANCH_PREFIXES, DEFAULT_USER } from 'utils/constants'
+import {
+  FASTER_PR_PROFILE_KEY,
+  FASTER_PR_PROFILE,
+  BRANCH_PREFIXES,
+  DEFAULT_USER,
+  DEFAULT_LOCAL_STORAGE_ALERT,
+} from 'utils/constants'
 
 const avatarRegex = /alt="@([^"]+)">/
 const repoRegex = /([^/]+)\/([^/]+)\/issues/
@@ -250,6 +256,12 @@ function getUsername(): string {
 }
 
 function Panel({ alertInfo, setClose }: any): JSX.Element {
+  const [alertDataInfo, setAlertDataInfo] = useState({
+    visible: false,
+    msg: '',
+    type: 'warning',
+  })
+
   const [prefixes, setPrefixes] = useState(() => getPrefixesTabs())
   const [selectedPrefix, setSelectedPrefix] = useState(prefixes[0])
 
@@ -258,6 +270,19 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
     updateKey(FASTER_PR_PROFILE_KEY, item)
     setProfilesData({ ...profilesData, selected: item })
   }
+
+  useEffect(() => {
+    try {
+      const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY)
+      const allProfiles = getLocalStorage(FASTER_PR_PROFILE)
+      const profile = allProfiles[profileKey]
+      if (!profile) {
+        setAlertDataInfo(DEFAULT_LOCAL_STORAGE_ALERT)
+      }
+    } catch (error) {
+      setAlertDataInfo(DEFAULT_LOCAL_STORAGE_ALERT)
+    }
+  }, [])
 
   useEffect(() => {
     const prefixes = getPrefixesTabs()
@@ -271,40 +296,54 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
   const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     setSelectedPrefix(newValue)
   }
+
   return (
     <Card sx={{ maxWidth: 980 }}>
       <div>
-        <Typography level="h4">
-          Copy:{' '}
-          <button
-            id="wjdkwed1"
-            className={styles['button']}
-            onClick={(event) => {
-              getBranchData(selectedPrefix)
-              onButtonClick(event)
-            }}
-          >
-            Branch
-          </button>
-          <button
-            className={styles['button']}
-            onClick={(event) => {
-              getCommitData(selectedPrefix, user)
-              onButtonClick(event)
-            }}
-          >
-            Commit
-          </button>
-          <button
-            className={styles['button']}
-            onClick={(event) => {
-              getPrData(selectedPrefix, user)
-              onButtonClick(event)
-            }}
-          >
-            PR desc
-          </button>
-        </Typography>
+        <Grid container direction="row" justifyContent="space-between" alignItems="flex-end" spacing={0}>
+          <Grid xs={8}>
+            <Typography level="h4">
+              Copy:{' '}
+              <button
+                id="wjdkwed1"
+                className={styles['button']}
+                onClick={(event) => {
+                  getBranchData(selectedPrefix)
+                  onButtonClick(event)
+                }}
+              >
+                Branch
+              </button>
+              <button
+                className={styles['button']}
+                onClick={(event) => {
+                  getCommitData(selectedPrefix, user)
+                  onButtonClick(event)
+                }}
+              >
+                Commit
+              </button>
+              <button
+                className={styles['button']}
+                onClick={(event) => {
+                  getPrData(selectedPrefix, user)
+                  onButtonClick(event)
+                }}
+              >
+                PR desc
+              </button>
+            </Typography>
+          </Grid>
+          <Grid xs={4}>
+            <Grid container direction="row" justifyContent="flex-end" alignItems="flex-start">
+              {alertDataInfo.visible && (
+                <Alert variant="soft" color={alertDataInfo.type as any} sx={{ width: 'fit-content', height: 47 }}>
+                  {alertDataInfo.msg}
+                </Alert>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
       </div>
       <ButtonGroup
         color="primary"
