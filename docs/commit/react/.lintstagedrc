@@ -1,0 +1,4 @@
+{
+  "**/*.{ts,tsx}": ["npm run clean-code"],
+  "*.md": "npm run prettier:fix"
+}
