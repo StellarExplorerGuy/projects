@@ -44,7 +44,11 @@ function attachContentScript(tabId) {
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   try {
-    if (changeInfo.status === "complete" && tab.url.includes("github")) {
+    if (
+      changeInfo.status === "complete" &&
+      tab.url &&
+      tab.url.match(/^https:\/\/[^/]+\.github\.com\/[^/]+\/issues\/\d+$/)
+    ) {
       attachContentScript(tabId);
     }
   } catch (error) {
