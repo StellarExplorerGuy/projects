@@ -42,3 +42,4 @@ next-env.d.ts
 
 extension/content.js.LICENSE.txt
 extension/service-worker.js
+extension/service-worker2.js

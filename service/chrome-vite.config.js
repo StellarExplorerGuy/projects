@@ -6,13 +6,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: "service-worker.js",
-        "service-worker": "service-worker.js",
+        main: "chrome-service-worker.js",
+        "chrome-service-worker": "chrome-service-worker.js",
       },
       output: {
         entryFileNames: "service-worker.js",
       },
     },
-    outDir: path.resolve(__dirname, "..", "extension"),
+    outDir: path.resolve(__dirname, "..", "chrome"),
   },
 });

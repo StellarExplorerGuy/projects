@@ -12,3 +12,13 @@ https://rickblyth.com/blog/the-pros--cons-of-developing-chrome-extensions
 https://mui.com/material-ui/material-icons
 
 https://github.com/StellarExplorerGuy/projects
+
+## Firefox
+https://github.com/mdn/webextensions-examples/blob/main/commands/manifest.json
+
+about:debugging#/runtime/this-firefox
+about:addons
+
+Firefox: https://github.com/facebook/react/issues/27432
+> allow
+https://www.reddit.com/r/firefox/comments/1326r7e/webextension_mv3_manifestjson_host_permissions/?rdt=56106
