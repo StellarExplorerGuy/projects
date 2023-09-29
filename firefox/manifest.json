@@ -11,16 +11,16 @@
         "scripting"
     ],
     "background": {
-        "service_worker": "service-worker.js"
+        "scripts": [
+            "service-worker.js"
+        ]
     },
     "host_permissions": [
-        "*://*.github.com/*"
+        "<all_urls>"
     ],
     "content_scripts": [
         {
-            "matches": [
-                "https://*.github.com/*/issues/*"
-            ],
+            "matches": ["<all_urls>"],
             "js": [
                 "content.js"
             ]

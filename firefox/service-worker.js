@@ -8,7 +8,6 @@ function updatePage() {
         popupHtml.innerHTML = `<script src="${browser.runtime.getURL(
           "content.js"
         )}"></script>`;
-
         headerElement[0].appendChild(popupHtml);
         observer.disconnect();
 
@@ -28,26 +27,27 @@ function updatePage() {
       }
     }
   }
-
   // Create a MutationObserver to watch for changes in the DOM
   const observer = new MutationObserver(onHeaderElementAvailable);
   // Configure the observer to look for changes in the subtree of the document body
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-function attachContentScript(tabId) {
-  browser.scripting.executeScript({
-    target: { tabId },
-    function: updatePage,
-  });
-}
-
-browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  try {
-    if (changeInfo.status === "complete" && tab.url.includes("github")) {
-      attachContentScript(tabId);
+browser.runtime.onInstalled.addListener(() => {
+  browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+    try {
+      if (
+        changeInfo.status === "complete" &&
+        tab.url &&
+        tab.url.match(/^https:\/\/[^/]+\.github\.com\/[^/]+\/issues\/\d+$/)
+      ) {
+        await browser.scripting.executeScript({
+          target: { tabId },
+          func: updatePage,
+        });
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
+  });
 });
