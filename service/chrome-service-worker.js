@@ -47,7 +47,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (
       changeInfo.status === "complete" &&
       tab.url &&
-      tab.url.match(/^https:\/\/[^/]+\.github\.com\/[^/]+\/issues\/\d+$/)
+      tab.url.match(/^https:\/\/[a-zA-Z0-9.-]+\/[^/]+\/[^/]+\/issues\/\d+$/g)
     ) {
       attachContentScript(tabId);
     }
