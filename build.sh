@@ -6,6 +6,13 @@ cd service && npm run build
 # Copy manifest
 cp chrome/manifest.json ../chrome/
 cp firefox/manifest.json ../firefox/
+cp onboarding/onboarding.js ../firefox/
+cp 128.png ../firefox/
+cp 128.png ../chrome/
+cp onboarding.js ../firefox/
+
+#  Copy onboarding
+# cp firefox/manifest.json ../firefox/
 
 cd ..
 
@@ -22,11 +29,14 @@ rm -f ../firefox/content.js
 rm -f ../firefox/service-worker2.js
 
 # Copy
-cp 128.png ../chrome/
 cp *.content.js ../chrome/
 cp content.js ../chrome/
-cp 128.png ../firefox/
 cp *.content.js ../firefox/
 cp content.js ../firefox/
 
+mkdir -p ../firefox/assets
+cp assets/*.css ../firefox/assets
+cp onboarding-page.html ../firefox/
+
 echo "Completed!"
+

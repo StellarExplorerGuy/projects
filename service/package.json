@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "npm run build:chrome && npm run build:firefox",
+    "build": "npm run build:chrome && npm run build:firefox && npm run build:onboarding",
+    "build:onboarding": "vite build --config onboarding-vite.config.js --emptyOutDir",
     "build:chrome": "vite build --config chrome-vite.config.js --emptyOutDir",
     "build:firefox": "vite build --config firefox-vite.config.js --emptyOutDir"
   },

@@ -33,21 +33,37 @@ function updatePage() {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-browser.runtime.onInstalled.addListener(() => {
-  browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    try {
-      if (
-        changeInfo.status === "complete" &&
-        tab.url &&
-        tab.url.match(/^https:\/\/[^/]+\.github\.com\/[^/]+\/issues\/\d+$/)
-      ) {
-        await browser.scripting.executeScript({
-          target: { tabId },
-          func: updatePage,
+try {
+  //On first install open onboarding
+  browser.runtime.onInstalled.addListener(async (r) => {
+    if (r.reason == "install") {
+      const response = await browser.permissions
+        .getAll()
+        .then((permissions) => {
+          return permissions.origins.indexOf("<all_urls>") > -1;
+        });
+      if (!response) {
+        //show onboarding page
+        browser.tabs.create({
+          url: "onboarding-page.html",
         });
       }
-    } catch (error) {
-      console.error(error);
     }
   });
-});
+
+  //ON page change
+  browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+    if (
+      changeInfo.status === "complete" &&
+      tab.url &&
+      tab.url.match(/^https:\/\/[^/]+\.github\.com\/[^/]+\/issues\/\d+$/)
+    ) {
+      await browser.scripting.executeScript({
+        target: { tabId },
+        func: updatePage,
+      });
+    }
+  });
+} catch (e) {
+  console.error(error);
+}
