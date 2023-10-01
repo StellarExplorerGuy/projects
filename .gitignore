@@ -51,3 +51,4 @@ extension/onboarding-page.html
 firefox/assets/*.css
 firefox/onboarding-page.html
 firefox/service-worker.js
+chrome/service-worker.js
