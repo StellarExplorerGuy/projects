@@ -7,7 +7,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "chrome-service-worker.js",
-        "chrome-service-worker": "chrome-service-worker.js",
       },
       output: {
         entryFileNames: "service-worker.js",

@@ -1,29 +1,29 @@
 {
-    "manifest_version": 3,
-    "name": "Faster PR",
-    "description": "Personalize and copy a branch name, commit message, or pull request description (compatible with GitHub only).",
-    "version": "0.0.0.1",
-    "icons": {
-      "128": "128.png"
-    },
-    "permissions": [
-      "tabs",
-      "scripting"
-    ],
-    "background": {
-      "service_worker": "service-worker.js"
-    },
-    "host_permissions": [
-      "<all_urls>"
-    ],
-    "content_scripts": [
-      {
-        "matches": [
-          "<all_urls>"
-        ],
-        "js": [
-          "content.js"
-        ]
-      }
-    ]
-  }
+  "manifest_version": 3,
+  "name": "Faster PR",
+  "description": "Personalize and copy a branch name, commit message, or pull request description (compatible with GitHub only).",
+  "version": "0.0.0.1",
+  "icons": {
+    "128": "128.png"
+  },
+  "permissions": [
+    "tabs",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}

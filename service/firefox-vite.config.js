@@ -7,7 +7,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "firefox-service-worker.js",
-        "firefox-service-worker": "firefox-service-worker.js",
       },
       output: {
         entryFileNames: "service-worker.js",
