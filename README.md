@@ -4,7 +4,7 @@
 
 My free projects:
 
-- <img src="assets/projects/faster_pr/pr.png" alt="faster_pr_icon" width="20" height="20" /> `Faster PR`: speed up the process of creating pull requests on `GitHub` **only** with a plugin that automatically generates branch names, commits, and PR descriptions in just one or two clicks. Additionally, this plugin can be customized to use your own templates.<details>
+- <img src="assets/projects/faster_pr/pr.png" alt="faster_pr_icon" width="20" height="20" /> `Faster PR`: speed up the process of creating pull requests on `GitHub` **only** with a plugin that automatically generates branch names, commits, and PR descriptions in just one or two clicks. Additionally, this plugin can be customized to use your own templates. The plugin is shown in issue and pull request pages. Published: [<img src="assets/projects/faster_pr/firefox_icon.svg" alt="faster_pr_icon" width="20" height="20" />](https://addons.mozilla.org/en-US/firefox/addon/faster-pr/) <details>
   <summary>Demo</summary>
     <img src="assets/projects/faster_pr/1.png" alt="faster_pr_icon" width="500" height="309" /> </br>
     <img src="assets/projects/faster_pr/2.png" alt="faster_pr_icon" width="500" height="309" /> </br>
