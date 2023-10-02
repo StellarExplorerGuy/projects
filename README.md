@@ -30,3 +30,7 @@ https://www.reddit.com/r/firefox/comments/1326r7e/webextension_mv3_manifestjson_
 https://github.ibm.com/apt-research/ai-risk-assessment-frontend/pull/694
 https://github.ibm.com/apt-research/ai-risk-assessment-frontend/issues/689
 https://github.com/BloodLine888/power-supply-electron-react-boilerplate/pull/2
+
+
+## Links
+https://www.iloveimg.com/resize-image
