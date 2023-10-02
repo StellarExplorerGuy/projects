@@ -1,0 +1,7 @@
+The Firefox extension is a versatile tool designed to enhance your GitHub experience by providing a seamless way to personalize and effortlessly copy essential information such as branch names, commit messages, and pull request descriptions. This extension is specifically tailored for GitHub users, ensuring compatibility and optimal functionality within the GitHub ecosystem.
+
+Once installed, this extension seamlessly integrates itself into your GitHub environment. When you load a GitHub page related to a Git issue, the extension springs into action, adding a thoughtful and intuitive component directly to the interface. This added component becomes your go-to resource for streamlining your workflow and improving your productivity.
+
+Imagine the convenience of a sleek and unobtrusive element, right within your GitHub workspace, that allows you to quickly select and copy branch names, commit messages, or pull request descriptions with a single click. Whether you're managing code repositories, collaborating with teammates, or reviewing code changes, this extension becomes an indispensable tool for managing and sharing essential information effortlessly.
+
+With this Firefox extension, you'll experience a new level of efficiency and convenience while working on GitHub. Say goodbye to the hassle of manual copying and pasting, and say hello to a smoother, more personalized GitHub experience.

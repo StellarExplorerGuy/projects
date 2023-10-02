@@ -1,0 +1,16 @@
+{
+  "name": "service",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:onboarding": "vite build --config onboarding-vite.config.js --emptyOutDir",
+    "build:firefox": "vite build --config firefox-vite.config.js --emptyOutDir"
+  },
+  "devDependencies": {
+    "vite": "4.4.9"
+  },
+  "engines": {
+    "node": "18.x",
+    "npm": "8.x"
+  }
+}
