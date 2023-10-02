@@ -28,7 +28,8 @@ import {
 } from 'utils/constants'
 
 const avatarRegex = /alt="@([^"]+)">/
-const repoRegex = /([^/]+)\/([^/]+)\/issues/
+const issueRegex = /([^/]+)\/([^/]+)\/issues\/(\d+)/
+const pullRequestRegex = /([^/]+)\/([^/]+)\/pull\/(\d+)/
 
 function getLocalStorage(key: string) {
   try {
@@ -209,14 +210,25 @@ function copyTextToClipboard(text: string) {
     })
 }
 
-function getRepoDetails() {
-  const url = window.location.href
-  const match = url.match(repoRegex)
-
-  if (match && match.length >= 3) {
+function matchUrl(url: string, regex: RegExp): { user: string; repo: string } {
+  const match = url.match(regex)
+  if (match && match?.length >= 4) {
     const user = match[1]
     const repo = match[2]
     return { user, repo }
+  }
+  return { user: '', repo: '' }
+}
+
+function getRepoDetails() {
+  const url = window.location.href
+  const issueMatch = matchUrl(url, issueRegex)
+  const pullRequestMatch = matchUrl(url, pullRequestRegex)
+  if (issueMatch.user && issueMatch.repo) {
+    return { user: issueMatch.user || '', repo: issueMatch.repo || '' }
+  }
+  if (pullRequestMatch.user && pullRequestMatch.repo) {
+    return { user: pullRequestMatch.user || '', repo: pullRequestMatch.repo || '' }
   }
   return { user: '', repo: '' }
 }
