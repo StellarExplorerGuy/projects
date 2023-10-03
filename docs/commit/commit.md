@@ -73,7 +73,6 @@ ref: [Package Json Upgrade plugin](https://marketplace.visualstudio.com/items?it
   `.husky/commit-msg`: hook to execute lint for commit message;  
   `.husky/pre-commit`: hook to execute lint-staged of code to lint, it is using config `.lintstagedrc`;  
   `.husky/pre-push`: hook to execute build, it is good practice to test your build locally as it is faster;
-- `.nvmrc`: specific to your Node Version Manager (nvm). ensure that all developers working on the project are using the same version of Node.js, which can prevent compatibility issues and ensure consistent behavior across different development environments;
 - `tsconfig.json`: default TS configs;
 - `prettier.config.js` your prettier config;
 - `.eslintrc.js` your eslint config that is extended by prettier config;
