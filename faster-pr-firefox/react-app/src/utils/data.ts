@@ -104,6 +104,7 @@ export const defaultProfile = () => {
     uppercase: false,
     commit: getCommit({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
     pr: getPR({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
+    slimPrChecked: false,
   }
 }
 
@@ -148,4 +149,9 @@ export const decodeUrl = (encodedText: string): string => {
   const doubleReversedText = atob(encodedText)
   const reversedText = doubleReversedText.split('').reverse().join('')
   return reversedText.split('').reverse().join('')
+}
+
+export const clearComments = (text: string): string => {
+  const regex = /<!--(.*?)-->\n/gs;
+  return text.replace(regex, '')
 }
