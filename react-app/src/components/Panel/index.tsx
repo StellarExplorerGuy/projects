@@ -16,7 +16,7 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 
 import Tab from '@mui/material/Tab'
 
-import { getCommit, getPR, updateKey } from 'utils/data'
+import { clearComments, getCommit, getPR, updateKey } from 'utils/data'
 import { Alert, Grid, Typography } from '@mui/joy'
 import { Box } from '@mui/material'
 import {
@@ -136,12 +136,16 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
         signature = profile.signature
       }
 
-      const formattedPR = profile.pr
+      let formattedPR = profile.pr
         .replace(/ISSUE_TYPE/g, type)
         .replace(/ISSUE/g, issue)
         .replace(/REPO_ORG/g, repoDetails.user)
         .replace(/REPO_NAME/g, repoDetails.repo)
         .replace(/SIGNATURE/g, signature)
+
+        if (profile.slimPrChecked) {
+          formattedPR = clearComments(formattedPR)
+        }
 
       return formattedPR
     }

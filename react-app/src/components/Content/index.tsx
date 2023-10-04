@@ -13,7 +13,7 @@ import ResetProfile from 'components/modals/ResetProfile'
 import Tip from 'components/modals/Tip'
 import { DIALOG, ItemType } from 'types'
 import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
-import { defaultProfile, showAlertInfo, updateKey, updateLocalStorage } from 'utils/data'
+import { clearComments, defaultProfile, showAlertInfo, updateKey, updateLocalStorage } from 'utils/data'
 
 import { UniqueIdentifier } from '@dnd-kit/core'
 import AddIcon from '@mui/icons-material/Add'
@@ -77,7 +77,11 @@ function Content({
       [input]: { ...defaultData, profile: input },
     })
 
-    setDialogValue({ ...defaultData, profiles: updatedProfiles, profile: input })
+    setDialogValue({
+      ...defaultData,
+      profiles: updatedProfiles,
+      profile: input,
+    })
     handleClose(DIALOG.NEW_PROFILE)
     showAlertInfo({ visible: true, msg: `The profile [${input}] is added!`, type: 'success' }, setAlertInfo)
   }
@@ -489,14 +493,30 @@ function Content({
                 <AccordionHeader isLast>Pull request body</AccordionHeader>
                 <AccordionContent isLast>
                   <Grid container>
-                    <Grid xs={12}>
-                      <Box sx={{ float: 'left', pt: 0.5 }}>
+                    <Grid xs={1}>
+                      <Box sx={{ float: 'left', pt: 0.5, mb: 1 }}>
                         <FormItem text="Demo view" />
                       </Box>
                       <InfoIconButton text="PR body where uppercase text is used to be update with actual value. Dynamic keys: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE." />
+                    </Grid>
+                    <Grid xs={11}>
+                      <Box sx={{ float: 'left', pt: 0.5, mb: 1 }}>
+                        <FormLabel>Comments visibility</FormLabel>
+                      </Box>
+                      <InfoIconButton text="If you activate this feature, comments will be hidden in the PR description please toggle to see the changes." />
+                      <FormControl>
+                        <Box sx={{ float: 'left', mt: 0.5, mb: 1 }}>
+                          <SwitchButton
+                            checked={dialogValue.slimPrChecked}
+                            setChecked={(value) => setDialogValue({ ...dialogValue, slimPrChecked: value })}
+                          />
+                        </Box>
+                      </FormControl>
+                    </Grid>
+                    <Grid xs={12}>
                       <PreviewMD
                         field="pr"
-                        value={dialogValue.pr}
+                        value={dialogValue.slimPrChecked ? clearComments(dialogValue.pr) : dialogValue.pr}
                         dialogValue={dialogValue}
                         setDialogValue={setDialogValue}
                       />

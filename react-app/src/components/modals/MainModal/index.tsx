@@ -40,6 +40,7 @@ const save = (
       checked: dialogValue.checked,
       commit: dialogValue.commit,
       pr: dialogValue.pr,
+      slimPrChecked: dialogValue.slimPrChecked,
     },
   }
 
@@ -78,6 +79,7 @@ function MainModal({ alertInfo, open, setClose, setAlertInfo }: any): JSX.Elemen
             uppercase: selectedProfile.uppercase,
             commit: selectedProfile.commit,
             pr: selectedProfile.pr,
+            slimPrChecked: selectedProfile.slimPrChecked,
           },
         }),
       )
@@ -91,6 +93,7 @@ function MainModal({ alertInfo, open, setClose, setAlertInfo }: any): JSX.Elemen
         uppercase: selectedProfile.uppercase,
         commit: selectedProfile.commit,
         pr: selectedProfile.pr,
+        slimPrChecked: selectedProfile.slimPrChecked,
       }
     }
 
@@ -106,6 +109,7 @@ function MainModal({ alertInfo, open, setClose, setAlertInfo }: any): JSX.Elemen
       uppercase: selectedProfile.uppercase,
       commit: selectedProfile.commit,
       pr: selectedProfile.pr,
+      slimPrChecked: selectedProfile.slimPrChecked,
     }
   })
   const [openDialogs, setOpenDialogs] = useState({

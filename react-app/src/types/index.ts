@@ -1,6 +1,7 @@
 import { UniqueIdentifier } from "@dnd-kit/core"
 
 export type ItemType = {
+  slimPrChecked: boolean
   profile: string
   profiles: string[]
   uppercase: boolean
