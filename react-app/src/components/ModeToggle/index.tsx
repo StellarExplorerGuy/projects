@@ -26,6 +26,7 @@ function ModeToggle() {
       }}
       sx={{
         '--Switch-thumbSize': '28px',
+        "--Switch-trackWidth": "48px"
       }}
       onClick={() => {
         setMode(mode === 'light' ? 'dark' : 'light')
