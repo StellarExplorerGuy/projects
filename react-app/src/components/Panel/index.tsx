@@ -16,7 +16,7 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 
 import Tab from '@mui/material/Tab'
 
-import { clearComments, getCommit, getPR, updateKey } from 'utils/data'
+import { clearComments, getCommit, getLocalStorage, getPR, getService, updateKey } from 'utils/data'
 import { Alert, Grid, Typography } from '@mui/joy'
 import { Box } from '@mui/material'
 import {
@@ -25,19 +25,18 @@ import {
   BRANCH_PREFIXES,
   DEFAULT_USER,
   DEFAULT_LOCAL_STORAGE_ALERT,
+  SERVICE,
 } from 'utils/constants'
 
-const avatarRegex = /alt="@([^"]+)">/
-const issueRegex = /([^/]+)\/([^/]+)\/issues\/(\d+)/
-const pullRequestRegex = /([^/]+)\/([^/]+)\/pull\/(\d+)/
-
-function getLocalStorage(key: string) {
-  try {
-    const localData = JSON.parse(localStorage.getItem(key)!) || {}
-    return localData
-  } catch (error) {
-    return {}
-  }
+const GITHUB_REGEX = {
+  USER_NAME: /alt="@([^"]+)">/,
+  ISSUE: /([^/]+)\/([^/]+)\/issues\/(\d+)/,
+  PULL_REQUEST: /([^/]+)\/([^/]+)\/pull\/(\d+)/,
+}
+const GITLAB_REGEX = {
+  USER_NAME: /alt="@([^"]+)">/,
+  ISSUE: /([^/]+)\/([^/]+)\/issues\/(\d+)/,
+  PULL_REQUEST: /([^/]+)\/([^/]+)\/pull\/(\d+)/,
 }
 
 function onButtonClick(event: { target: any }) {
@@ -116,10 +115,11 @@ function processCommit(type: any, issue: any, repoDetails: { user: any; repo: an
 
       return formattedCommit
     }
-    const { user: repoName, repo: repoOrg } = getRepoDetails()
+
+    const { user: repoName, repo: repoOrg } = getFormattedHeader()
     return getCommit({ type, issue, repoOrg, repoName, user })
   } catch (error) {
-    const { user: repoName, repo: repoOrg } = getRepoDetails()
+    const { user: repoName, repo: repoOrg } = getFormattedHeader()
     return getCommit({ type, issue, repoOrg, repoName, user })
   }
 }
@@ -143,14 +143,14 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
         .replace(/REPO_NAME/g, repoDetails.repo)
         .replace(/SIGNATURE/g, signature)
 
-        if (profile.slimPrChecked) {
-          formattedPR = clearComments(formattedPR)
-        }
+      if (profile.slimPrChecked) {
+        formattedPR = clearComments(formattedPR)
+      }
 
       return formattedPR
     }
 
-    const { user: repoName, repo: repoOrg } = getRepoDetails()
+    const { user: repoName, repo: repoOrg } = getFormattedHeader()
     return getPR({
       type,
       issue,
@@ -159,7 +159,7 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
       user,
     })
   } catch (error) {
-    const { user: repoName, repo: repoOrg } = getRepoDetails()
+    const { user: repoName, repo: repoOrg } = getFormattedHeader()
 
     return getPR({
       type,
@@ -169,37 +169,6 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
       user,
     })
   }
-}
-
-function getBranchName(text: string) {
-  const DOT_KEY = 'dwedtw'
-  // get first line that is branch name
-  const trimmedText = text.replace(/Copy: BranchCommitPR[\s\S]*$/, '')
-
-  // Extracting the number from the text using regex
-  const regex = /#(\d+)/
-  const matches = trimmedText.match(regex)
-  const number = matches ? matches[1] : ''
-
-  // Removing the number and the # from the text
-  const textWithoutNumber = trimmedText.replace(regex, '')
-  const textWithDashes = textWithoutNumber.replace(/\./g, DOT_KEY)
-
-  // Converting the remaining text to the desired format
-  const formattedText =
-    number +
-    '-' +
-    textWithDashes
-      .replace(/\s+/g, '-') // Replacing spaces with dashes
-      .replace(/[^\w-]/g, '') // Removing non-alphanumeric characters except dashes
-      .replace(/_/g, '-') // replace underscore
-      .toLowerCase() // Converting to lowercase
-
-  // Removing the trailing dash from the formatted text
-  const finalFormattedText = formattedText.replace(/-+$/, '').replace(/-+/g, '-').replace(new RegExp(DOT_KEY, 'g'), '.')
-  const dotRegex = /[.,!]+$/ // Match one or more dots at the end
-  const finalText = finalFormattedText.replace(dotRegex, '')
-  return finalText
 }
 
 function copyTextToClipboard(text: string) {
@@ -224,25 +193,90 @@ function matchUrl(url: string, regex: RegExp): { user: string; repo: string } {
   return { user: '', repo: '' }
 }
 
-function getRepoDetails() {
-  const url = window.location.href
-  const issueMatch = matchUrl(url, issueRegex)
-  const pullRequestMatch = matchUrl(url, pullRequestRegex)
-  if (issueMatch.user && issueMatch.repo) {
-    return { user: issueMatch.user || '', repo: issueMatch.repo || '' }
+const getDetails = (service: SERVICE) => {
+  if (service === SERVICE.GITHUB) {
+    return {
+      getHeaderElement: (): string => {
+        const headerElement = document.getElementsByClassName('gh-header-title')
+        return headerElement && headerElement[0] ? headerElement[0].textContent! : ''
+      },
+      getBranchName: (text: string): string => {
+        const DOT_KEY = 'dwedtw'
+        // get first line that is branch name
+        const trimmedText = text.replace(/Copy: BranchCommitPR[\s\S]*$/, '')
+
+        // Extracting the number from the text using regex
+        const regex = /#(\d+)/
+        const matches = trimmedText.match(regex)
+        const number = matches ? matches[1] : ''
+
+        // Removing the number and the # from the text
+        const textWithoutNumber = trimmedText.replace(regex, '')
+        const textWithDashes = textWithoutNumber.replace(/\./g, DOT_KEY)
+
+        // Converting the remaining text to the desired format
+        const formattedText =
+          number +
+          '-' +
+          textWithDashes
+            .replace(/\s+/g, '-') // Replacing spaces with dashes
+            .replace(/[^\w-]/g, '') // Removing non-alphanumeric characters except dashes
+            .replace(/_/g, '-') // replace underscore
+            .toLowerCase() // Converting to lowercase
+
+        // Removing the trailing dash from the formatted text
+        const finalFormattedText = formattedText
+          .replace(/-+$/, '')
+          .replace(/-+/g, '-')
+          .replace(new RegExp(DOT_KEY, 'g'), '.')
+
+        const dotRegex = /[.,!]+$/ // Match one or more dots at the end
+        const finalText = finalFormattedText.replace(dotRegex, '')
+        return finalText
+      },
+      getUsername: (): string => {
+        let user = DEFAULT_USER
+        const avatarInfo = document?.querySelector('div#issuecomment-new .d-inline-block > img')!
+        const match = avatarInfo?.outerHTML.match(GITHUB_REGEX.USER_NAME)
+
+        if (match) {
+          const username = match[1]
+          user = username
+        }
+        return user
+      },
+      getRepoDetails: () => {
+        const url = window.location.href
+        const issueMatch = matchUrl(url, GITHUB_REGEX.ISSUE)
+        const pullRequestMatch = matchUrl(url, GITHUB_REGEX.PULL_REQUEST)
+        if (issueMatch.user && issueMatch.repo) {
+          return { user: issueMatch.user || '', repo: issueMatch.repo || '' }
+        }
+        if (pullRequestMatch.user && pullRequestMatch.repo) {
+          return { user: pullRequestMatch.user || '', repo: pullRequestMatch.repo || '' }
+        }
+        return { user: '', repo: '' }
+      },
+    }
   }
-  if (pullRequestMatch.user && pullRequestMatch.repo) {
-    return { user: pullRequestMatch.user || '', repo: pullRequestMatch.repo || '' }
+
+  return {
+    getHeaderElement: (): string => '',
+    getBranchName: (): string => '',
+    getUsername: (): string => '',
+    getRepoDetails: () => ({ user: '', repo: '' }),
   }
-  return { user: '', repo: '' }
 }
 
 function getFormattedHeader() {
-  const headerElement = document.getElementsByClassName('gh-header-title')
-  const formattedHeader = getBranchName(headerElement && headerElement[0] ? headerElement[0].textContent! : '')
+  const service =  getService()
+  const { user: org, repo } = getDetails(service).getRepoDetails()
+  const user = getDetails(service).getUsername()
+  const headerElement = getDetails(service).getHeaderElement()
+  const formattedHeader = getDetails(service).getBranchName(headerElement)
 
   const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)!
-  return { formattedHeader, issueNumber: issueNumber[0] }
+  return { org, repo, formattedHeader, issueNumber: issueNumber[0], user }
 }
 
 function getBranchData(prefix: string): void {
@@ -250,26 +284,14 @@ function getBranchData(prefix: string): void {
   copyTextToClipboard(processBranchName(prefix, formattedHeader))
 }
 
-function getCommitData(prefix: string, user: string): void {
-  const { issueNumber } = getFormattedHeader()
-  copyTextToClipboard(processCommit(prefix, issueNumber, getRepoDetails(), user))
+function getCommitData(prefix: string): void {
+  const { org, repo, issueNumber, user } = getFormattedHeader()
+  copyTextToClipboard(processCommit(prefix, issueNumber, { user: org, repo }, user))
 }
 
-function getPrData(prefix: string, user: string): void {
-  const { issueNumber } = getFormattedHeader()
-  copyTextToClipboard(processPR(prefix, issueNumber, getRepoDetails(), user))
-}
-
-function getUsername(): string {
-  let user = DEFAULT_USER
-  const avatarInfo = document?.querySelector('div#issuecomment-new .d-inline-block > img')!
-  const match = avatarInfo?.outerHTML.match(avatarRegex)
-
-  if (match) {
-    const username = match[1]
-    user = username
-  }
-  return user
+function getPrData(prefix: string): void {
+  const { org, repo, issueNumber, user } = getFormattedHeader()
+  copyTextToClipboard(processPR(prefix, issueNumber, { user: org, repo }, user))
 }
 
 function Panel({ alertInfo, setClose }: any): JSX.Element {
@@ -308,8 +330,6 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
     setProfilesData(getProfileData())
   }, [alertInfo.visible, profilesData.selected])
 
-  const user = getUsername()
-
   const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     setSelectedPrefix(newValue)
   }
@@ -334,7 +354,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               <button
                 className={styles['button']}
                 onClick={(event) => {
-                  getCommitData(selectedPrefix, user)
+                  getCommitData(selectedPrefix)
                   onButtonClick(event)
                 }}
               >
@@ -343,7 +363,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               <button
                 className={styles['button']}
                 onClick={(event) => {
-                  getPrData(selectedPrefix, user)
+                  getPrData(selectedPrefix)
                   onButtonClick(event)
                 }}
               >

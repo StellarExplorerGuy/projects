@@ -12,9 +12,9 @@ export const TEMPLATE_KEY = {
   SIGNATURE: 'SIGNATURE',
 }
 
-export const HOME_URL = 'aHR0cHM6Ly9naXRodWIuY29tL1N0ZWxsYXJFeHBsb3Jlckd1eS9wcm9qZWN0cw==';
-export const GIT_URL = 'aHR0cHM6Ly9naXRodWIuY29tL1N0ZWxsYXJFeHBsb3Jlckd1eS9wcm9qZWN0cy9ibG9iL21haW4vZG9jcy9jb21taXQvY29tbWl0Lm1k';
-
+export const HOME_URL = 'aHR0cHM6Ly9naXRodWIuY29tL1N0ZWxsYXJFeHBsb3Jlckd1eS9wcm9qZWN0cw=='
+export const GIT_URL =
+  'aHR0cHM6Ly9naXRodWIuY29tL1N0ZWxsYXJFeHBsb3Jlckd1eS9wcm9qZWN0cy9ibG9iL21haW4vZG9jcy9jb21taXQvY29tbWl0Lm1k'
 
 export const DEFAULT_LOCAL_STORAGE_ALERT = {
   visible: true,
@@ -22,7 +22,7 @@ export const DEFAULT_LOCAL_STORAGE_ALERT = {
   type: 'warning',
 }
 
-export const SERVICE = {
-  GITHUB: 'GITHUB',
-  GITLAB: 'GITLAB'
+export enum SERVICE {
+  GITHUB = 'GITHUB',
+  GITLAB = 'GITLAB',
 }

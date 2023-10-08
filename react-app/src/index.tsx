@@ -3,21 +3,11 @@ import ReactDOM from 'react-dom/client'
 
 import App from './App'
 import { SERVICE } from 'utils/constants'
+import { getService } from 'utils/data'
 
 const getHeader = () => {
-  const url = window.location.href
+  const service = getService()
   let headerElement
-
-  let service = url.match(/^https:\/\/github(\.(?:[a-zA-Z0-9.-]+))?\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/issues\/\d+$/g)
-    ? SERVICE.GITHUB
-    : ''
-
-  if (!service) {
-    // find GITLAB
-    service = url.match(/^https:\/\/gitlab\.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/-\/issues\/\d+$/g)
-      ? SERVICE.GITLAB
-      : ''
-  }
   if (service === SERVICE.GITHUB) {
     headerElement = document.getElementsByClassName('gh-header-title')
     headerElement = headerElement?.length > 0 ? headerElement[0] : null
