@@ -16,12 +16,18 @@ https://github.com/StellarExplorerGuy/projects
 ## Firefox
 https://github.com/mdn/webextensions-examples/blob/main/commands/manifest.json
 
+web store: https://addons.mozilla.org/en-US/firefox/addon/faster-pr/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search
+
 about:debugging#/runtime/this-firefox
 about:addons
 
 Firefox: https://github.com/facebook/react/issues/27432
 > allow
 https://www.reddit.com/r/firefox/comments/1326r7e/webextension_mv3_manifestjson_host_permissions/?rdt=56106
+
+
+## Chrome
+web store: https://chrome.google.com/webstore/detail/faster-pr/lcenjlelbnlooigocboklccingbhiajh/related?hl=en&authuser=0
 
 
 
