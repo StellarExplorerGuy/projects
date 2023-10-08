@@ -85,7 +85,7 @@ function processCommit(type: any, issue: any, repoDetails: { user: any; repo: an
     if (profile) {
       let signature = user
 
-      if (profile.signature) {
+      if (!profile.checked && profile.signature) {
         signature = profile.signature
       }
 
@@ -115,7 +115,7 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
     if (profile) {
       let signature = user
 
-      if (profile.signature) {
+      if (!profile.checked && profile.signature) {
         signature = profile.signature
       }
 
