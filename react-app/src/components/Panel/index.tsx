@@ -335,7 +335,14 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
           </Box>
         </CssVarsProvider>
         <Dropdown>
-          <MenuButton sx={{ maxWidth: 120 }} startDecorator={<AccountCircleIcon color="primary" fontSize="small" />}>
+          <MenuButton
+            sx={{
+              maxWidth: 120,
+              borderTop: '1px solid var(--ButtonGroup-separatorColor)',
+              borderBottom: '1px solid var(--ButtonGroup-separatorColor)',
+            }}
+            startDecorator={<AccountCircleIcon color="primary" fontSize="small" />}
+          >
             <Typography sx={{ width: 80 }} level="body-sm" noWrap>
               {profilesData.selected}
             </Typography>
