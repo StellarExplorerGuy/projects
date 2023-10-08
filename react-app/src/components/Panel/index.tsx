@@ -168,13 +168,12 @@ function copyTextToClipboard(text: string) {
 
 function getFormattedHeader() {
   const service = getService()
-  const { user: org, repo } = getDetails(service).getRepoDetails()
+  const { user: org, repo, issueNumber } = getDetails(service).getRepoDetails()
   const user = getDetails(service).getUsername()
   const headerElement = getDetails(service).getHeaderElement()
-  const formattedHeader = getDetails(service).getBranchName(headerElement)
+  const formattedHeader = getDetails(service).getBranchName(headerElement, issueNumber)
 
-  const issueNumber = formattedHeader.match(/\d+(\.\d+)?/g)!
-  return { org, repo, formattedHeader, issueNumber: issueNumber[0], user }
+  return { org, repo, formattedHeader, issueNumber, user }
 }
 
 function getBranchData(prefix: string): void {

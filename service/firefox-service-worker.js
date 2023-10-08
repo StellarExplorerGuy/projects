@@ -84,11 +84,12 @@ try {
 
       if (!currentService) {
         // find GITLAB
-        currentService = tab.url.match(
-          /^https:\/\/gitlab\.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/-\/issues\/\d+$/g
-        )
-          ? SERVICE.GITLAB
-          : "";
+        currentService =
+          /^https:\/\/gitlab\.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/-\/(issues|merge_requests)\/\d+$/.test(
+            tab.url
+          )
+            ? SERVICE.GITLAB
+            : "";
       }
       if (currentService) {
         await browser.scripting.executeScript({

@@ -13,6 +13,10 @@ const getHeader = () => {
     headerElement = headerElement?.length > 0 ? headerElement[0] : null
   } else if (service === SERVICE.GITLAB) {
     headerElement = document.querySelector('[data-testid="issue-title"]')
+    //enable for merge_requests
+    if (!headerElement) {
+      headerElement = document.querySelector('[data-testid="title-content"]')
+    }
   }
 
   return headerElement

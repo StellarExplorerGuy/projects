@@ -34,6 +34,7 @@ https://github.com/BloodLine888/power-supply-electron-react-boilerplate/pull/2
 
 GITLAB:
 https://gitlab.com/GoJavaCoding/projectname/-/issues/1
+https://gitlab.com/GoJavaCoding/java/-/merge_requests/2
 
 NEXT ?
 trello / JIRA?
