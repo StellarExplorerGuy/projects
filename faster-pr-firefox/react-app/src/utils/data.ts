@@ -1,6 +1,6 @@
 import { UniqueIdentifier } from '@dnd-kit/core'
 
-import { DEFAULT_PROFILE, BRANCH_PREFIXES, TEMPLATE_KEY } from './constants'
+import { DEFAULT_PROFILE, BRANCH_PREFIXES, TEMPLATE_KEY, SERVICE } from './constants'
 
 type CommitBody = {
   type: string
@@ -152,6 +152,30 @@ export const decodeUrl = (encodedText: string): string => {
 }
 
 export const clearComments = (text: string): string => {
-  const regex = /<!--(.*?)-->\n/gs;
+  const regex = /<!--(.*?)-->\n/gs
   return text.replace(regex, '')
+}
+
+export function getLocalStorage(key: string) {
+  try {
+    const localData = JSON.parse(localStorage.getItem(key)!) || {}
+    return localData
+  } catch (error) {
+    return {}
+  }
+}
+
+const githubRegex = /^https:\/\/github(\.(?:[a-zA-Z0-9.-]+))?\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/issues\/\d+$/
+const gitlabRegex = /^https:\/\/gitlab\.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/-\/(issues|merge_requests)\/\d+$/
+
+export const getService = (): SERVICE  => {
+  const url = window.location.href
+
+  if (githubRegex.test(url)) {
+    return SERVICE.GITHUB
+  } else if (gitlabRegex.test(url)) {
+    return SERVICE.GITLAB
+  }
+
+  return SERVICE.GITHUB
 }
