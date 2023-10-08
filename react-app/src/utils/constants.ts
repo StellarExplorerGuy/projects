@@ -21,3 +21,8 @@ export const DEFAULT_LOCAL_STORAGE_ALERT = {
   msg: 'It seems browser localStorage is cleared, default profile is set 😱.',
   type: 'warning',
 }
+
+export const SERVICE = {
+  GITHUB: 'GITHUB',
+  GITLAB: 'GITLAB'
+}

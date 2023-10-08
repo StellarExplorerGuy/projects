@@ -1,14 +1,31 @@
-function updatePage() {
-  function onHeaderElementAvailable() {
-    const headerElement = document.getElementsByClassName("gh-header-title");
+function updatePage(currentService, SERVICE) {
+  const FASTER_PR_SCRIPT_ID = "faster-pr";
 
-    if (headerElement && headerElement.length > 0) {
+  function onHeaderElementAvailable() {
+    let headerElement = null;
+    if (currentService === SERVICE.GITHUB) {
+      headerElement = document.getElementsByClassName("gh-header-title");
+      headerElement =
+        headerElement && headerElement.length > 0 ? headerElement[0] : null;
+    } else if (currentService === SERVICE.GITLAB) {
+      headerElement = document.querySelector('[data-testid="issue-title"]');
+    }
+
+    if (headerElement) {
       try {
+        //<add script once
+        const fasterPRScript = document.getElementById(FASTER_PR_SCRIPT_ID);
+        if (fasterPRScript) {
+          fasterPRScript.remove();
+        }
+        //>
         const popupHtml = document.createElement("div");
-        popupHtml.innerHTML = `<script src="${browser.runtime.getURL(
+        popupHtml.id = FASTER_PR_SCRIPT_ID;
+        popupHtml.innerHTML = `<script src="${chrome.runtime.getURL(
           "content.js"
         )}"></script>`;
-        headerElement[0].appendChild(popupHtml);
+
+        headerElement.appendChild(popupHtml);
         observer.disconnect();
 
         const button1 = document.getElementById("wjdkwed1");
@@ -51,19 +68,37 @@ try {
     }
   });
 
-  //ON page change
   browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    if (
-      changeInfo.status === "complete" &&
-      tab.url &&
-      tab.url.match(/^https:\/\/[a-zA-Z0-9.-]+\/[^/]+\/[^/]+\/issues\/\d+$/g)
-    ) {
-      await browser.scripting.executeScript({
-        target: { tabId },
-        func: updatePage,
-      });
+    if (changeInfo.status === "complete" && tab.url) {
+      const SERVICE = {
+        GITHUB: "GITHUB",
+        GITLAB: "GITLAB",
+      };
+      // detect servicer:
+      // find github or github.companyName
+      let currentService = tab.url.match(
+        /^https:\/\/github(\.(?:[a-zA-Z0-9.-]+))?\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/issues\/\d+$/g
+      )
+        ? SERVICE.GITHUB
+        : "";
+
+      if (!currentService) {
+        // find GITLAB
+        currentService = tab.url.match(
+          /^https:\/\/gitlab\.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/-\/issues\/\d+$/g
+        )
+          ? SERVICE.GITLAB
+          : "";
+      }
+      if (currentService) {
+        await browser.scripting.executeScript({
+          target: { tabId },
+          func: updatePage,
+          args: [currentService, SERVICE],
+        });
+      }
     }
   });
-} catch (e) {
+} catch (error) {
   console.error(error);
 }

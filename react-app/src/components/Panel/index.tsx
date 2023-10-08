@@ -377,7 +377,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
           <Box
             sx={{
               flexGrow: 1,
-              maxWidth: 950,
+              maxWidth: 818,
               border: 'none !important',
             }}
           >

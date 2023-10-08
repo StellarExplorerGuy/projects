@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Faster PR",
-  "description": "Personalize and copy a branch name, commit message, or pull request description (compatible with GitHub only).",
-  "version": "0.0.0.3",
+  "description": "Personalize and copy a branch name, commit message, or pull request description (compatible with GitHub/GitLab only).",
+  "version": "0.0.0.4",
   "icons": {
     "128": "128.png"
   },

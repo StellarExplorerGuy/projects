@@ -9,10 +9,10 @@
     "build:firefox": "vite build --config firefox-vite.config.js --emptyOutDir"
   },
   "devDependencies": {
-    "vite": "4.4.9"
+    "vite": "4.4.11"
   },
   "engines": {
     "node": "18.x",
-    "npm": "8.x"
+    "npm": "9.8.1"
   }
 }
