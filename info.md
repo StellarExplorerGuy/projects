@@ -5,3 +5,22 @@ Once installed, this extension seamlessly integrates itself into your GitHub env
 Imagine the convenience of a sleek and unobtrusive element, right within your GitHub workspace, that allows you to quickly select and copy branch names, commit messages, or pull request descriptions with a single click. Whether you're managing code repositories, collaborating with teammates, or reviewing code changes, this extension becomes an indispensable tool for managing and sharing essential information effortlessly.
 
 With this Firefox extension, you'll experience a new level of efficiency and convenience while working on GitHub. Say goodbye to the hassle of manual copying and pasting, and say hello to a smoother, more personalized GitHub experience.
+
+
+============
+// Distributing your Safari web extension
+
+https://developer.apple.com/documentation/safariservices/safari_web_extensions/distributing_your_safari_web_extension
+
+
+
+https://developer.apple.com/safari/extensions/
+
+
+next?
+https://gitlab.com/GoJavaCoding/java/-/issues/2
+bitbucket?
+
+
+TO DO
+- add know issues > refresh the first time
