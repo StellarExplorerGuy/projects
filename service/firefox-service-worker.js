@@ -1,8 +1,11 @@
 function updatePage(currentService, SERVICE) {
   const FASTER_PR_SCRIPT_ID = "faster-pr";
+  //  With this debounce mechanism, the onHeaderElementAvailable function will only execute once, 1 second after the last observed mutation.
+  let debounceTimeout;
 
   function onHeaderElementAvailable() {
-    setTimeout(() => {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
       let headerElement = null;
       if (currentService === SERVICE.GITHUB) {
         headerElement = document.getElementsByClassName("gh-header-title");
@@ -12,8 +15,15 @@ function updatePage(currentService, SERVICE) {
         headerElement = document.querySelector('[data-testid="issue-title"]');
         //enable for merge_requests
         if (!headerElement) {
-          headerElement = document.querySelector('[data-testid="title-content"]');
+          headerElement = document.querySelector(
+            '[data-testid="title-content"]'
+          );
         }
+      } else if (currentService === SERVICE.TRELLO) {
+        headerElement = document.getElementsByClassName(
+          "window-header js-card-detail-header"
+        );
+        headerElement = headerElement?.length > 0 ? headerElement[0] : null;
       }
 
       if (headerElement) {
@@ -48,7 +58,7 @@ function updatePage(currentService, SERVICE) {
           console.error("[error]", error);
         }
       }
-    }, 400);
+    }, 1000);
   }
   // Create a MutationObserver to watch for changes in the DOM
   const observer = new MutationObserver(onHeaderElementAvailable);
@@ -79,6 +89,7 @@ try {
       const SERVICE = {
         GITHUB: "GITHUB",
         GITLAB: "GITLAB",
+        TRELLO: "TRELLO",
       };
       // detect servicer:
       // find github or github.companyName
@@ -95,6 +106,14 @@ try {
             tab.url
           )
             ? SERVICE.GITLAB
+            : "";
+      }
+      if (!currentService) {
+        currentService =
+          /^https:\/\/trello\.com\/[A-Za-z0-9-]\/[A-Za-z0-9]+\/\d+-[A-Za-z0-9-]+/.test(
+            tab.url
+          )
+            ? SERVICE.TRELLO
             : "";
       }
       if (currentService) {

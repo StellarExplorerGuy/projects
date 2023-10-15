@@ -25,4 +25,5 @@ export const DEFAULT_LOCAL_STORAGE_ALERT = {
 export enum SERVICE {
   GITHUB = 'GITHUB',
   GITLAB = 'GITLAB',
+  TRELLO = 'TRELLO'
 }

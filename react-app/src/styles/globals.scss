@@ -1,8 +1,16 @@
+
 // For Modal GITLAB specific fix (in GITHUB all good)
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     color: inherit;
 }
+
 .code-highlight {
     color: var(--color-fg-default);
 }
+
 //>

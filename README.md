@@ -42,8 +42,16 @@ GITLAB:
 https://gitlab.com/GoJavaCoding/projectname/-/issues/1
 https://gitlab.com/GoJavaCoding/java/-/merge_requests/2
 
+
+TRELLO
+https://trello.com/c/khWk6Q6b/7-the-login-page-doesnt-work-in-prod-v100
+
+JIRA
+https://gotestingspace.atlassian.net/browse/KAN-1
+https://jsw.ibm.com/browse/MDLDHDB-987
+
+
 NEXT ?
-trello / JIRA?
 BITBUCKET
 https://bitbucket.org/sladikxteam/checkcontrol-react/pull-requests/2
 
