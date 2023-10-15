@@ -42,8 +42,6 @@ function updatePage(currentService, SERVICE) {
           )}"></script>`;
 
           headerElement.appendChild(popupHtml);
-          observer.disconnect();
-
           const button1 = document.getElementById("wjdkwed1");
           if (button1) {
             const hasClickEvent =
@@ -52,6 +50,7 @@ function updatePage(currentService, SERVICE) {
             if (!hasClickEvent) {
               window.location.reload();
             }
+            observer.disconnect();
           } else {
             window.location.reload();
           }
