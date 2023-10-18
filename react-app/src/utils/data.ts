@@ -169,7 +169,7 @@ const githubRegex = /^https:\/\/github(\.(?:[a-zA-Z0-9.-]+))?\/[a-zA-Z0-9.-]+\/[
 const gitlabRegex = /^https:\/\/gitlab\.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/-\/(issues|merge_requests)\/\d+$/
 const trelloRegex = /^https:\/\/trello\.com\/[A-Za-z0-9-]\/[A-Za-z0-9]+\/\d+-[A-Za-z0-9-]+/
 
-export const getService = (): SERVICE  => {
+export const getService = (): SERVICE => {
   const url = window.location.href
 
   if (githubRegex.test(url)) {
@@ -181,4 +181,15 @@ export const getService = (): SERVICE  => {
   }
 
   return SERVICE.GITHUB
+}
+
+export const getConfig = () => {
+  const currentService = getService()
+  const config = {
+    panelMaxWidth: 818,
+  }
+  if (currentService === SERVICE.TRELLO) {
+    config.panelMaxWidth = 584
+  }
+  return config
 }
