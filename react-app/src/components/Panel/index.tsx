@@ -17,8 +17,7 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 import Tab from '@mui/material/Tab'
 
 import { clearComments, getCommit, getConfig, getLocalStorage, getPR, getService, updateKey } from 'utils/data'
-import { Alert, Grid, Typography } from '@mui/joy'
-import { Box } from '@mui/material'
+import { Box, Alert, Grid, Typography } from '@mui/joy'
 import {
   FASTER_PR_PROFILE_KEY,
   FASTER_PR_PROFILE,
