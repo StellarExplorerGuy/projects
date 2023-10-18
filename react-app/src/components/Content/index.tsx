@@ -421,7 +421,7 @@ function Content({
                       </Box>
                     </Grid>
                     <Grid xs={0.8}>
-                      <FormLabel>Edit issues</FormLabel>
+                      <FormLabel>Edit prefixes</FormLabel>
                       <Button
                         sx={{ mt: 1 }}
                         aria-label="new"

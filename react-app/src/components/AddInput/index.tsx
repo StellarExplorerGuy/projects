@@ -11,12 +11,12 @@ type AddInputProps = {
   items: UniqueIdentifier[]
   setItems: React.Dispatch<React.SetStateAction<UniqueIdentifier[]>>
   setAlertInfo: React.Dispatch<
-  React.SetStateAction<{
-    visible: boolean
-    msg: string
-    type: string
-  }>
->
+    React.SetStateAction<{
+      visible: boolean
+      msg: string
+      type: string
+    }>
+  >
 }
 
 function AddInput({ items, setItems, setAlertInfo }: AddInputProps) {
@@ -59,6 +59,7 @@ function AddInput({ items, setItems, setAlertInfo }: AddInputProps) {
         placeholder="feat/"
         type="text"
         variant="outlined"
+        size="sm"
         color="primary"
         required
         value={data.input}
@@ -69,10 +70,11 @@ function AddInput({ items, setItems, setAlertInfo }: AddInputProps) {
               <ClearOutlinedIcon color="info" sx={{ fontSize: 'var(--joy-fontSize-md)' }} />
             </IconButton>
             <Button
+              sx={{ ml: 1.5, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
               variant="solid"
               color="primary"
+              size="sm"
               onClick={handleSubmit}
-              sx={{ ml: 1.5, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
             >
               Add
             </Button>
