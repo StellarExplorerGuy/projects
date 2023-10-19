@@ -168,6 +168,8 @@ export function getLocalStorage(key: string) {
 const githubRegex = /^https:\/\/github(\.(?:[a-zA-Z0-9.-]+))?\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/issues\/\d+$/
 const gitlabRegex = /^https:\/\/gitlab\.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/-\/(issues|merge_requests)\/\d+$/
 const trelloRegex = /^https:\/\/trello\.com\/[A-Za-z0-9-]\/[A-Za-z0-9]+\/\d+-[A-Za-z0-9-]+/
+const jiraDefaultRegex = /^https:\/\/(?:[a-zA-Z0-9.-]+\.)?atlassian.net\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
+const jiraCompany1Regex = /^https:\/\/jsw(?:[a-zA-Z0-9.-]+)?.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
 
 export const getService = (): SERVICE => {
   const url = window.location.href
@@ -178,6 +180,10 @@ export const getService = (): SERVICE => {
     return SERVICE.GITLAB
   } else if (trelloRegex.test(url)) {
     return SERVICE.TRELLO
+  } else if (jiraDefaultRegex.test(url)) {
+    return SERVICE.JIRA_DEFAULT
+  } else if (jiraCompany1Regex.test(url)) {
+    return SERVICE.JIRA_COMPANY_1
   }
 
   return SERVICE.GITHUB

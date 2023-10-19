@@ -11,10 +11,7 @@
     "icons": {
         "128": "128.png"
     },
-    "permissions": [
-        "tabs",
-        "scripting"
-    ],
+    "permissions": [],
     "background": {
         "scripts": [
             "service-worker.js"

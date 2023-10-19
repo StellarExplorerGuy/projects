@@ -7,95 +7,96 @@ import { getService } from 'utils/data'
 
 const FASTER_PR_SCRIPT_ID = 'faster-pr-1we4'
 
-window.onload = () => {
-  let debounceTimeout: NodeJS.Timeout
+const getHeader = (service: SERVICE) => {
+  let headerElement
+  if (service === SERVICE.GITHUB) {
+    headerElement = document.getElementsByClassName('gh-header-title')
+    headerElement = headerElement?.length > 0 ? headerElement[0] : null
+  } else if (service === SERVICE.GITLAB) {
+    headerElement = document.querySelector('[data-testid="issue-title"]')
+    //enable for merge_requests
+    if (!headerElement) {
+      headerElement = document.querySelector('[data-testid="title-content"]')
+    }
+  } else if (service === SERVICE.TRELLO) {
+    headerElement = document.getElementsByClassName('window-header js-card-detail-header')
+    headerElement = headerElement?.length > 0 ? headerElement[0] : null
+  } else if (service === SERVICE.JIRA_DEFAULT) {
+    headerElement = document.getElementById('jira-issue-header')
+  } else if (service === SERVICE.JIRA_COMPANY_1) {
+    headerElement = document.getElementsByClassName('issue-header-content')
+    headerElement = headerElement?.length > 0 ? headerElement[0] : null
+  }
+  return headerElement
+}
 
-  const getHeader = (service: SERVICE) => {
-    let headerElement
-    if (service === SERVICE.GITHUB) {
-      headerElement = document.getElementsByClassName('gh-header-title')
-      headerElement = headerElement?.length > 0 ? headerElement[0] : null
-    } else if (service === SERVICE.GITLAB) {
-      headerElement = document.querySelector('[data-testid="issue-title"]')
-      //enable for merge_requests
-      if (!headerElement) {
-        headerElement = document.querySelector('[data-testid="title-content"]')
-      }
-    } else if (service === SERVICE.TRELLO) {
-      headerElement = document.getElementsByClassName('window-header js-card-detail-header')
-      headerElement = headerElement?.length > 0 ? headerElement[0] : null
+function process(headerElement: Element, currentService: SERVICE) {
+  const fasterPRScripts = document.querySelectorAll(`#${FASTER_PR_SCRIPT_ID}`)
+  fasterPRScripts.forEach((fasterPRScript) => {
+    fasterPRScript.remove()
+  })
+  if (headerElement) {
+    const rootElement = document.createElement('div')
+    rootElement.id = FASTER_PR_SCRIPT_ID
+    rootElement.style.display = 'grid'
+    rootElement.style.justifyItems = 'start'
+
+    if (currentService === SERVICE.TRELLO) {
+      rootElement.style.left = '-56px'
+      rootElement.style.position = 'relative'
     }
 
-    return headerElement
+    ReactDOM.createRoot(rootElement).render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+    )
+    headerElement.appendChild(rootElement)
   }
+}
 
-  function process(headerElement: Element, currentService: SERVICE) {
-    const fasterPRScripts = document.querySelectorAll(`#${FASTER_PR_SCRIPT_ID}`)
-    fasterPRScripts.forEach((fasterPRScript) => {
-      fasterPRScript.remove()
-    })
-    if (headerElement) {
-      const rootElement = document.createElement('div')
-      rootElement.id = FASTER_PR_SCRIPT_ID
-      rootElement.style.display = 'grid'
-      rootElement.style.justifyItems = 'start'
+//PROD
+let debounceTimeout: NodeJS.Timeout
 
-      if (currentService === SERVICE.TRELLO) {
-        rootElement.style.left = '-56px'
-        rootElement.style.position = 'relative'
-      }
+function onInitAvailable() {
+  clearTimeout(debounceTimeout)
+  const url = window.location.href
+  const currentService = getService()
 
-      headerElement.appendChild(rootElement)
-      ReactDOM.createRoot(rootElement).render(
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>,
-      )
-    }
-  }
-
-  //PROD
-  function onInitAvailable() {
-    clearTimeout(debounceTimeout)
-    const url = window.location.href
-    const currentService = getService()
-
-    if (url) {
+  if (url) {
+    try {
       const headerElement = getHeader(currentService)
-
       debounceTimeout = setTimeout(() => {
         if (currentService && headerElement) {
-          try {
-            let isStyleLoaded = false
-            const buttonRendered = document.getElementById('wjdkwed1')
-            if (buttonRendered) {
-              const selectedButton = document.querySelector('button.Mui-selected')
-              if (selectedButton) {
-                isStyleLoaded = getComputedStyle(selectedButton).color === 'rgb(25, 118, 210)'
-              }
-              const hasClickEvent = buttonRendered.onclick !== null && isStyleLoaded
-              if (hasClickEvent) {
-                // observerInit.disconnect()
-              } else {
-                process(headerElement, currentService)
-              }
+          let isStyleLoaded = false
+          const buttonRendered = document.getElementById('wjdkwed1')
+          if (buttonRendered) {
+            const selectedButton = document.querySelector('button.Mui-selected')
+            if (selectedButton) {
+              isStyleLoaded = getComputedStyle(selectedButton).color === 'rgb(25, 118, 210)'
+            }
+            const hasClickEvent = buttonRendered.onclick !== null && isStyleLoaded
+            if (hasClickEvent) {
+              // observerInit.disconnect()
             } else {
               process(headerElement, currentService)
             }
-          } catch (error) {
-            console.error('[error]', error)
+          } else {
+            process(headerElement, currentService)
           }
         }
       }, 200)
+    } catch (error) {
+      console.error('[error]', error)
     }
   }
-
-  const observerInit = new MutationObserver(onInitAvailable)
-  observerInit.observe(document.body, {
-    childList: true,
-    subtree: true,
-  })
 }
+
+const observerInit = new MutationObserver(onInitAvailable)
+observerInit.observe(document.body, {
+  childList: true,
+  subtree: true,
+})
 
 ///////////
 // DEV

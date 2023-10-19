@@ -3,13 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "npm run build:chrome && npm run build:firefox && npm run build:onboarding",
+    "build": "npm run build:firefox && npm run build:onboarding",
     "build:onboarding": "vite build --config onboarding-vite.config.js --emptyOutDir",
-    "build:chrome": "vite build --config chrome-vite.config.js --emptyOutDir",
     "build:firefox": "vite build --config firefox-vite.config.js --emptyOutDir"
   },
   "devDependencies": {
-    "vite": "4.4.11"
+    "vite": "4.5.0"
   },
   "engines": {
     "node": "18.x",

@@ -6,13 +6,7 @@
   "icons": {
     "128": "128.png"
   },
-  "permissions": [
-    "tabs",
-    "scripting"
-  ],
-  "background": {
-    "service_worker": "service-worker.js"
-  },
+  "permissions": [],
   "host_permissions": [
     "<all_urls>"
   ],

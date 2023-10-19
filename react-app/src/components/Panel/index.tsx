@@ -91,7 +91,7 @@ function formatIssueLink(
 ): string {
   const issueLink = repoDetails.user || repoDetails.repo
 
-  const formattedCommit = commit
+  const text = commit
     .replace(/ISSUE_TYPE/g, type)
     .replace(/ISSUE/g, repoDetails.repo)
     .replace(/REPO_ORG/g, repoDetails.repo)
@@ -103,7 +103,7 @@ function formatIssueLink(
     .replace(`${issueLink}/${issueLink}`, issueLink)
     .replace(`${issueLink}#${issueLink}`, issueLink)
 
-  return formattedCommit
+  return text
 }
 
 function processCommit(type: any, issue: any, repoDetails: { user: any; repo: any }, user: any) {
@@ -120,7 +120,7 @@ function processCommit(type: any, issue: any, repoDetails: { user: any; repo: an
 
       const currentService = getService()
       let formattedCommit
-      if (currentService === SERVICE.TRELLO) {
+      if ([SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1].includes(currentService)) {
         formattedCommit = formatIssueLink(repoDetails, profile.commit, type, signature)
       } else {
         formattedCommit = profile.commit
@@ -156,7 +156,7 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
 
       const currentService = getService()
       let formattedPR
-      if (currentService === SERVICE.TRELLO) {
+      if ([SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1].includes(currentService)) {
         formattedPR = formatIssueLink(repoDetails, profile.pr, type, signature)
       } else {
         formattedPR = profile.pr
