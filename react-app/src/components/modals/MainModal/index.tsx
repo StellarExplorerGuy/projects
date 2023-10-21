@@ -118,6 +118,7 @@ function MainModal({ alertInfo, open, setClose, setAlertInfo }: any): JSX.Elemen
     deleteProfile: false,
     resetDefault: false,
     editBranch: false,
+    integrations: false,
     tip: false,
   })
 

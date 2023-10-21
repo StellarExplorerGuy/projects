@@ -1,5 +1,5 @@
-const path = require('path')
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const path = require('path');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
           ecma: 2020,
           compress: true,
           output: {
-             ascii_only: true
+            ascii_only: true,
           },
         },
       }),
@@ -38,6 +38,11 @@ module.exports = {
         test: /\.s?css$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
+      {
+        test: /\.svg$/,
+        type: 'asset',
+        use: 'svgo-loader',
+      },
     ],
   },
   resolve: {
@@ -52,4 +57,4 @@ module.exports = {
     filename: 'content.js',
     path: path.resolve(__dirname, '..', 'extension'),
   },
-}
+};

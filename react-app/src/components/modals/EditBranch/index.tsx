@@ -13,6 +13,7 @@ import Modal from '@mui/joy/Modal'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
+import MessageBox from 'components/MessageBox'
 
 interface CustomSeparatorButtonGroupProps {
   items: UniqueIdentifier[]
@@ -105,7 +106,9 @@ function EditBranch({ open, handleClose, items, handleSave }: EditBranchProps) {
           Edit branch details
         </Typography>
         <Typography id="basic-modal-dialog-description" mt={0.5} mb={2} textColor="text.tertiary">
-          You can generate and arrange prefixes for branches, which correspond to different types of issues.
+          <Box sx={{ mt: 1, mb: 2 }}>
+            <MessageBox message="You can generate and arrange prefixes for branches, which correspond to different types of issues." />
+          </Box>
           <CustomSeparatorButtonGroup items={data} setItems={setItemsData} setAlertInfo={setAlertInfo} />
         </Typography>
         <Grid container>

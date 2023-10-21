@@ -1,6 +1,7 @@
 import { UniqueIdentifier } from '@dnd-kit/core'
 
-import { DEFAULT_PROFILE, BRANCH_PREFIXES, TEMPLATE_KEY, SERVICE } from './constants'
+import { DEFAULT_PROFILE, BRANCH_PREFIXES, TEMPLATE_KEY, SERVICE, FASTER_PR_CONFIG } from './constants'
+import { AppConfig } from 'types'
 
 type CommitBody = {
   type: string
@@ -107,6 +108,7 @@ export const defaultProfile = () => {
     slimPrChecked: false,
   }
 }
+export const DEFAULT_INTEGRATIONS = () => [true, true, true, true]
 
 export const showAlertInfo = (
   data: {
@@ -145,6 +147,21 @@ export const updateKey = (key: string, data: string): void => {
   } catch (error) {}
 }
 
+export const getAppConfig = (): AppConfig => {
+  try {
+    const localConfig = localStorage.getItem(FASTER_PR_CONFIG)!
+
+    if (!localConfig) {
+      updateLocalStorage(FASTER_PR_CONFIG, { integrations: DEFAULT_INTEGRATIONS() })
+      return { integrations: DEFAULT_INTEGRATIONS() }
+    }
+    const AppConfig = JSON.parse(localConfig) as AppConfig
+    return AppConfig
+  } catch (error) {
+    return { integrations: DEFAULT_INTEGRATIONS() }
+  }
+}
+
 export const decodeUrl = (encodedText: string): string => {
   const doubleReversedText = atob(encodedText)
   const reversedText = doubleReversedText.split('').reverse().join('')
@@ -172,17 +189,19 @@ const jiraDefaultRegex = /^https:\/\/(?:[a-zA-Z0-9.-]+\.)?atlassian.net\/[a-zA-Z
 const jiraCompany1Regex = /^https:\/\/jsw(?:[a-zA-Z0-9.-]+)?.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
 
 export const getService = (): SERVICE => {
+  const { integrations } = getAppConfig()
+  const [github, gitlab, trello, jira] = integrations
   const url = window.location.href
 
-  if (githubRegex.test(url)) {
+  if (github && githubRegex.test(url)) {
     return SERVICE.GITHUB
-  } else if (gitlabRegex.test(url)) {
+  } else if (gitlab && gitlabRegex.test(url)) {
     return SERVICE.GITLAB
-  } else if (trelloRegex.test(url)) {
+  } else if (github && trelloRegex.test(url)) {
     return SERVICE.TRELLO
-  } else if (jiraDefaultRegex.test(url)) {
+  } else if (trello && jiraDefaultRegex.test(url)) {
     return SERVICE.JIRA_DEFAULT
-  } else if (jiraCompany1Regex.test(url)) {
+  } else if (jira && jiraCompany1Regex.test(url)) {
     return SERVICE.JIRA_COMPANY_1
   }
 

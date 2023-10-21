@@ -71,6 +71,7 @@ function onInitAvailable() {
           let isStyleLoaded = false
           const buttonRendered = document.getElementById('wjdkwed1')
           if (buttonRendered) {
+            // resolve the issue if style isn't loaded
             const selectedButton = document.querySelector('button.Mui-selected')
             if (selectedButton) {
               isStyleLoaded = getComputedStyle(selectedButton).color === 'rgb(25, 118, 210)'
@@ -110,3 +111,4 @@ observerInit.observe(document.body, {
 //     <App />
 //   </React.StrictMode>,
 // )
+
