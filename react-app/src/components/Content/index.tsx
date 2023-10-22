@@ -372,7 +372,7 @@ function Content({
             <Grid xs={1}>
               <Tooltip
                 arrow
-                title="Global application configuration"
+                title="About"
                 variant="solid"
                 placement="top"
                 color="neutral"
@@ -392,7 +392,7 @@ function Content({
             </Grid>
           </Grid>
           <Box sx={{ mt: 1, mb: 1 }}>
-            <MessageBox message="You can switch profile, create new or use default. Configs are stored to your browser storage. Please, press 'save' to apply the changes." />
+            <MessageBox message="You can switch profiles, create new ones, or use the default profile. Configurations are stored in your browser storage on a per-page basis (e.g., GitHub and Gitlab have their own configurations). Remember to click 'save' to apply any changes." />
           </Box>
           <Sheet>
             <Typography level="h2" fontSize="xl2" sx={{ mb: 2 }}>

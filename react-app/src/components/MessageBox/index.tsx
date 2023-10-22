@@ -4,6 +4,7 @@ function MessageBox(props: any) {
   const { sx, message } = props
   return (
     <Typography
+      component="div"
       variant="soft"
       color="primary"
       borderRadius="xs"

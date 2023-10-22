@@ -146,7 +146,7 @@ export const updateKey = (key: string, data: string): void => {
     localStorage.setItem(key, JSON.stringify(data))
   } catch (error) {}
 }
-
+// unused for now
 export const getAppConfig = (): AppConfig => {
   try {
     const localConfig = localStorage.getItem(FASTER_PR_CONFIG)!
@@ -189,19 +189,19 @@ const jiraDefaultRegex = /^https:\/\/(?:[a-zA-Z0-9.-]+\.)?atlassian.net\/[a-zA-Z
 const jiraCompany1Regex = /^https:\/\/jsw(?:[a-zA-Z0-9.-]+)?.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
 
 export const getService = (): SERVICE => {
-  const { integrations } = getAppConfig()
-  const [github, gitlab, trello, jira] = integrations
+  // const { integrations } = getAppConfig()
+  // const [github, gitlab, trello, jira] = integrations
   const url = window.location.href
 
-  if (github && githubRegex.test(url)) {
+  if (githubRegex.test(url)) {
     return SERVICE.GITHUB
-  } else if (gitlab && gitlabRegex.test(url)) {
+  } else if (gitlabRegex.test(url)) {
     return SERVICE.GITLAB
-  } else if (github && trelloRegex.test(url)) {
+  } else if (trelloRegex.test(url)) {
     return SERVICE.TRELLO
-  } else if (trello && jiraDefaultRegex.test(url)) {
+  } else if (jiraDefaultRegex.test(url)) {
     return SERVICE.JIRA_DEFAULT
-  } else if (jira && jiraCompany1Regex.test(url)) {
+  } else if (jiraCompany1Regex.test(url)) {
     return SERVICE.JIRA_COMPANY_1
   }
 

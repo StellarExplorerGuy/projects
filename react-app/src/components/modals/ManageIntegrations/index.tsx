@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Alert, Box } from '@mui/joy'
+import { Box, Link } from '@mui/joy'
 import Button from '@mui/joy/Button'
 import Grid from '@mui/joy/Grid'
 import Modal from '@mui/joy/Modal'
@@ -15,7 +15,6 @@ import Checkbox, { checkboxClasses } from '@mui/joy/Checkbox'
 import List from '@mui/joy/List'
 import ListItem from '@mui/joy/ListItem'
 import Sheet from '@mui/joy/Sheet'
-import { getAppConfig } from 'utils/data'
 
 import Github from 'assets/github.svg'
 import GitLab from 'assets/gitlab.svg'
@@ -62,10 +61,13 @@ interface ItemProps {
 function Item({ integration, toggleIntegration }: ItemProps) {
   return (
     <ListItem
-      {...(integration.checked && {
-        variant: 'soft',
-        color: 'primary',
-      })}
+    sx={{
+      pointerEvents: 'none'
+    }}
+    // {...(integration.checked && {
+    //   variant: 'soft',
+    //   color: 'primary',
+    // })}
     >
       <Avatar aria-hidden="true" src={integration.avatar} />
       <Checkbox
@@ -81,7 +83,7 @@ function Item({ integration, toggleIntegration }: ItemProps) {
         }
         checked={integration.checked}
         onChange={toggleIntegration(integration.index)}
-        sx={{ color: 'inherit' }}
+        color="success"
       />
     </ListItem>
   )
@@ -135,13 +137,13 @@ function IntegrationsCheckbox({ toggleIntegration }: IntegrationsCheckboxProps) 
 }
 
 function getIntegrationConfig() {
-  const appConfig = getAppConfig()
-  const copy = [...dataList]
-  appConfig.integrations.forEach((checked: boolean, index: number) => {
-    copy[index].checked = checked
-  })
-
-  return copy
+  // const appConfig = getAppConfig()
+  // const copy = [...dataList]
+  // appConfig.integrations.forEach((checked: boolean, index: number) => {
+  //   copy[index].checked = checked
+  // })
+  // return copy
+  return dataList
 }
 
 interface ManageIntegrationsProps {
@@ -151,11 +153,11 @@ interface ManageIntegrationsProps {
 }
 
 function ManageIntegrations({ open, handleSubmit, handleClose }: ManageIntegrationsProps) {
-  const [alertInfo, setAlertInfo] = useState({
-    visible: false,
-    msg: '',
-    type: 'warning',
-  })
+  // const [alertInfo, setAlertInfo] = useState({
+  //   visible: false,
+  //   msg: '',
+  //   type: 'warning',
+  // })
   const [integrations, setIntegrations] = useState(() => getIntegrationConfig())
 
   const toggleIntegration = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,30 +166,39 @@ function ManageIntegrations({ open, handleSubmit, handleClose }: ManageIntegrati
     setIntegrations(newIntegrations)
   }
 
-  const handleSave = (): void => {
-    const checkedIntegrationsCount = integrations.filter((integration) => integration.checked === true).length
-    if (checkedIntegrationsCount) {
-      handleSubmit(integrations.map(({ checked }) => checked))
-    } else {
-      setAlertInfo({
-        visible: true,
-        msg: 'You cannot save it without selecting at least one option.',
-        type: 'warning',
-      })
-    }
-  }
+  // const handleSave = (): void => {
+  //   const checkedIntegrationsCount = integrations.filter((integration) => integration.checked === true).length
+  //   if (checkedIntegrationsCount) {
+  //     handleSubmit(integrations.map(({ checked }) => checked))
+  //   } else {
+  //     setAlertInfo({
+  //       visible: true,
+  //       msg: 'You cannot save it without selecting at least one option.',
+  //       type: 'warning',
+  //     })
+  //   }
+  // }
 
   return (
-    <Modal open={open}>
+    <Modal open={open} onClose={handleClose}>
       <ModalDialog variant="outlined" role="alertdialog" size="md">
         <Typography id="manage-integrations" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
-          Manage integrations 😎
+          Integrations 😎
         </Typography>
-        <Typography id="basic-modal-dialog-description" mt={0.5} mb={2} textColor="text.tertiary">
-          <Box sx={{ mt: 1 }}>
-            <MessageBox message="You have the option to activate or deactivate integrations as required. It's essential to have at least one integration enabled." />
-          </Box>
-        </Typography>
+        <Box sx={{ mt: 1 }}>
+          <MessageBox
+            message={
+              <div>
+                Here is a list of the integrations that are currently available. If you require support for an
+                additional service, you can create an{' '}
+                <Link target="_blank" href="https://github.com/StellarExplorerGuy/projects/issues/new/choose">
+                  issue
+                </Link>{' '}
+                on GitHub to request it. After when issue would be raised, then it would be reviewed.
+              </div>
+            }
+          />
+        </Box>
         <Grid container>
           <Grid xs={12}>
             <IntegrationsCheckbox toggleIntegration={toggleIntegration} />
@@ -195,16 +206,19 @@ function ManageIntegrations({ open, handleSubmit, handleClose }: ManageIntegrati
         </Grid>
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="flex-end" spacing={2} height={{ height: 42 }}>
-            {alertInfo.visible && (
+            {/* {alertInfo.visible && (
               <Alert variant="soft" color={alertInfo.type as any} sx={{ width: 'fit-content' }}>
                 {alertInfo.msg}
               </Alert>
-            )}
-            <Button variant="outlined" color="neutral" onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button disabled={false} onClick={handleSave}>
+            )} */}
+            {/* <Button disabled={false} onClick={handleSave}>
               Save
+            </Button> */}
+            <Button variant="outlined" onClick={handleClose}>
+              Close
+              <Typography sx={{ pl: 1 }} color="neutral">
+                [esc]
+              </Typography>
             </Button>
           </Stack>
         </Stack>
