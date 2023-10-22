@@ -57,4 +57,5 @@ module.exports = {
     filename: 'content.js',
     path: path.resolve(__dirname, '..', 'extension'),
   },
+  // devtool: 'source-map',
 };
