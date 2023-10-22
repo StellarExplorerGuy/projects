@@ -17,15 +17,10 @@ import ListItem from '@mui/joy/ListItem'
 import Sheet from '@mui/joy/Sheet'
 import { getAppConfig } from 'utils/data'
 
-import Github from '../../../../assets/github.svg';
-import GitLab from '../../../../assets/gitlab.svg';
-import Trello from '../../../../assets/trello.svg';
-import Jira from '../../../../assets/jira.svg';
-
-// const Github = ''
-// const GitLab = ''
-// const Trello = ''
-// const Jira = ''
+import Github from 'assets/github.svg'
+import GitLab from 'assets/gitlab.svg'
+import Trello from 'assets/trello.svg'
+import Jira from 'assets/jira.svg'
 
 const dataList = [
   {
