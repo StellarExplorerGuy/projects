@@ -25,6 +25,40 @@ const TRELLO_REGEX = {
 //   ISSUE: /gitlab\.com\/([^/]+)\/([^/]+)\/-\/issues\/(\d+)/,
 // }
 
+const DOT_KEY = 'dwedtw'
+const getBranchName = (text: string, number: string, isVersionControl = true): string => {
+  // get first line that is branch name
+  const trimmedText = text.replace(/Copy: BranchCommitPR[\s\S]*$/, '')
+
+  let textWithoutNumber
+  if (isVersionControl) {
+    // Extracting the number from the text using regex
+    const regex = /#(\d+)/
+    // Removing the number and the # from the text
+    textWithoutNumber = trimmedText.replace(regex, '')
+  } else {
+    textWithoutNumber = trimmedText
+  }
+
+  const textWithDashes = textWithoutNumber.replace(/\./g, DOT_KEY)
+  // Converting the remaining text to the desired format
+  const formattedText =
+    number +
+    '-' +
+    textWithDashes
+      .replace(/\s+/g, '-') // Replacing spaces with dashes
+      .replace(/[^\w-]/g, '') // Removing non-alphanumeric characters except dashes
+      .replace(/_/g, '-') // replace underscore
+      .toLowerCase() // Converting to lowercase
+
+  // Removing the trailing dash from the formatted text
+  const finalFormattedText = formattedText.replace(/-+$/, '').replace(/-+/g, '-').replace(new RegExp(DOT_KEY, 'g'), '.')
+
+  const dotRegex = /[.,!]+$/ // Match one or more dots at the end
+  const finalText = finalFormattedText.replace(dotRegex, '')
+  return finalText
+}
+
 function matchUrl(url: string, regex: RegExp): { user: string; repo: string; issueNumber: string } {
   const match = url.match(regex)
   if (match && match?.length >= 3) {
@@ -44,35 +78,7 @@ export const getDetails = (service: SERVICE) => {
         return headerElement && headerElement[0] ? headerElement[0].textContent! : ''
       },
       getBranchName: (text: string, number: string): string => {
-        const DOT_KEY = 'dwedtw'
-        // get first line that is branch name
-        const trimmedText = text.replace(/Copy: BranchCommitPR[\s\S]*$/, '')
-
-        // Extracting the number from the text using regex
-        const regex = /#(\d+)/
-        // Removing the number and the # from the text
-        const textWithoutNumber = trimmedText.replace(regex, '')
-        const textWithDashes = textWithoutNumber.replace(/\./g, DOT_KEY)
-
-        // Converting the remaining text to the desired format
-        const formattedText =
-          number +
-          '-' +
-          textWithDashes
-            .replace(/\s+/g, '-') // Replacing spaces with dashes
-            .replace(/[^\w-]/g, '') // Removing non-alphanumeric characters except dashes
-            .replace(/_/g, '-') // replace underscore
-            .toLowerCase() // Converting to lowercase
-
-        // Removing the trailing dash from the formatted text
-        const finalFormattedText = formattedText
-          .replace(/-+$/, '')
-          .replace(/-+/g, '-')
-          .replace(new RegExp(DOT_KEY, 'g'), '.')
-
-        const dotRegex = /[.,!]+$/ // Match one or more dots at the end
-        const finalText = finalFormattedText.replace(dotRegex, '')
-        return finalText
+        return getBranchName(text, number)
       },
       getUsername: (): string => {
         let user = DEFAULT_USER
@@ -118,33 +124,7 @@ export const getDetails = (service: SERVICE) => {
         return headerElement ? headerElement.textContent! : ''
       },
       getBranchName: (text: string, number: string): string => {
-        const DOT_KEY = 'dwedtw'
-        // get first line that is branch name
-        const trimmedText = text.replace(/Copy: BranchCommitPR[\s\S]*$/, '')
-
-        // Removing the number and the # from the text
-        const textWithoutNumber = trimmedText
-        const textWithDashes = textWithoutNumber.replace(/\./g, DOT_KEY)
-
-        // Converting the remaining text to the desired format
-        const formattedText =
-          number +
-          '-' +
-          textWithDashes
-            .replace(/\s+/g, '-') // Replacing spaces with dashes
-            .replace(/[^\w-]/g, '') // Removing non-alphanumeric characters except dashes
-            .replace(/_/g, '-') // replace underscore
-            .toLowerCase() // Converting to lowercase
-
-        // Removing the trailing dash from the formatted text
-        const finalFormattedText = formattedText
-          .replace(/-+$/, '')
-          .replace(/-+/g, '-')
-          .replace(new RegExp(DOT_KEY, 'g'), '.')
-
-        const dotRegex = /[.,!]+$/ // Match one or more dots at the end
-        const finalText = finalFormattedText.replace(dotRegex, '')
-        return finalText
+        return getBranchName(text, number)
       },
       getUsername: (): string => {
         const avatarInfo = document?.querySelector('.user-bar-item  .gl-sr-only')!
@@ -184,33 +164,7 @@ export const getDetails = (service: SERVICE) => {
         return headerElement ? headerElement.textContent! : ''
       },
       getBranchName: (text: string, number: string): string => {
-        const DOT_KEY = 'dwedtw'
-        // get first line that is branch name
-        const trimmedText = text.replace(/Copy: BranchCommitPR[\s\S]*$/, '')
-
-        // Removing the number and the # from the text
-        const textWithoutNumber = trimmedText
-        const textWithDashes = textWithoutNumber.replace(/\./g, DOT_KEY)
-
-        // Converting the remaining text to the desired format
-        const formattedText =
-          number +
-          '-' +
-          textWithDashes
-            .replace(/\s+/g, '-') // Replacing spaces with dashes
-            .replace(/[^\w-]/g, '') // Removing non-alphanumeric characters except dashes
-            .replace(/_/g, '-') // replace underscore
-            .toLowerCase() // Converting to lowercase
-
-        // Removing the trailing dash from the formatted text
-        const finalFormattedText = formattedText
-          .replace(/-+$/, '')
-          .replace(/-+/g, '-')
-          .replace(new RegExp(DOT_KEY, 'g'), '.')
-
-        const dotRegex = /[.,!]+$/ // Match one or more dots at the end
-        const finalText = finalFormattedText.replace(dotRegex, '')
-        return finalText
+        return getBranchName(text, number, false)
       },
       getUsername: (): string => {
         const avatarInfo = document?.querySelector('[data-testid="header-member-menu-button"]>div[title]')!
@@ -246,33 +200,7 @@ export const getDetails = (service: SERVICE) => {
         return headerElement ? headerElement.textContent! : ''
       },
       getBranchName: (text: string, number: string): string => {
-        const DOT_KEY = 'dwedtw'
-        // get first line that is branch name
-        const trimmedText = text.replace(/Copy: BranchCommitPR[\s\S]*$/, '')
-
-        // Removing the number and the # from the text
-        const textWithoutNumber = trimmedText
-        const textWithDashes = textWithoutNumber.replace(/\./g, DOT_KEY)
-
-        // Converting the remaining text to the desired format
-        const formattedText =
-          number +
-          '-' +
-          textWithDashes
-            .replace(/\s+/g, '-') // Replacing spaces with dashes
-            .replace(/[^\w-]/g, '') // Removing non-alphanumeric characters except dashes
-            .replace(/_/g, '-') // replace underscore
-            .toLowerCase() // Converting to lowercase
-
-        // Removing the trailing dash from the formatted text
-        const finalFormattedText = formattedText
-          .replace(/-+$/, '')
-          .replace(/-+/g, '-')
-          .replace(new RegExp(DOT_KEY, 'g'), '.')
-
-        const dotRegex = /[.,!]+$/ // Match one or more dots at the end
-        const finalText = finalFormattedText.replace(dotRegex, '')
-        return finalText
+        return getBranchName(text, number, false)
       },
       getUsername: (): string => {
         const avatarInfo = document?.querySelector('[name="ajs-remote-user-fullname"]')!.getAttribute('content')
@@ -304,33 +232,7 @@ export const getDetails = (service: SERVICE) => {
         return headerElement ? headerElement.textContent! : ''
       },
       getBranchName: (text: string, number: string): string => {
-        const DOT_KEY = 'dwedtw'
-        // get first line that is branch name
-        const trimmedText = text.replace(/Copy: BranchCommitPR[\s\S]*$/, '')
-
-        // Removing the number and the # from the text
-        const textWithoutNumber = trimmedText
-        const textWithDashes = textWithoutNumber.replace(/\./g, DOT_KEY)
-
-        // Converting the remaining text to the desired format
-        const formattedText =
-          number +
-          '-' +
-          textWithDashes
-            .replace(/\s+/g, '-') // Replacing spaces with dashes
-            .replace(/[^\w-]/g, '') // Removing non-alphanumeric characters except dashes
-            .replace(/_/g, '-') // replace underscore
-            .toLowerCase() // Converting to lowercase
-
-        // Removing the trailing dash from the formatted text
-        const finalFormattedText = formattedText
-          .replace(/-+$/, '')
-          .replace(/-+/g, '-')
-          .replace(new RegExp(DOT_KEY, 'g'), '.')
-
-        const dotRegex = /[.,!]+$/ // Match one or more dots at the end
-        const finalText = finalFormattedText.replace(dotRegex, '')
-        return finalText
+        return getBranchName(text, number, false)
       },
       getUsername: (): string => {
         const avatarInfo = document?.querySelector('[name="ajs-remote-user-fullname"]')!.getAttribute('content')
@@ -341,7 +243,7 @@ export const getDetails = (service: SERVICE) => {
       },
       getRepoDetails: () => {
         const url = window.location.href
-        const matchResult = url.match(/-([0-9]+)$/);
+        const matchResult = url.match(/-([0-9]+)$/)
         let issueNumber = ''
         if (matchResult?.length) {
           issueNumber = matchResult[1]

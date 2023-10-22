@@ -26,7 +26,7 @@ const dataList = [
     index: 0,
     checked: true,
     avatar: Github,
-    label: 'Github [github.com, github.company.com]',
+    label: 'Github [github.com, github.any-name.com]',
   },
   {
     index: 1,
@@ -44,7 +44,7 @@ const dataList = [
     index: 3,
     checked: true,
     avatar: Jira,
-    label: 'Jira [jsw.company.com]',
+    label: 'Jira [jsw.any-name.com]',
   },
 ]
 
