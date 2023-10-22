@@ -1,5 +1,6 @@
 export const DEFAULT_PROFILE = 'default'
 export const BRANCH_PREFIXES = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'release']
+export const FASTER_PR_CONFIG = 'FASTER_PR_CONFIG'
 export const FASTER_PR_PROFILE_KEY = 'FASTER_PR_KEY'
 export const FASTER_PR_PROFILE = 'FASTER_PR_PROFILE'
 export const DEFAULT_USER = 'Name Surname <name.surname@org.com>'
@@ -25,4 +26,7 @@ export const DEFAULT_LOCAL_STORAGE_ALERT = {
 export enum SERVICE {
   GITHUB = 'GITHUB',
   GITLAB = 'GITLAB',
+  TRELLO = 'TRELLO',
+  JIRA_DEFAULT = 'JIRA_DEFAULT',
+  JIRA_COMPANY_1 = 'JIRA_COMPANY_1',
 }

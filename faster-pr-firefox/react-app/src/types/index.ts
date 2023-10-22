@@ -1,4 +1,4 @@
-import { UniqueIdentifier } from "@dnd-kit/core"
+import { UniqueIdentifier } from '@dnd-kit/core'
 
 export type ItemType = {
   slimPrChecked: boolean
@@ -26,5 +26,10 @@ export enum DIALOG {
   DELETE_PROFILE = 'deleteProfile',
   RESET_DEFAULT = 'resetDefault',
   EDIT_BRANCH = 'editBranch',
-  TIP = 'tip'
+  INTEGRATION = 'integrations',
+  TIP = 'tip',
+}
+
+export type AppConfig = {
+  integrations: boolean[]
 }

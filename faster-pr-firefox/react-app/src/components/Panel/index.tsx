@@ -16,10 +16,15 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 
 import Tab from '@mui/material/Tab'
 
-import { clearComments, getCommit, getLocalStorage, getPR, getService, updateKey } from 'utils/data'
-import { Alert, Grid, Typography } from '@mui/joy'
-import { Box } from '@mui/material'
-import { FASTER_PR_PROFILE_KEY, FASTER_PR_PROFILE, BRANCH_PREFIXES, DEFAULT_LOCAL_STORAGE_ALERT } from 'utils/constants'
+import { clearComments, getCommit, getConfig, getLocalStorage, getPR, getService, updateKey } from 'utils/data'
+import { Box, Alert, Grid, Typography } from '@mui/joy'
+import {
+  FASTER_PR_PROFILE_KEY,
+  FASTER_PR_PROFILE,
+  BRANCH_PREFIXES,
+  DEFAULT_LOCAL_STORAGE_ALERT,
+  SERVICE,
+} from 'utils/constants'
 import { getDetails } from 'utils/service.adapter'
 
 function onButtonClick(event: { target: any }) {
@@ -77,6 +82,30 @@ function processBranchName(prefix: string, suffix: string) {
   }
 }
 
+// if REPO_ORG/REPO_NAME#ISSUE then use repoDetails.repo or user and leave one
+function formatIssueLink(
+  repoDetails: { user: string; repo: string },
+  commit: string,
+  type: string,
+  signature: string,
+): string {
+  const issueLink = repoDetails.user || repoDetails.repo
+
+  const text = commit
+    .replace(/ISSUE_TYPE/g, type)
+    .replace(/ISSUE/g, repoDetails.repo)
+    .replace(/REPO_ORG/g, repoDetails.repo)
+    .replace(/REPO_NAME/g, repoDetails.repo)
+    .replace(/SIGNATURE/g, signature)
+    // remove duplicate of repoDetails.repo
+    .replace(`${issueLink}/${issueLink}#${issueLink}`, issueLink)
+    .replace(`${issueLink}/${issueLink}/${issueLink}`, issueLink)
+    .replace(`${issueLink}/${issueLink}`, issueLink)
+    .replace(`${issueLink}#${issueLink}`, issueLink)
+
+  return text
+}
+
 function processCommit(type: any, issue: any, repoDetails: { user: any; repo: any }, user: any) {
   try {
     const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY)
@@ -89,12 +118,18 @@ function processCommit(type: any, issue: any, repoDetails: { user: any; repo: an
         signature = profile.signature
       }
 
-      const formattedCommit = profile.commit
-        .replace(/ISSUE_TYPE/g, type)
-        .replace(/ISSUE/g, issue)
-        .replace(/REPO_ORG/g, repoDetails.user)
-        .replace(/REPO_NAME/g, repoDetails.repo)
-        .replace(/SIGNATURE/g, signature)
+      const currentService = getService()
+      let formattedCommit
+      if ([SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1].includes(currentService)) {
+        formattedCommit = formatIssueLink(repoDetails, profile.commit, type, signature)
+      } else {
+        formattedCommit = profile.commit
+          .replace(/ISSUE_TYPE/g, type)
+          .replace(/ISSUE/g, issue)
+          .replace(/REPO_ORG/g, repoDetails.user)
+          .replace(/REPO_NAME/g, repoDetails.repo)
+          .replace(/SIGNATURE/g, signature)
+      }
 
       return formattedCommit
     }
@@ -119,12 +154,18 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
         signature = profile.signature
       }
 
-      let formattedPR = profile.pr
-        .replace(/ISSUE_TYPE/g, type)
-        .replace(/ISSUE/g, issue)
-        .replace(/REPO_ORG/g, repoDetails.user)
-        .replace(/REPO_NAME/g, repoDetails.repo)
-        .replace(/SIGNATURE/g, signature)
+      const currentService = getService()
+      let formattedPR
+      if ([SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1].includes(currentService)) {
+        formattedPR = formatIssueLink(repoDetails, profile.pr, type, signature)
+      } else {
+        formattedPR = profile.pr
+          .replace(/ISSUE_TYPE/g, type)
+          .replace(/ISSUE/g, issue)
+          .replace(/REPO_ORG/g, repoDetails.user)
+          .replace(/REPO_NAME/g, repoDetails.repo)
+          .replace(/SIGNATURE/g, signature)
+      }
 
       if (profile.slimPrChecked) {
         formattedPR = clearComments(formattedPR)
@@ -192,6 +233,8 @@ function getPrData(prefix: string): void {
 }
 
 function Panel({ alertInfo, setClose }: any): JSX.Element {
+  const config = getConfig()
+
   const [alertDataInfo, setAlertDataInfo] = useState({
     visible: false,
     msg: '',
@@ -235,7 +278,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
     <Card sx={{ maxWidth: '100%' }}>
       <div>
         <Grid container direction="row" justifyContent="space-between" alignItems="flex-end" spacing={0}>
-          <Grid xs={8}>
+          <Grid xs={9}>
             <Typography level="h4">
               Copy:{' '}
               <button
@@ -268,7 +311,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               </button>
             </Typography>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={3}>
             <Grid container direction="row" justifyContent="flex-end" alignItems="flex-start">
               {alertDataInfo.visible && (
                 <Alert variant="soft" color={alertDataInfo.type as any} sx={{ width: 'fit-content', height: 47 }}>
@@ -294,7 +337,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
           <Box
             sx={{
               flexGrow: 1,
-              maxWidth: 818,
+              maxWidth: config.panelMaxWidth,
               border: 'none !important',
             }}
           >

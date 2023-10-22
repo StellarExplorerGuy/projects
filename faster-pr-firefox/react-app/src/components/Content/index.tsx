@@ -12,7 +12,7 @@ import NewProfile from 'components/modals/NewProfile'
 import ResetProfile from 'components/modals/ResetProfile'
 import Tip from 'components/modals/Tip'
 import { DIALOG, ItemType } from 'types'
-import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
+import { DEFAULT_PROFILE, FASTER_PR_CONFIG, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
 import { clearComments, defaultProfile, showAlertInfo, updateKey, updateLocalStorage } from 'utils/data'
 
 import { UniqueIdentifier } from '@dnd-kit/core'
@@ -20,6 +20,7 @@ import AddIcon from '@mui/icons-material/Add'
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import ModeIcon from '@mui/icons-material/Mode'
+import ExtensionIcon from '@mui/icons-material/Extension'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
 import { Box, Divider, Tooltip } from '@mui/joy'
 import Button from '@mui/joy/Button'
@@ -34,6 +35,7 @@ import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as Accordion from '@radix-ui/react-accordion'
+import ManageIntegrations from 'components/modals/ManageIntegrations'
 
 interface ContentProps {
   openDialogs: {
@@ -42,6 +44,7 @@ interface ContentProps {
     deleteProfile: boolean
     resetDefault: boolean
     editBranch: boolean
+    integrations: boolean
     tip: boolean
   }
   dialogValue: ItemType
@@ -142,7 +145,27 @@ function Content({
     showAlertInfo(
       {
         visible: true,
-        msg: `The prefixes for branches  are saved!`,
+        msg: 'The prefixes for branches  are saved!',
+        type: 'success',
+      },
+      setAlertInfo,
+    )
+  }
+
+  const handleIntegrationSubmit = (integrations: boolean[]): void => {
+    let localConfig = localStorage.getItem(FASTER_PR_CONFIG)!
+    const config = JSON.parse(localConfig)
+
+    updateLocalStorage(FASTER_PR_CONFIG, {
+      ...config,
+      integrations,
+    })
+
+    handleClose(DIALOG.INTEGRATION)
+    showAlertInfo(
+      {
+        visible: true,
+        msg: 'Saved!',
         type: 'success',
       },
       setAlertInfo,
@@ -261,6 +284,13 @@ function Content({
           handleClose={() => handleClose(DIALOG.RESET_DEFAULT)}
         />
       )}
+      {openDialogs.integrations && (
+        <ManageIntegrations
+          open={openDialogs.integrations}
+          handleSubmit={handleIntegrationSubmit}
+          handleClose={() => handleClose(DIALOG.INTEGRATION)}
+        />
+      )}
       {openDialogs.tip && <Tip open={openDialogs.tip} handleClose={() => handleClose(DIALOG.TIP)} />}
       {dialogValue?.profiles && (
         <>
@@ -275,7 +305,7 @@ function Content({
             <Grid xs={3}>
               <ProfilesSelector dialogValue={dialogValue} data={dialogValue.profiles} setDialogValue={setDialogValue} />
             </Grid>
-            <Grid xs={9}>
+            <Grid xs={8}>
               <Stack spacing={1} direction="row">
                 <Tooltip arrow title="Add new profile" variant="solid" placement="top" color="neutral" size="lg">
                   <Button
@@ -339,9 +369,30 @@ function Content({
                 </Tooltip>
               </Stack>
             </Grid>
+            <Grid xs={1}>
+              <Tooltip
+                arrow
+                title="About"
+                variant="solid"
+                placement="top"
+                color="neutral"
+                size="lg"
+              >
+                <Button
+                  sx={{ float: 'right' }}
+                  aria-label="new"
+                  variant="solid"
+                  color="primary"
+                  size="md"
+                  onClick={() => handleOpen(DIALOG.INTEGRATION)}
+                >
+                  <ExtensionIcon />
+                </Button>
+              </Tooltip>
+            </Grid>
           </Grid>
           <Box sx={{ mt: 1, mb: 1 }}>
-            <MessageBox message="You can switch profile, create new or use default. Configs are stored to your browser storage. Please, press 'save' to apply the changes." />
+            <MessageBox message="You can switch profiles, create new ones, or use the default profile. Configurations are stored in your browser storage on a per-page basis (e.g., GitHub and Gitlab have their own configurations). Remember to click 'save' to apply any changes." />
           </Box>
           <Sheet>
             <Typography level="h2" fontSize="xl2" sx={{ mb: 2 }}>
@@ -385,8 +436,8 @@ function Content({
                         />
                       </FormControl>
                     </Grid>
-                    <Grid xs={2}>
-                      <Box sx={{ float: 'left', pt: 0.5 }}>
+                    <Grid xs={1.5}>
+                      <Box sx={{ float: 'left', mt: 0.5 }}>
                         <FormLabel>Use default signature</FormLabel>
                       </Box>
                       <InfoIconButton text="If enabled, then plugin would try to find your username." />
@@ -421,7 +472,7 @@ function Content({
                       </Box>
                     </Grid>
                     <Grid xs={0.8}>
-                      <FormLabel>Edit issues</FormLabel>
+                      <FormLabel>Edit prefixes</FormLabel>
                       <Button
                         sx={{ mt: 1 }}
                         aria-label="new"

@@ -9,10 +9,12 @@ interface TabsVerticalProps {
 
 export default function TabsVertical({ tabs }: TabsVerticalProps) {
   return (
-    <Tabs aria-label="Vertical tabs" orientation="vertical" >
+    <Tabs aria-label="tabs" orientation="vertical" size="md">
       <TabList sx={{ width: 270, minWidth: 270 }}>
         {tabs.headers.map((header) => (
-          <Tab key={header}>{header}</Tab>
+          <Tab variant="plain" color="primary" key={header}>
+            {header}
+          </Tab>
         ))}
       </TabList>
       {tabs.data.map((item, index) => (
