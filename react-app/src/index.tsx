@@ -50,12 +50,13 @@ function process(headerElement: Element, currentService: SERVICE) {
       })
     }
 
+    headerElement.appendChild(rootElement)
+
     ReactDOM.createRoot(rootElement).render(
       <React.StrictMode>
         <App />
       </React.StrictMode>,
     )
-    headerElement.appendChild(rootElement)
   }
 }
 
