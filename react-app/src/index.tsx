@@ -38,12 +38,16 @@ function process(headerElement: Element, currentService: SERVICE) {
   if (headerElement) {
     const rootElement = document.createElement('div')
     rootElement.id = FASTER_PR_SCRIPT_ID
-    rootElement.style.display = 'grid'
-    rootElement.style.justifyItems = 'start'
+    Object.assign(rootElement.style, {
+      display: 'grid',
+      justifyItems: 'start',
+    })
 
     if (currentService === SERVICE.TRELLO) {
-      rootElement.style.left = '-56px'
-      rootElement.style.position = 'relative'
+      Object.assign(rootElement.style, {
+        left: '-56px',
+        position: 'relative',
+      })
     }
 
     ReactDOM.createRoot(rootElement).render(
@@ -111,4 +115,3 @@ observerInit.observe(document.body, {
 //     <App />
 //   </React.StrictMode>,
 // )
-
