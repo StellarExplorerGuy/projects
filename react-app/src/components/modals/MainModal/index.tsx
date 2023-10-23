@@ -14,6 +14,7 @@ import IconButton from '@mui/joy/IconButton'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Content from 'components/Content'
+import styles from '../../../styles/Main.module.scss'
 
 const save = (
   dialogValue: ItemType,
@@ -130,7 +131,13 @@ function MainModal({ alertInfo, open, setClose, setAlertInfo }: any): JSX.Elemen
   }
 
   return (
-    <Modal disableEscapeKeyDown={alertInfo.visible} keepMounted open={open} onClose={() => setClose(false)}>
+    <Modal
+      className={styles.main_component}
+      disableEscapeKeyDown={alertInfo.visible}
+      keepMounted
+      open={open}
+      onClose={() => setClose(false)}
+    >
       <ModalDialog layout="fullscreen" variant="plain" role="alertdialog">
         <Grid
           sx={{ mb: 0.5 }}

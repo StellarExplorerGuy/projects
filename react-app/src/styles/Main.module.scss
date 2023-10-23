@@ -1,0 +1,83 @@
+.main_component {
+
+    ::-moz-selection {
+        background: var(--variant-softBg, var(--joy-palette-primary-softBg, var(--joy-palette-primary-100, #E3EFFB)));
+    }
+
+    ::selection {
+        background: var(--variant-softBg, var(--joy-palette-primary-softBg, var(--joy-palette-primary-100, #E3EFFB)));
+    }
+
+    // For Modal GITLAB specific fix (in GITHUB all good)
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: inherit;
+        margin: inherit;
+    }
+
+    .code-highlight {
+        color: var(--color-fg-default);
+    }
+
+    //>
+    // <For Modal Trello specific fix (in GITHUB all good)
+    pre {
+        padding: inherit;
+    }
+
+    input[type=email]:disabled {
+        color: inherit;
+        background-color: inherit;
+    }
+
+    input,
+    textarea {
+        color: inherit;
+        background-color: inherit;
+        margin-bottom: inherit;
+        box-shadow: inherit;
+    }
+
+    // input[type=email],
+    // input[type=password],
+    // input[type=search],
+    // input[type=text] {
+    //     width: inherit;
+    // }
+
+    input[type=email]:hover,
+    input[type=password]:hover,
+    input[type=search]:hover,
+    input[type=text]:hover,
+    textarea:hover {
+        background-color: inherit;
+        color: inherit;
+        box-shadow: inherit;
+    }
+
+    input[type=email]:focus,
+    input[type=password]:focus,
+    input[type=search]:focus,
+    input[type=text]:focus,
+    textarea:focus {
+        background-color: inherit;
+        color: inherit;
+        box-shadow: inherit;
+    }
+
+    button {
+        // padding: inherit;
+        margin-bottom: inherit;
+    }
+
+    ol,
+    ul {
+        list-style: inherit;
+    }
+
+    //>
+}
