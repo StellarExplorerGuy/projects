@@ -240,7 +240,8 @@ function Content({
   return (
     <Box
       sx={{
-        overflow: 'scroll',
+        overflowY: 'auto',
+        overflowX: 'hidden',
         mx: 'calc(-1 * var(--ModalDialog-padding))',
         px: 'var(--ModalDialog-padding)',
       }}

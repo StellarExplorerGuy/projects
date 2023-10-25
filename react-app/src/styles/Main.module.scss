@@ -19,9 +19,6 @@
         margin: inherit;
     }
 
-    .code-highlight {
-        color: var(--color-fg-default);
-    }
 
     //>
     // <For Modal Trello specific fix (in GITHUB all good)
@@ -42,12 +39,12 @@
         box-shadow: inherit;
     }
 
-    // input[type=email],
-    // input[type=password],
-    // input[type=search],
-    // input[type=text] {
-    //     width: inherit;
-    // }
+    input[type=email],
+    input[type=password],
+    input[type=search],
+    input[type=text] {
+        width: inherit;
+    }
 
     input[type=email]:hover,
     input[type=password]:hover,
