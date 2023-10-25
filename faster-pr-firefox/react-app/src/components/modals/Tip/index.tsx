@@ -5,6 +5,7 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Typography from '@mui/joy/Typography'
 import TabsVertical from 'components/TabsVertical'
 import { TIP_HEADERS, getTips } from './tips-content'
+import styles from '../../../styles/Main.module.scss'
 
 interface TipProps {
   open: boolean
@@ -14,7 +15,7 @@ interface TipProps {
 function Tip({ open, handleClose }: TipProps) {
   const data = getTips()
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal className={styles.main_component} open={open} onClose={handleClose}>
       <ModalDialog sx={{ width: '70vw', height: '70vh' }} variant="outlined" role="alertdialog" size="lg">
         <Typography id="basic-modal-dialog-title" component="h2" level="inherit">
           PR Tips 👀

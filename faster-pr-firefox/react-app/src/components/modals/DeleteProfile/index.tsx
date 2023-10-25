@@ -5,6 +5,7 @@ import Modal from '@mui/joy/Modal'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
+import styles from '../../../styles/Main.module.scss'
 
 interface DeleteProfileProps {
   open: boolean
@@ -15,7 +16,7 @@ interface DeleteProfileProps {
 
 function DeleteProfile({ open, dialogValue, handleClose, handleSave }: DeleteProfileProps) {
   return (
-    <Modal open={open}>
+    <Modal className={styles.main_component} open={open}>
       <ModalDialog variant="outlined" role="alertdialog" size="md">
         <Typography id="basic-modal-dialog-title" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
           Deletion
@@ -28,7 +29,9 @@ function DeleteProfile({ open, dialogValue, handleClose, handleSave }: DeletePro
             <Button variant="outlined" color="neutral" onClick={handleClose}>
               No
             </Button>
-            <Button color="danger" onClick={()=> handleSave()}>Yes</Button>
+            <Button color="danger" onClick={() => handleSave()}>
+              Yes
+            </Button>
           </Stack>
         </Stack>
       </ModalDialog>

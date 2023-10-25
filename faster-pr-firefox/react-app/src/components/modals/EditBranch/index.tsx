@@ -14,6 +14,7 @@ import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import MessageBox from 'components/MessageBox'
+import styles from '../../../styles/Main.module.scss'
 
 interface CustomSeparatorButtonGroupProps {
   items: UniqueIdentifier[]
@@ -100,7 +101,7 @@ function EditBranch({ open, handleClose, items, handleSave }: EditBranchProps) {
   })
 
   return (
-    <Modal open={open}>
+    <Modal className={styles.main_component} open={open}>
       <ModalDialog variant="outlined" role="alertdialog" size="md">
         <Typography id="basic-modal-dialog-title" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
           Edit branch details

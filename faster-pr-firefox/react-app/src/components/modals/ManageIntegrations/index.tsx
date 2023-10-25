@@ -20,6 +20,7 @@ import Github from 'assets/github.svg'
 import GitLab from 'assets/gitlab.svg'
 import Trello from 'assets/trello.svg'
 import Jira from 'assets/jira.svg'
+import styles from '../../../styles/Main.module.scss'
 
 const dataList = [
   {
@@ -61,13 +62,13 @@ interface ItemProps {
 function Item({ integration, toggleIntegration }: ItemProps) {
   return (
     <ListItem
-    sx={{
-      pointerEvents: 'none'
-    }}
-    // {...(integration.checked && {
-    //   variant: 'soft',
-    //   color: 'primary',
-    // })}
+      sx={{
+        pointerEvents: 'none',
+      }}
+      // {...(integration.checked && {
+      //   variant: 'soft',
+      //   color: 'primary',
+      // })}
     >
       <Avatar aria-hidden="true" src={integration.avatar} />
       <Checkbox
@@ -180,7 +181,7 @@ function ManageIntegrations({ open, handleSubmit, handleClose }: ManageIntegrati
   // }
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal className={styles.main_component} open={open} onClose={handleClose}>
       <ModalDialog variant="outlined" role="alertdialog" size="md">
         <Typography id="manage-integrations" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
           Integrations 😎
