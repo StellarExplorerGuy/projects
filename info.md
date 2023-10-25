@@ -1,11 +1,10 @@
-The Firefox extension is a versatile tool designed to enhance your GitHub experience by providing a seamless way to personalize and effortlessly copy essential information such as branch names, commit messages, and pull request descriptions. This extension is specifically tailored for GitHub users, ensuring compatibility and optimal functionality within the GitHub ecosystem.
+The extension is a versatile tool designed to enhance your GitHub/GitLab/Trello/Jira experience by providing a seamless way to personalize and effortlessly copy essential information such as branch names, commit messages, and pull request descriptions.
 
-Once installed, this extension seamlessly integrates itself into your GitHub environment. When you load a GitHub page related to a Git issue, the extension springs into action, adding a thoughtful and intuitive component directly to the interface. This added component becomes your go-to resource for streamlining your workflow and improving your productivity.
+Once installed, this extension seamlessly integrates itself into your GitHub/GitLab/Trello/Jira environment. When you load a GitHub/GitLab/Trello/Jira page related to a issue/task, the extension springs into action, adding a thoughtful and intuitive component directly to the interface. This newly incorporated component serves as your primary tool for optimizing your work processes and enhancing your overall efficiency ⏰.
 
-Imagine the convenience of a sleek and unobtrusive element, right within your GitHub workspace, that allows you to quickly select and copy branch names, commit messages, or pull request descriptions with a single click. Whether you're managing code repositories, collaborating with teammates, or reviewing code changes, this extension becomes an indispensable tool for managing and sharing essential information effortlessly.
+Imagine the convenience of a sleek and unobtrusive element, right within your GitHub/GitLab/Trello/Jira workspace, that allows you to quickly select and copy branch names, commit messages, or pull request descriptions with a single click. Whether you're managing code repositories, collaborating with teammates, or reviewing code changes, this extension becomes an indispensable tool for managing and sharing essential information effortlessly.
 
-With this Firefox extension, you'll experience a new level of efficiency and convenience while working on GitHub. Say goodbye to the hassle of manual copying and pasting, and say hello to a smoother, more personalized GitHub experience.
-
+Say goodbye 👋 to the hassle of manual copying and pasting, and say hello to a smoother, more personalized GitHub/GitLab/Trello/Jira experience 🎉.
 
 ============
 // Distributing your Safari web extension
