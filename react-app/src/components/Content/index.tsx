@@ -441,7 +441,7 @@ function Content({
                       <Box sx={{ float: 'left', mt: 0.5 }}>
                         <FormLabel>Use default signature</FormLabel>
                       </Box>
-                      <InfoIconButton text="If enabled, then plugin would try to find your username." />
+                      <InfoIconButton text="If enabled, then plugin would try to set your username using the issue details." />
                       <FormControl>
                         <Box sx={{ float: 'left', mt: 0.5 }}>
                           <SwitchButton
@@ -555,7 +555,7 @@ function Content({
                       <Box sx={{ float: 'left', pt: 0.5, mb: 1 }}>
                         <FormLabel>Comments visibility</FormLabel>
                       </Box>
-                      <InfoIconButton text="If you activate this feature, comments will be hidden in the PR description please toggle to see the changes." />
+                      <InfoIconButton text="If you activate this feature, comments will be hidden in the PR description please toggle to see the changes. Here you can see the preview only." />
                       <FormControl>
                         <Box sx={{ float: 'left', mt: 0.5, mb: 1 }}>
                           <SwitchButton
