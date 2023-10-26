@@ -27,12 +27,16 @@
     }
 
     input[type=email]:disabled {
+        box-shadow: none;
+        border: none;
         color: inherit;
         background-color: inherit;
     }
 
     input,
     textarea {
+        box-shadow: none;
+        border: none;
         color: inherit;
         background-color: inherit;
         margin-bottom: inherit;
@@ -43,7 +47,10 @@
     input[type=password],
     input[type=search],
     input[type=text] {
+        box-shadow: none;
+        border: none;
         width: inherit;
+        background-color: inherit;
     }
 
     input[type=email]:hover,

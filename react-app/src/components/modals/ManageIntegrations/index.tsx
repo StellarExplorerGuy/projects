@@ -20,6 +20,7 @@ import Github from 'assets/github.svg'
 import GitLab from 'assets/gitlab.svg'
 import Trello from 'assets/trello.svg'
 import Jira from 'assets/jira.svg'
+import Monday from 'assets/monday_icon.svg'
 import Chrome from 'assets/chrome_icon.svg'
 import Firefox from 'assets/firefox_icon.svg'
 import Cup from 'assets/drink-glass-hot-warm.svg'
@@ -50,6 +51,12 @@ const dataList = [
     checked: true,
     avatar: Jira,
     label: 'Jira [jsw.any-name.com]',
+  },
+  {
+    index: 4,
+    checked: true,
+    avatar: Monday,
+    label: 'Monday [monday.com, any-name.monday.com]',
   },
 ]
 

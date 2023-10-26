@@ -120,7 +120,7 @@ function processCommit(type: any, issue: any, repoDetails: { user: any; repo: an
 
       const currentService = getService()
       let formattedCommit
-      if ([SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1].includes(currentService)) {
+      if ([SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1, SERVICE.MONDAY_DEFAULT].includes(currentService)) {
         formattedCommit = formatIssueLink(repoDetails, profile.commit, type, signature)
       } else {
         formattedCommit = profile.commit
@@ -156,7 +156,7 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
 
       const currentService = getService()
       let formattedPR
-      if ([SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1].includes(currentService)) {
+      if ([SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1, SERVICE.MONDAY_DEFAULT].includes(currentService)) {
         formattedPR = formatIssueLink(repoDetails, profile.pr, type, signature)
       } else {
         formattedPR = profile.pr
@@ -390,7 +390,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               {profilesData.selected}
             </Typography>
           </MenuButton>
-          <Menu>
+          <Menu sx={{ zIndex: 2000 }}>
             {profilesData.list.map((item: string) => (
               <MenuItem
                 key={item}

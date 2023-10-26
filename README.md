@@ -50,6 +50,9 @@ JIRA
 https://gotestingspace.atlassian.net/browse/KAN-1
 https://jsw.ibm.com/browse/MDLDHDB-987
 
+Monday
+https://heavendivider101s-team.monday.com/boards/1303381640/pulses/1303381649
+https://ibm.monday.com/boards/5401118772/pulses/5401118887
 
 NEXT ?
 BITBUCKET

@@ -257,6 +257,38 @@ export const getDetails = (service: SERVICE) => {
       },
     }
   }
+  if (service === SERVICE.MONDAY_DEFAULT) {
+    return {
+      getHeaderElement: (): string => {
+        let headerElement = document.querySelector('.pulse_title .title-wrapper') as any
+        return headerElement ? headerElement.textContent! : ''
+      },
+      getBranchName: (text: string, number: string): string => {
+        return getBranchName(text, number, false)
+      },
+      getUsername: (): string => {
+        const avatarInfo = document?.querySelector('.avatar-with-company-logo [title]')!.getAttribute('title')
+        if (avatarInfo) {
+          return avatarInfo
+        }
+        return DEFAULT_USER
+      },
+      getRepoDetails: () => {
+        const url = window.location.href
+        const match = url.match(/\/boards\/\d+\/pulses\/(\d+)/)
+        let issueNumber = ''
+        if (match?.length) {
+          issueNumber = match[1]
+        }
+
+        return {
+          user: '',
+          repo: url,
+          issueNumber: issueNumber || '',
+        }
+      },
+    }
+  }
   return {
     getHeaderElement: (): string => '',
     getBranchName: (): string => '',
