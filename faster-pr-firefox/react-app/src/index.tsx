@@ -26,6 +26,8 @@ const getHeader = (service: SERVICE) => {
   } else if (service === SERVICE.JIRA_COMPANY_1) {
     headerElement = document.getElementsByClassName('issue-header-content')
     headerElement = headerElement?.length > 0 ? headerElement[0] : null
+  } else if (service === SERVICE.MONDAY_DEFAULT) {
+    headerElement = document.querySelector('.pulse_title')
   }
   return headerElement
 }

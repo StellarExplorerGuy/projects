@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Box, Link } from '@mui/joy'
+import { Box, Link, Tooltip } from '@mui/joy'
 import Button from '@mui/joy/Button'
 import Grid from '@mui/joy/Grid'
 import Modal from '@mui/joy/Modal'
@@ -20,6 +20,11 @@ import Github from 'assets/github.svg'
 import GitLab from 'assets/gitlab.svg'
 import Trello from 'assets/trello.svg'
 import Jira from 'assets/jira.svg'
+import Monday from 'assets/monday_icon.svg'
+import Chrome from 'assets/chrome_icon.svg'
+import Firefox from 'assets/firefox_icon.svg'
+import Cup from 'assets/drink-glass-hot-warm.svg'
+
 import styles from '../../../styles/Main.module.scss'
 
 const dataList = [
@@ -46,6 +51,12 @@ const dataList = [
     checked: true,
     avatar: Jira,
     label: 'Jira [jsw.any-name.com]',
+  },
+  {
+    index: 4,
+    checked: true,
+    avatar: Monday,
+    label: 'Monday [monday.com, any-name.monday.com]',
   },
 ]
 
@@ -103,19 +114,72 @@ function IntegrationsCheckbox({ toggleIntegration }: IntegrationsCheckboxProps) 
         maxWidth: '100%',
       }}
     >
-      <Typography
-        id="integration"
-        sx={{
-          textTransform: 'uppercase',
-          fontSize: 'xs',
-          letterSpacing: 'lg',
-          fontWeight: 'lg',
-          color: 'text.secondary',
-          mb: 2,
-        }}
-      >
-        Available integrations
-      </Typography>
+      <Grid container direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+        <Grid xs={9}>
+          <Typography
+            id="integration"
+            sx={{
+              textTransform: 'uppercase',
+              fontSize: 'xs',
+              letterSpacing: 'lg',
+              fontWeight: 'lg',
+              color: 'text.secondary',
+            }}
+          >
+            Available integrations
+          </Typography>
+        </Grid>
+        <Grid xs={3}>
+          <Box sx={{ float: 'right', mr: 1 }}>
+            <Tooltip
+              arrow
+              title="Please take a moment to rate and review the Chrome extension on the Web Store 🙂."
+              variant="solid"
+              placement="top"
+              color="neutral"
+              size="lg"
+            >
+              <Link
+                target="_blank"
+                href="https://chrome.google.com/webstore/detail/faster-pr/lcenjlelbnlooigocboklccingbhiajh/"
+              >
+                <Avatar
+                  sx={{
+                    transform: 'translate(0, 0)',
+                    transition: 'transform 0.2s ease-in-out',
+                    ':hover': { transform: 'translate(-3px, -3px) rotate(10deg) scale(1.1)' },
+                  }}
+                  aria-hidden="true"
+                  src={Chrome}
+                  size="sm"
+                />
+              </Link>
+            </Tooltip>
+            &nbsp;&nbsp;
+            <Tooltip
+              arrow
+              title="Please take a moment to rate and review the Firefox extension on the Web Store 🙂."
+              variant="solid"
+              placement="top"
+              color="neutral"
+              size="lg"
+            >
+              <Link target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/faster-pr/">
+                <Avatar
+                  sx={{
+                    transform: 'translate(0, 0)',
+                    transition: 'transform 0.2s ease-in-out',
+                    ':hover': { transform: 'translate(-3px, -3px) rotate(10deg) scale(1.1)' },
+                  }}
+                  aria-hidden="true"
+                  src={Firefox}
+                  size="sm"
+                />
+              </Link>
+            </Tooltip>
+          </Box>
+        </Grid>
+      </Grid>
       <Box>
         <List
           sx={{
@@ -205,24 +269,46 @@ function ManageIntegrations({ open, handleSubmit, handleClose }: ManageIntegrati
             <IntegrationsCheckbox toggleIntegration={toggleIntegration} />
           </Grid>
         </Grid>
-        <Stack spacing={2}>
-          <Stack direction="row" justifyContent="flex-end" spacing={2} height={{ height: 42 }}>
-            {/* {alertInfo.visible && (
+        <Grid sx={{ mt: 1 }} container direction="row" justifyContent="space-between" alignItems="flex-end">
+          <Tooltip
+            arrow
+            title="Your contributions make a significant impact, fueling my projects and boosting my confidence to create more!🚀"
+            variant="solid"
+            placement="top"
+            color="neutral"
+            size="lg"
+          >
+            <Link target="_blank" href="https://ko-fi.com/stellarexplorerguy">
+              <Avatar
+                sx={{
+                  transition: 'transform 0.5s ease-in-out',
+                  ':hover': { transform: 'rotate(360deg)', transition: 'transform 1s ease-in-out' },
+                }}
+                aria-hidden="true"
+                src={Cup}
+                size="lg"
+              />
+            </Link>
+          </Tooltip>
+          <Stack spacing={2}>
+            <Stack direction="row" justifyContent="flex-end" spacing={2} height={{ height: 42 }}>
+              {/* {alertInfo.visible && (
               <Alert variant="soft" color={alertInfo.type as any} sx={{ width: 'fit-content' }}>
                 {alertInfo.msg}
               </Alert>
             )} */}
-            {/* <Button disabled={false} onClick={handleSave}>
+              {/* <Button disabled={false} onClick={handleSave}>
               Save
             </Button> */}
-            <Button variant="outlined" onClick={handleClose}>
-              Close
-              <Typography sx={{ pl: 1 }} color="neutral">
-                [esc]
-              </Typography>
-            </Button>
+              <Button variant="outlined" onClick={handleClose}>
+                Close
+                <Typography sx={{ pl: 1 }} color="neutral">
+                  [esc]
+                </Typography>
+              </Button>
+            </Stack>
           </Stack>
-        </Stack>
+        </Grid>
       </ModalDialog>
     </Modal>
   )

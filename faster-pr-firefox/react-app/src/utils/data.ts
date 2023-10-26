@@ -187,6 +187,7 @@ const gitlabRegex = /^https:\/\/gitlab\.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/-\/
 const trelloRegex = /^https:\/\/trello\.com\/[A-Za-z0-9-]\/[A-Za-z0-9]+\/\d+-[A-Za-z0-9-]+/
 // const jiraDefaultRegex = /^https:\/\/(?:[a-zA-Z0-9.-]+\.)?atlassian.net\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
 const jiraCompany1Regex = /^https:\/\/jsw(?:[a-zA-Z0-9.-]+)?.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
+const mondayDefaultRegex = /^https:\/\/[a-zA-Z0-9.-]+\.monday\.com\/boards\/\d+\/pulses\/\d+/
 
 export const getService = (): SERVICE => {
   // const { integrations } = getAppConfig()
@@ -199,10 +200,12 @@ export const getService = (): SERVICE => {
     return SERVICE.GITLAB
   } else if (trelloRegex.test(url)) {
     return SERVICE.TRELLO
-  // } else if (jiraDefaultRegex.test(url)) {
-  //   return SERVICE.JIRA_DEFAULT
+    // } else if (jiraDefaultRegex.test(url)) {
+    //   return SERVICE.JIRA_DEFAULT
   } else if (jiraCompany1Regex.test(url)) {
     return SERVICE.JIRA_COMPANY_1
+  } else if (mondayDefaultRegex.test(url)) {
+    return SERVICE.MONDAY_DEFAULT
   }
 
   return SERVICE.GITHUB
@@ -215,6 +218,8 @@ export const getConfig = () => {
   }
   if (currentService === SERVICE.TRELLO) {
     config.panelMaxWidth = 584
+  } else if (currentService === SERVICE.MONDAY_DEFAULT) {
+    config.panelMaxWidth = 520
   }
   return config
 }
