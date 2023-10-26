@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Box, Link } from '@mui/joy'
+import { Box, Link, Tooltip } from '@mui/joy'
 import Button from '@mui/joy/Button'
 import Grid from '@mui/joy/Grid'
 import Modal from '@mui/joy/Modal'
@@ -124,34 +124,52 @@ function IntegrationsCheckbox({ toggleIntegration }: IntegrationsCheckboxProps) 
         </Grid>
         <Grid xs={3}>
           <Box sx={{ float: 'right', mr: 1 }}>
-            <Link
-              target="_blank"
-              href="https://chrome.google.com/webstore/detail/faster-pr/lcenjlelbnlooigocboklccingbhiajh/"
+            <Tooltip
+              arrow
+              title="Please take a moment to rate and review the Chrome extension on the Web Store 🙂."
+              variant="solid"
+              placement="top"
+              color="neutral"
+              size="lg"
             >
-              <Avatar
-                sx={{
-                  transform: 'translate(0, 0)',
-                  transition: 'transform 0.2s ease-in-out',
-                  ':hover': { transform: 'translate(-3px, -3px) rotate(10deg) scale(1.1)' },
-                }}
-                aria-hidden="true"
-                src={Chrome}
-                size="sm"
-              />
-            </Link>
+              <Link
+                target="_blank"
+                href="https://chrome.google.com/webstore/detail/faster-pr/lcenjlelbnlooigocboklccingbhiajh/"
+              >
+                <Avatar
+                  sx={{
+                    transform: 'translate(0, 0)',
+                    transition: 'transform 0.2s ease-in-out',
+                    ':hover': { transform: 'translate(-3px, -3px) rotate(10deg) scale(1.1)' },
+                  }}
+                  aria-hidden="true"
+                  src={Chrome}
+                  size="sm"
+                />
+              </Link>
+            </Tooltip>
             &nbsp;&nbsp;
-            <Link target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/faster-pr/">
-              <Avatar
-                sx={{
-                  transform: 'translate(0, 0)',
-                  transition: 'transform 0.2s ease-in-out',
-                  ':hover': { transform: 'translate(-3px, -3px) rotate(10deg) scale(1.1)' },
-                }}
-                aria-hidden="true"
-                src={Firefox}
-                size="sm"
-              />
-            </Link>
+            <Tooltip
+              arrow
+              title="Please take a moment to rate and review the Firefox extension on the Web Store 🙂."
+              variant="solid"
+              placement="top"
+              color="neutral"
+              size="lg"
+            >
+              <Link target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/faster-pr/">
+                <Avatar
+                  sx={{
+                    transform: 'translate(0, 0)',
+                    transition: 'transform 0.2s ease-in-out',
+                    ':hover': { transform: 'translate(-3px, -3px) rotate(10deg) scale(1.1)' },
+                  }}
+                  aria-hidden="true"
+                  src={Firefox}
+                  size="sm"
+                />
+              </Link>
+            </Tooltip>
           </Box>
         </Grid>
       </Grid>
@@ -245,17 +263,26 @@ function ManageIntegrations({ open, handleSubmit, handleClose }: ManageIntegrati
           </Grid>
         </Grid>
         <Grid sx={{ mt: 1 }} container direction="row" justifyContent="space-between" alignItems="flex-end">
-          <Link target="_blank" href="https://ko-fi.com/stellarexplorerguy">
-            <Avatar
-              sx={{
-                transition: 'transform 0.5s ease-in-out',
-                ':hover': { transform: 'rotate(360deg)', transition: 'transform 1s ease-in-out' },
-              }}
-              aria-hidden="true"
-              src={Cup}
-              size="lg"
-            />
-          </Link>
+          <Tooltip
+            arrow
+            title="Your contributions make a significant impact, fueling my projects and boosting my confidence to create more!🚀"
+            variant="solid"
+            placement="top"
+            color="neutral"
+            size="lg"
+          >
+            <Link target="_blank" href="https://ko-fi.com/stellarexplorerguy">
+              <Avatar
+                sx={{
+                  transition: 'transform 0.5s ease-in-out',
+                  ':hover': { transform: 'rotate(360deg)', transition: 'transform 1s ease-in-out' },
+                }}
+                aria-hidden="true"
+                src={Cup}
+                size="lg"
+              />
+            </Link>
+          </Tooltip>
           <Stack spacing={2}>
             <Stack direction="row" justifyContent="flex-end" spacing={2} height={{ height: 42 }}>
               {/* {alertInfo.visible && (
