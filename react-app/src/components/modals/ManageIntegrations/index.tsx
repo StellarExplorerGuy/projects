@@ -1,6 +1,4 @@
-import { useState } from 'react'
-
-import { Box, Link, Tooltip } from '@mui/joy'
+import { Alert, Box, Link, Tooltip } from '@mui/joy'
 import Button from '@mui/joy/Button'
 import Grid from '@mui/joy/Grid'
 import Modal from '@mui/joy/Modal'
@@ -9,7 +7,6 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import MessageBox from 'components/MessageBox'
 
-import * as React from 'react'
 import Avatar from '@mui/joy/Avatar'
 import Checkbox, { checkboxClasses } from '@mui/joy/Checkbox'
 import List from '@mui/joy/List'
@@ -23,10 +20,18 @@ import Jira from 'assets/jira.svg'
 import Monday from 'assets/monday.svg'
 import Chrome from 'assets/chrome_icon.svg'
 import Firefox from 'assets/firefox_icon.svg'
-import Cup from 'assets/drink-glass-hot-warm.svg'
+import Cup from 'assets/coffee.svg'
 
 import styles from '../../../styles/Main.module.scss'
+import CustomTabs from 'components/CustomTabs'
+import { ADVANCED, FASTER_PR_CONFIG, KO_FI_URL, TEXT } from 'utils/constants'
+import Signature from 'components/Signature'
+import { decodeUrl, getAppConfig, showAlertInfo } from 'utils/data'
+import { useState } from 'react'
+import { GlobalConfig } from 'types'
+import SwitchButton from 'components/SwitchButton'
 
+const HEADERS = ['Integrations 😎', 'Globals 🔧']
 const dataList = [
   {
     index: 0,
@@ -67,10 +72,9 @@ interface ItemProps {
     avatar: string
     label: string
   }
-  toggleIntegration: (item: number) => React.ChangeEventHandler<HTMLInputElement> | undefined
 }
 
-function Item({ integration, toggleIntegration }: ItemProps) {
+function Item({ integration }: ItemProps) {
   return (
     <ListItem
       sx={{
@@ -94,17 +98,13 @@ function Item({ integration, toggleIntegration }: ItemProps) {
           </Typography>
         }
         checked={integration.checked}
-        onChange={toggleIntegration(integration.index)}
         color="success"
       />
     </ListItem>
   )
 }
 
-interface IntegrationsCheckboxProps {
-  toggleIntegration: (item: number) => React.ChangeEventHandler<HTMLInputElement> | undefined
-}
-function IntegrationsCheckbox({ toggleIntegration }: IntegrationsCheckboxProps) {
+function IntegrationsCheckbox() {
   return (
     <Sheet
       variant="outlined"
@@ -193,7 +193,7 @@ function IntegrationsCheckbox({ toggleIntegration }: IntegrationsCheckboxProps) 
           }}
         >
           {dataList.map((item, index) => (
-            <Item key={index} integration={item} toggleIntegration={toggleIntegration} />
+            <Item key={index} integration={item} />
           ))}
         </List>
       </Box>
@@ -201,114 +201,173 @@ function IntegrationsCheckbox({ toggleIntegration }: IntegrationsCheckboxProps) 
   )
 }
 
-function getIntegrationConfig() {
-  // const appConfig = getAppConfig()
-  // const copy = [...dataList]
-  // appConfig.integrations.forEach((checked: boolean, index: number) => {
-  //   copy[index].checked = checked
-  // })
-  // return copy
-  return dataList
+function getDetails(global: GlobalConfig, setGlobal: React.Dispatch<React.SetStateAction<GlobalConfig>>) {
+  return [
+    <Box fontWeight="sm">
+      <Box sx={{ pt: 1, pb: 1 }}>
+        <MessageBox
+          message={
+            <div>
+              Here is a list of the integrations that are currently available. If you require support for an additional
+              service, you can create an{' '}
+              <Link target="_blank" href="https://github.com/StellarExplorerGuy/projects/issues/new/choose">
+                issue 📝
+              </Link>{' '}
+              on GitHub to request it. After when issue would be raised, then it would be reviewed.
+            </div>
+          }
+        />
+      </Box>
+      <Grid container>
+        <Grid xs={12}>
+          <IntegrationsCheckbox />
+        </Grid>
+      </Grid>
+    </Box>,
+    <Box fontWeight="sm">
+      <Box sx={{ pt: 1, pb: 1 }}>
+        <MessageBox message={<div>{TEXT.MANAGE_INTEGRATIONS.GLOBALS}</div>} />
+      </Box>
+      <Sheet
+        variant="outlined"
+        sx={{
+          p: 2,
+          borderRadius: 'sm',
+          maxWidth: '100%',
+        }}
+      >
+        <Grid container direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+          <Grid xs={9}>
+            <Typography
+              sx={{
+                textTransform: 'uppercase',
+                fontSize: 'xs',
+                letterSpacing: 'lg',
+                fontWeight: 'lg',
+                color: 'text.secondary',
+              }}
+            >
+              Global configuration{' '}
+              <Typography color={global.enabled ? 'success' : 'danger'}>
+                {global.enabled ? 'enabled' : 'disabled'}
+              </Typography>
+            </Typography>
+          </Grid>
+          <Grid xs={1.5}>
+            <Box sx={{ float: 'right' }}>
+              <SwitchButton checked={global.enabled} setChecked={(value) => setGlobal({ ...global, enabled: value })} />
+            </Box>
+          </Grid>
+        </Grid>
+        <Signature data={global} setValue={setGlobal} />
+      </Sheet>
+    </Box>,
+  ]
 }
 
 interface ManageIntegrationsProps {
   open: boolean
-  handleSubmit: (integrations: boolean[]) => void
   handleClose: () => void
 }
 
-function ManageIntegrations({ open, handleSubmit, handleClose }: ManageIntegrationsProps) {
-  // const [alertInfo, setAlertInfo] = useState({
-  //   visible: false,
-  //   msg: '',
-  //   type: 'warning',
-  // })
-  const [integrations, setIntegrations] = useState(() => getIntegrationConfig())
+function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
+  const [alertInfo, setAlertInfo] = useState({
+    visible: false,
+    msg: '',
+    type: 'success',
+  })
+  const [currentTab, setCurrentTab] = useState<number>(0)
+  const [global, setGlobal] = useState<GlobalConfig>(() => {
+    const { global } = getAppConfig()
+    // const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY)
+    // const allProfiles = getLocalStorage(FASTER_PR_PROFILE)
+    // const profile = allProfiles[profileKey]
 
-  const toggleIntegration = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newIntegrations = [...integrations]
-    newIntegrations[index].checked = event.target.checked
-    setIntegrations(newIntegrations)
+    // if (!global.enabled) {
+    //   global.signature = profile.signature
+    // }
+    return global
+  })
+
+  const onTabClick = (tabIndex: number): void => {
+    setCurrentTab(tabIndex)
   }
+  const handleSaveGlobals = (): void => {
+    if (global.enabled && !global.signature.trim().length) {
+      showAlertInfo(
+        {
+          visible: true,
+          msg: `Signature can't be empty as top-level configuration.`,
+          type: 'warning',
+        },
+        setAlertInfo,
+      )
+      return
+    }
 
-  // const handleSave = (): void => {
-  //   const checkedIntegrationsCount = integrations.filter((integration) => integration.checked === true).length
-  //   if (checkedIntegrationsCount) {
-  //     handleSubmit(integrations.map(({ checked }) => checked))
-  //   } else {
-  //     setAlertInfo({
-  //       visible: true,
-  //       msg: 'You cannot save it without selecting at least one option.',
-  //       type: 'warning',
-  //     })
-  //   }
-  // }
+    // cb to parent modal
+    localStorage.setItem(FASTER_PR_CONFIG, JSON.stringify({ global }))
+
+    showAlertInfo(
+      {
+        visible: true,
+        msg: 'Saved!',
+        type: 'success',
+      },
+      setAlertInfo,
+    )
+  }
+  const data = getDetails(global, setGlobal)
 
   return (
-    <Modal className={styles.main_component} open={open} onClose={handleClose}>
-      <ModalDialog variant="outlined" role="alertdialog" size="md">
+    <Modal keepMounted className={styles.main_component} open={open} onClose={handleClose}>
+      <ModalDialog variant="outlined" role="alertdialog" size="md" sx={{ height: 600 }}>
         <Typography id="manage-integrations" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
-          Integrations 😎
+          My setup
         </Typography>
-        <Box sx={{ mt: 1 }}>
-          <MessageBox
-            message={
-              <div>
-                Here is a list of the integrations that are currently available. If you require support for an
-                additional service, you can create an{' '}
-                <Link target="_blank" href="https://github.com/StellarExplorerGuy/projects/issues/new/choose">
-                  issue
-                </Link>{' '}
-                on GitHub to request it. After when issue would be raised, then it would be reviewed.
-              </div>
-            }
-          />
-        </Box>
-        <Grid container>
-          <Grid xs={12}>
-            <IntegrationsCheckbox toggleIntegration={toggleIntegration} />
-          </Grid>
-        </Grid>
-        <Grid sx={{ mt: 1 }} container direction="row" justifyContent="space-between" alignItems="flex-end">
-          <Tooltip
-            arrow
-            title="Your contributions make a significant impact, fueling my projects and boosting my confidence to create more!🚀"
-            variant="solid"
-            placement="top"
-            color="neutral"
-            size="lg"
-          >
-            <Link target="_blank" href="https://ko-fi.com/stellarexplorerguy">
-              <Avatar
-                sx={{
-                  transition: 'transform 0.5s ease-in-out',
-                  ':hover': { transform: 'rotate(360deg)', transition: 'transform 1s ease-in-out' },
-                }}
-                aria-hidden="true"
-                src={Cup}
-                size="lg"
-              />
-            </Link>
-          </Tooltip>
-          <Stack spacing={2}>
-            <Stack direction="row" justifyContent="flex-end" spacing={2} height={{ height: 42 }}>
-              {/* {alertInfo.visible && (
+        <CustomTabs orientation="horizontal" tabs={{ headers: HEADERS, data }} onClick={onTabClick} />
+        {currentTab === ADVANCED.INTEGRATIONS ? (
+          <Box sx={{ left: 18, bottom: 10, position: 'absolute' }}>
+            <Tooltip
+              arrow
+              title={TEXT.MANAGE_INTEGRATIONS.TITLE}
+              variant="solid"
+              placement="top"
+              color="neutral"
+              size="lg"
+            >
+              <Link target="_blank" href={decodeUrl(KO_FI_URL)}>
+                <Avatar
+                  sx={{
+                    transition: 'transform 0.5s ease-in-out',
+                    ':hover': { transform: 'rotate(360deg)', transition: 'transform 1s ease-in-out' },
+                  }}
+                  aria-hidden="true"
+                  src={Cup}
+                  size="lg"
+                />
+              </Link>
+            </Tooltip>
+          </Box>
+        ) : (
+          <div></div>
+        )}
+        <Stack sx={{ right: 18, bottom: 10, position: 'absolute' }} spacing={2}>
+          <Stack direction="row" justifyContent="flex-end" spacing={2} height={{ height: 42 }}>
+            {alertInfo.visible && (
               <Alert variant="soft" color={alertInfo.type as any} sx={{ width: 'fit-content' }}>
                 {alertInfo.msg}
               </Alert>
-            )} */}
-              {/* <Button disabled={false} onClick={handleSave}>
-              Save
-            </Button> */}
-              <Button variant="outlined" onClick={handleClose}>
-                Close
-                <Typography sx={{ pl: 1 }} color="neutral">
-                  [esc]
-                </Typography>
-              </Button>
-            </Stack>
+            )}
+            <Button variant="outlined" onClick={handleClose}>
+              Close
+              <Typography sx={{ pl: 1 }} color="neutral">
+                [esc]
+              </Typography>
+            </Button>
+            {currentTab === ADVANCED.GLOBALS && <Button onClick={handleSaveGlobals}>Save</Button>}
           </Stack>
-        </Grid>
+        </Stack>
       </ModalDialog>
     </Modal>
   )

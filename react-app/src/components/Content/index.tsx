@@ -11,9 +11,9 @@ import EditProfile from 'components/modals/EditProfile'
 import NewProfile from 'components/modals/NewProfile'
 import ResetProfile from 'components/modals/ResetProfile'
 import Tip from 'components/modals/Tip'
-import { DIALOG, ItemType } from 'types'
-import { DEFAULT_PROFILE, FASTER_PR_CONFIG, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
-import { clearComments, defaultProfile, showAlertInfo, updateKey, updateLocalStorage } from 'utils/data'
+import { DIALOG, GlobalConfig, ItemType } from 'types'
+import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, TEXT } from 'utils/constants'
+import { clearComments, defaultProfile, getAppConfig, showAlertInfo, updateKey, updateLocalStorage } from 'utils/data'
 
 import { UniqueIdentifier } from '@dnd-kit/core'
 import AddIcon from '@mui/icons-material/Add'
@@ -36,6 +36,22 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as Accordion from '@radix-ui/react-accordion'
 import ManageIntegrations from 'components/modals/ManageIntegrations'
+
+const getCommonDetails = (global: GlobalConfig, dialogValue: ItemType) => {
+  const common = { title: <Typography>Common</Typography>, sx: {}, dialogValue }
+
+  if (global.enabled) {
+    common.title = (
+      <Typography>
+        Common <Typography color="warning">[DISABLED - as your are using top-level configuration 🔧]</Typography>
+      </Typography>
+    )
+    common.sx = { pointerEvents: 'none', opacity: 0.6 }
+    common.dialogValue.checked = !!global.signature
+    common.dialogValue.signature = global.signature
+  }
+  return common
+}
 
 interface ContentProps {
   openDialogs: {
@@ -68,6 +84,7 @@ function Content({
   setDialogValue,
   handleOpen,
 }: ContentProps): JSX.Element {
+  const { global } = getAppConfig()
   const handleNewProfileSubmit = (input: string): void => {
     const defaultData = defaultProfile()
     const allProfiles = JSON.parse(localStorage.getItem(FASTER_PR_PROFILE)!) || {}
@@ -152,26 +169,6 @@ function Content({
     )
   }
 
-  const handleIntegrationSubmit = (integrations: boolean[]): void => {
-    let localConfig = localStorage.getItem(FASTER_PR_CONFIG)!
-    const config = JSON.parse(localConfig)
-
-    updateLocalStorage(FASTER_PR_CONFIG, {
-      ...config,
-      integrations,
-    })
-
-    handleClose(DIALOG.INTEGRATION)
-    showAlertInfo(
-      {
-        visible: true,
-        msg: 'Saved!',
-        type: 'success',
-      },
-      setAlertInfo,
-    )
-  }
-
   const handleDeleteProfileSubmit = (): void => {
     const index = dialogValue.profiles.findIndex((profile: string) => profile === dialogValue.profile)
     if (index === -1) return
@@ -236,6 +233,7 @@ function Content({
   }
 
   const isProfileEnabled = dialogValue.profile === DEFAULT_PROFILE
+  const common = getCommonDetails(global, dialogValue)
 
   return (
     <Box
@@ -288,7 +286,6 @@ function Content({
       {openDialogs.integrations && (
         <ManageIntegrations
           open={openDialogs.integrations}
-          handleSubmit={handleIntegrationSubmit}
           handleClose={() => handleClose(DIALOG.INTEGRATION)}
         />
       )}
@@ -371,14 +368,7 @@ function Content({
               </Stack>
             </Grid>
             <Grid xs={1}>
-              <Tooltip
-                arrow
-                title="About"
-                variant="solid"
-                placement="top"
-                color="neutral"
-                size="lg"
-              >
+              <Tooltip arrow title="My setup" variant="solid" placement="top" color="neutral" size="lg">
                 <Button
                   sx={{ float: 'right' }}
                   aria-label="new"
@@ -392,11 +382,11 @@ function Content({
               </Tooltip>
             </Grid>
           </Grid>
-          <Box sx={{ mt: 1, mb: 1 }}>
-            <MessageBox message="You can switch profiles, create new ones, or use the default profile. Configurations are stored in your browser storage on a per-page basis (e.g., GitHub and Gitlab have their own configurations). Remember to click 'save' to apply any changes." />
+          <Box sx={{ mt: 2, mb: 1 }}>
+            <MessageBox message={TEXT.MAIN.INFO} />
           </Box>
           <Sheet>
-            <Typography level="h2" fontSize="xl2" sx={{ mb: 2 }}>
+            <Typography level="h2" fontSize="xl2" sx={{ pb: 2 }}>
               Templates
             </Typography>
             <List
@@ -411,23 +401,23 @@ function Content({
               }}
             >
               <Accordion.Item value="item-0">
-                <AccordionHeader isFirst>Common</AccordionHeader>
+                <AccordionHeader isFirst>{common.title}</AccordionHeader>
                 <AccordionContent>
-                  <Grid container spacing={2}>
+                  <Grid sx={common.sx} container spacing={2}>
                     <Grid xs={3}>
                       <Box sx={{ float: 'left', pt: 0.5 }}>
                         <FormItem text="Signature" />
                       </Box>
-                      <InfoIconButton text="Define signature for your commit and PR templates." />
+                      <InfoIconButton text={TEXT.TOOLTIP.SIGNATURE} />
                       <FormControl>
                         <Input
-                          value={dialogValue.signature}
-                          disabled={dialogValue.checked}
+                          value={common.dialogValue.signature}
+                          disabled={common.dialogValue.checked}
                           name="email"
                           type="email"
                           variant="outlined"
                           color="primary"
-                          placeholder="John Doe john.doe@email.com"
+                          placeholder={TEXT.MAIN.USERNAME_PLACEHOLDER}
                           onChange={(event) => setDialogValue({ ...dialogValue, signature: event.target.value })}
                           endDecorator={
                             <IconButton onClick={() => setDialogValue({ ...dialogValue, signature: '' })}>
@@ -437,7 +427,7 @@ function Content({
                         />
                       </FormControl>
                     </Grid>
-                    <Grid xs={1.5}>
+                    <Grid xs={3}>
                       <Box sx={{ float: 'left', mt: 0.5 }}>
                         <FormLabel>Use default signature</FormLabel>
                       </Box>
@@ -445,7 +435,7 @@ function Content({
                       <FormControl>
                         <Box sx={{ float: 'left', mt: 0.5 }}>
                           <SwitchButton
-                            checked={dialogValue.checked}
+                            checked={common.dialogValue.checked}
                             setChecked={(value) => setDialogValue({ ...dialogValue, checked: value })}
                           />
                         </Box>

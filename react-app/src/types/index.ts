@@ -30,6 +30,11 @@ export enum DIALOG {
   TIP = 'tip',
 }
 
+export type GlobalConfig = {
+  enabled: boolean
+  signature: string
+}
+
 export type AppConfig = {
-  integrations: boolean[]
+  global: GlobalConfig
 }

@@ -6,5 +6,8 @@ function encodeUrl(text) {
 const HOME_URL = "https://github.com/StellarExplorerGuy/projects";
 const GIT_URL =
   "https://github.com/StellarExplorerGuy/projects/blob/main/docs/commit/commit.md";
-console.log("!![TEST]", encodeUrl(HOME_URL));
-console.log("!![TEST]", encodeUrl(GIT_URL));
+
+const KO_FI_URL = "https://ko-fi.com/stellarexplorerguy";
+console.log("!![TEST]HOME_URL", encodeUrl(HOME_URL));
+console.log("!![TEST]GIT_URL", encodeUrl(GIT_URL));
+console.log("!![TEST]GIT_URL", encodeUrl(KO_FI_URL));
