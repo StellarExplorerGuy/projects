@@ -297,7 +297,7 @@ function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
       showAlertInfo(
         {
           visible: true,
-          msg: `Signature can't be empty as top-level configuration.`,
+          msg: `Signature can't be empty as top-level configuration if it is enabled.`,
           type: 'warning',
         },
         setAlertInfo,
