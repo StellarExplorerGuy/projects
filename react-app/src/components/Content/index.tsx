@@ -38,7 +38,7 @@ import * as Accordion from '@radix-ui/react-accordion'
 import ManageIntegrations from 'components/modals/ManageIntegrations'
 
 const getCommonDetails = (global: GlobalConfig, dialogValue: ItemType) => {
-  const common = { title: <Typography>Common</Typography>, sx: {}, dialogValue }
+  const common = { title: <Typography>Common</Typography>, sx: {}, dialogValue: { ...dialogValue } }
 
   if (global.enabled) {
     common.title = (
@@ -50,7 +50,8 @@ const getCommonDetails = (global: GlobalConfig, dialogValue: ItemType) => {
     common.dialogValue.checked = !!global.signature
     common.dialogValue.signature = global.signature
   }
-  return common
+
+  return { ...common }
 }
 
 interface ContentProps {
@@ -284,10 +285,7 @@ function Content({
         />
       )}
       {openDialogs.integrations && (
-        <ManageIntegrations
-          open={openDialogs.integrations}
-          handleClose={() => handleClose(DIALOG.INTEGRATION)}
-        />
+        <ManageIntegrations open={openDialogs.integrations} handleClose={() => handleClose(DIALOG.INTEGRATION)} />
       )}
       {openDialogs.tip && <Tip open={openDialogs.tip} handleClose={() => handleClose(DIALOG.TIP)} />}
       {dialogValue?.profiles && (
