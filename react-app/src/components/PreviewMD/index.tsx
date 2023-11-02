@@ -3,6 +3,8 @@ import { ItemType } from 'types'
 import MarkdownEditor from '@uiw/react-markdown-editor'
 
 import styles from './PreviewMD.module.scss'
+import { toolbars } from './preview.utils'
+
 
 interface PreviewMDProps {
   field: keyof ItemType
@@ -16,6 +18,7 @@ function PreviewMD({ field, value, dialogValue, setDialogValue }: PreviewMDProps
     <MarkdownEditor
       className={styles.wrapper}
       visible
+      toolbars={toolbars}
       value={value}
       onChange={(value) => {
         setDialogValue({ ...dialogValue, [field]: value })
