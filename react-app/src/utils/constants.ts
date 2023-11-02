@@ -28,7 +28,8 @@ export const TEXT = {
     TITLE:
       'Your contributions make a significant impact, fueling my projects and boosting my confidence to create more!🚀',
     GLOBALS:
-      ' You have the option to adjust extension behavior by establishing global configuration settings at the top to supersede profile-specific configurations. This is particularly useful if you desire a consistent configuration that applies to all profiles.',
+      'You have the option to adjust extension behavior by establishing global configuration settings at the top to supersede profile-specific configurations. This is particularly useful if you desire a consistent configuration that applies to all profiles.',
+    PROFILE: 'You can customize your profile. Maximum two characters are allowed.',
   },
 }
 
@@ -62,6 +63,7 @@ export enum SERVICE {
 
 export enum ADVANCED {
   INTEGRATIONS,
+  PROFILE,
   GLOBALS,
 }
 

@@ -36,7 +36,7 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as Accordion from '@radix-ui/react-accordion'
 import ManageIntegrations from 'components/modals/ManageIntegrations'
-import { useEffect, useRef } from 'react'
+import { SetStateAction, useEffect, useRef } from 'react'
 
 const getCommonDetails = (global: GlobalConfig, dialogValue: ItemType) => {
   const params = { title: <Typography>Common</Typography>, sx: {}, dialogValue: { ...dialogValue } }
@@ -101,10 +101,15 @@ function Content({
   handleOpen,
 }: ContentProps): JSX.Element {
   const previousSlimPrChecked = useRef(false)
+  const isSlimPrCheckedDirty = useRef(false)
 
   useEffect(() => {
     // PR notification if comments are hidden
-    if (dialogValue.slimPrChecked && previousSlimPrChecked.current !== dialogValue.slimPrChecked) {
+    if (
+      isSlimPrCheckedDirty.current &&
+      dialogValue.slimPrChecked &&
+      previousSlimPrChecked.current !== dialogValue.slimPrChecked
+    ) {
       showAlertInfo(
         {
           visible: true,
@@ -332,7 +337,14 @@ function Content({
             sx={{ mt: 0.5 }}
           >
             <Grid xs={3}>
-              <ProfilesSelector dialogValue={dialogValue} data={dialogValue.profiles} setDialogValue={setDialogValue} />
+              <ProfilesSelector
+                dialogValue={dialogValue}
+                data={dialogValue.profiles}
+                setDialogValue={(value: SetStateAction<ItemType>) => {
+                  isSlimPrCheckedDirty.current = false
+                  setDialogValue(value)
+                }}
+              />
             </Grid>
             <Grid xs={8}>
               <Stack spacing={1} direction="row">
@@ -582,7 +594,10 @@ function Content({
                         <Box sx={{ float: 'left', mt: 0.5, mb: 1 }}>
                           <SwitchButton
                             checked={dialogValue.slimPrChecked}
-                            setChecked={(value) => setDialogValue({ ...dialogValue, slimPrChecked: value })}
+                            setChecked={(value) => {
+                              isSlimPrCheckedDirty.current = true
+                              setDialogValue({ ...dialogValue, slimPrChecked: value })
+                            }}
                           />
                         </Box>
                       </FormControl>

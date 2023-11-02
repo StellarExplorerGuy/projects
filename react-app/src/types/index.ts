@@ -30,6 +30,10 @@ export enum DIALOG {
   TIP = 'tip',
 }
 
+export type ProfileConfig = {
+  avatar: string
+}
+
 export type GlobalConfig = {
   enabled: boolean
   signature: string
@@ -37,4 +41,5 @@ export type GlobalConfig = {
 
 export type AppConfig = {
   global: GlobalConfig
+  profile: ProfileConfig
 }

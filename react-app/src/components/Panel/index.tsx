@@ -9,7 +9,6 @@ import MenuButton from '@mui/joy/MenuButton'
 import Menu from '@mui/joy/Menu'
 import MenuItem from '@mui/joy/MenuItem'
 import Dropdown from '@mui/joy/Dropdown'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Card from '@mui/joy/Card'
 import Tabs, { tabsClasses } from '@mui/material/Tabs'
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles'
@@ -37,6 +36,7 @@ import {
 } from 'utils/constants'
 import { getDetails } from 'utils/service.adapter'
 import { GlobalConfig } from 'types'
+import ProfileAvatar from 'components/ProfileAvatar'
 
 function onButtonClick(event: { target: any }) {
   const button = event.target
@@ -391,7 +391,9 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               borderTop: '1px solid var(--ButtonGroup-separatorColor)',
               borderBottom: '1px solid var(--ButtonGroup-separatorColor)',
             }}
-            startDecorator={<AccountCircleIcon color="primary" fontSize="medium" />}
+            startDecorator={
+              <ProfileAvatar/>
+            }
           >
             <Typography sx={{ width: 80 }} level="body-sm" noWrap>
               {profilesData.selected}

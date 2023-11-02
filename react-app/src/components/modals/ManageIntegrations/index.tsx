@@ -1,4 +1,4 @@
-import { Alert, Box, Link, Tooltip } from '@mui/joy'
+import { Alert, Box, ButtonGroup, Divider, FormControl, FormLabel, IconButton, Input, Link, Tooltip } from '@mui/joy'
 import Button from '@mui/joy/Button'
 import Grid from '@mui/joy/Grid'
 import Modal from '@mui/joy/Modal'
@@ -28,10 +28,11 @@ import { ADVANCED, FASTER_PR_CONFIG, KO_FI_URL, TEXT } from 'utils/constants'
 import Signature from 'components/Signature'
 import { decodeUrl, getAppConfig, showAlertInfo } from 'utils/data'
 import { useState } from 'react'
-import { GlobalConfig } from 'types'
+import { GlobalConfig, ProfileConfig } from 'types'
 import SwitchButton from 'components/SwitchButton'
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
 
-const HEADERS = ['Integrations 😎', 'Globals 🔧']
+const HEADERS = ['Integrations 😎', 'Profile 👤', 'Globals 🔧']
 const dataList = [
   {
     index: 0,
@@ -201,7 +202,12 @@ function IntegrationsCheckbox() {
   )
 }
 
-function getDetails(global: GlobalConfig, setGlobal: React.Dispatch<React.SetStateAction<GlobalConfig>>) {
+function getDetails(
+  global: GlobalConfig,
+  profile: ProfileConfig,
+  setGlobal: React.Dispatch<React.SetStateAction<GlobalConfig>>,
+  setProfile: React.Dispatch<React.SetStateAction<ProfileConfig>>,
+) {
   return [
     <Box fontWeight="sm">
       <Box sx={{ pt: 1, pb: 1 }}>
@@ -223,6 +229,78 @@ function getDetails(global: GlobalConfig, setGlobal: React.Dispatch<React.SetSta
           <IntegrationsCheckbox />
         </Grid>
       </Grid>
+    </Box>,
+    <Box fontWeight="sm">
+      <Box sx={{ pt: 1, pb: 1 }}>
+        <MessageBox message={<div>{TEXT.MANAGE_INTEGRATIONS.PROFILE}</div>} />
+      </Box>
+      <Sheet
+        variant="outlined"
+        sx={{
+          p: 2,
+          borderRadius: 'sm',
+          maxWidth: '100%',
+        }}
+      >
+        <Grid container spacing={2}>
+          <Grid xs={5}>
+            <FormControl>
+              <FormLabel>Avatar</FormLabel>
+              <Input
+                value={profile.avatar}
+                name="avatar"
+                type="text"
+                variant="outlined"
+                color="primary"
+                slotProps={{
+                  input: {
+                    minLength: 1,
+                    maxLength: 2,
+                  },
+                }}
+                onChange={(event) => setProfile({ ...profile, avatar: event.target.value })}
+                endDecorator={
+                  <IconButton onClick={() => setProfile({ ...profile, avatar: '' })}>
+                    <ClearOutlinedIcon color="info" fontSize="small" />
+                  </IconButton>
+                }
+              />
+            </FormControl>
+          </Grid>
+          <Divider sx={{ ml: 2, mr: 2 }} orientation="vertical" />
+          <Grid xs={3}>
+            <FormLabel sx={{pb: 0.8}}>Select from the list</FormLabel>
+            <ButtonGroup
+              variant="solid"
+              color="primary"
+              aria-label="button group"
+              sx={{
+                '--ButtonGroup-separatorColor': 'none !important',
+                '& > span': {
+                  zIndex: 3,
+                  background: 'linear-gradient(to top, transparent, rgba(255 255 255 / 0.6), transparent)',
+                },
+              }}
+            >
+              <Button onClick={() => setProfile({ ...profile, avatar: '🦊' })}>🦊</Button>
+              <Divider />
+              <Button onClick={() => setProfile({ ...profile, avatar: '🐺' })}>🐺</Button>
+              <Divider />
+              <Button onClick={() => setProfile({ ...profile, avatar: '🐻‍❄️' })}>🐻‍❄️</Button>
+              <Divider />
+              <Button onClick={() => setProfile({ ...profile, avatar: '🐝' })}>🐝</Button>
+              <Divider />
+              <Button onClick={() => setProfile({ ...profile, avatar: '🦁' })}>🦁</Button>
+              <Divider />
+              <Button onClick={() => setProfile({ ...profile, avatar: '🙀' })}>🙀</Button>
+              <Divider />
+              <Button onClick={() => setProfile({ ...profile, avatar: '🐔' })}>🐔</Button>
+              <Divider />
+              <Button onClick={() => setProfile({ ...profile, avatar: '🐮' })}>🐮</Button>
+            </ButtonGroup>
+          </Grid>
+        </Grid>
+      </Sheet>
     </Box>,
     <Box fontWeight="sm">
       <Box sx={{ pt: 1, pb: 1 }}>
@@ -288,44 +366,84 @@ function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
     // }
     return global
   })
+  const [profile, setProfile] = useState<ProfileConfig>(() => {
+    const { profile } = getAppConfig()
+    return profile
+  })
 
   const onTabClick = (tabIndex: number): void => {
     setCurrentTab(tabIndex)
   }
-  const handleSaveGlobals = (): void => {
-    if (global.enabled && !global.signature.trim().length) {
-      showAlertInfo(
-        {
-          visible: true,
-          msg: `Signature can't be empty as top-level configuration if it is enabled.`,
-          type: 'warning',
-        },
-        setAlertInfo,
-      )
-      return
+  const handleSave = (currentTab: ADVANCED): void => {
+    switch (currentTab) {
+      case ADVANCED.PROFILE: {
+        if (!profile.avatar.trim().length) {
+          showAlertInfo(
+            {
+              visible: true,
+              msg: `It can't be empty!`,
+              type: 'warning',
+            },
+            setAlertInfo,
+          )
+          return
+        }
+
+        const appConfig = getAppConfig()
+        localStorage.setItem(FASTER_PR_CONFIG, JSON.stringify({ ...appConfig, profile }))
+        // cb to parent modal
+        showAlertInfo(
+          {
+            visible: true,
+            msg: 'Saved!',
+            type: 'success',
+          },
+          setAlertInfo,
+        )
+        break
+      }
+      case ADVANCED.GLOBALS: {
+        if (global.enabled && !global.signature.trim().length) {
+          showAlertInfo(
+            {
+              visible: true,
+              msg: `Signature can't be empty as top-level configuration if it is enabled.`,
+              type: 'warning',
+            },
+            setAlertInfo,
+          )
+          return
+        }
+
+        const appConfig = getAppConfig()
+        localStorage.setItem(FASTER_PR_CONFIG, JSON.stringify({ ...appConfig, global }))
+        // cb to parent modal
+        showAlertInfo(
+          {
+            visible: true,
+            msg: 'Saved!',
+            type: 'success',
+          },
+          setAlertInfo,
+        )
+        break
+      }
     }
-
-    // cb to parent modal
-    localStorage.setItem(FASTER_PR_CONFIG, JSON.stringify({ global }))
-
-    showAlertInfo(
-      {
-        visible: true,
-        msg: 'Saved!',
-        type: 'success',
-      },
-      setAlertInfo,
-    )
   }
-  const data = getDetails(global, setGlobal)
+  const data = getDetails(global, profile, setGlobal, setProfile)
 
   return (
     <Modal keepMounted className={styles.main_component} open={open} onClose={handleClose}>
-      <ModalDialog variant="outlined" role="alertdialog" size="md" sx={{ height: 600 }}>
+      <ModalDialog variant="outlined" role="alertdialog" size="md" sx={{ height: 600, width: 800 }}>
         <Typography id="manage-integrations" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
           My setup
         </Typography>
-        <CustomTabs orientation="horizontal" tabs={{ headers: HEADERS, data }} onClick={onTabClick} />
+        <CustomTabs
+          orientation="horizontal"
+          tabs={{ headers: HEADERS, data }}
+          tabsListSx={{ width: 500, minWidth: 500 }}
+          onClick={onTabClick}
+        />
         {currentTab === ADVANCED.INTEGRATIONS ? (
           <Box sx={{ left: 18, bottom: 10, position: 'absolute' }}>
             <Tooltip
@@ -365,7 +483,9 @@ function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
                 [esc]
               </Typography>
             </Button>
-            {currentTab === ADVANCED.GLOBALS && <Button onClick={handleSaveGlobals}>Save</Button>}
+            {(currentTab === ADVANCED.GLOBALS || currentTab === ADVANCED.PROFILE) && (
+              <Button onClick={() => handleSave(currentTab)}>Save</Button>
+            )}
           </Stack>
         </Stack>
       </ModalDialog>

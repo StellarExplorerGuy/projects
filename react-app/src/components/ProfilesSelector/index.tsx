@@ -1,11 +1,11 @@
 import { ItemType } from 'types'
 import { FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
 
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Chip from '@mui/joy/Chip'
 import Option from '@mui/joy/Option'
 import Select from '@mui/joy/Select'
 import { updateKey } from 'utils/data'
+import ProfileAvatar from 'components/ProfileAvatar'
 
 interface ProfilesSelectorProps {
   dialogValue: ItemType
@@ -30,7 +30,7 @@ function ProfilesSelector({ dialogValue, data, setDialogValue }: ProfilesSelecto
       color="primary"
       placeholder="Select a profile"
       value={dialogValue.profile}
-      startDecorator={<AccountCircleIcon color="primary" fontSize="small"  />}
+      startDecorator={<ProfileAvatar size={{ height: 24, width: 24, fontSize: 16 }} />}
       endDecorator={
         <Chip size="sm" color="primary" variant="soft">
           {data.length} {data.length > 1 ? 'profiles' : 'profile'}

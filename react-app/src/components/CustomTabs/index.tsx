@@ -6,17 +6,19 @@ import TabPanel from '@mui/joy/TabPanel'
 interface CustomTabsProps {
   tabs: { headers: string[]; data: JSX.Element[] }
   orientation?: 'horizontal' | 'vertical'
+  tabsListSx?: { width: number; minWidth: number }
   onClick?: (index: number) => void
 }
 
 export default function CustomTabs({
   tabs,
   orientation = 'vertical',
-  onClick = (index: number) => {},
+  tabsListSx = { width: 270, minWidth: 270 },
+  onClick = (_: number) => {},
 }: CustomTabsProps) {
   return (
     <Tabs aria-label="tabs" orientation={orientation} size="md" onChange={(_, value) => onClick(value as number)}>
-      <TabList sx={{ width: 270, minWidth: 270 }}>
+      <TabList sx={tabsListSx}>
         {tabs.headers.map((header) => (
           <Tab variant="plain" color="primary" key={header}>
             {header}

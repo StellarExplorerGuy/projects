@@ -1,6 +1,14 @@
 import { UniqueIdentifier } from '@dnd-kit/core'
 
-import { DEFAULT_PROFILE, BRANCH_PREFIXES, TEMPLATE_KEY, SERVICE, FASTER_PR_CONFIG, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from './constants'
+import {
+  DEFAULT_PROFILE,
+  BRANCH_PREFIXES,
+  TEMPLATE_KEY,
+  SERVICE,
+  FASTER_PR_CONFIG,
+  FASTER_PR_PROFILE,
+  FASTER_PR_PROFILE_KEY,
+} from './constants'
 import { AppConfig } from 'types'
 
 type CommitBody = {
@@ -114,6 +122,10 @@ export const DEFAULT_GLOBAL_CONFIG = () => ({
   checked: false,
 })
 
+export const DEFAULT_PROFILE_CONFIG = () => ({
+  avatar: '🦊',
+})
+
 export const showAlertInfo = (
   data: {
     visible: boolean
@@ -157,16 +169,16 @@ export const getAppConfig = (): AppConfig => {
 
     if (!localConfig) {
       updateLocalStorage(FASTER_PR_CONFIG, { global: DEFAULT_GLOBAL_CONFIG() })
-      return { global: DEFAULT_GLOBAL_CONFIG() }
+      return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
     }
     const appConfig = JSON.parse(localConfig) as AppConfig
-    if (!appConfig.global) {
+    if (!appConfig.global || !appConfig.profile) {
       updateLocalStorage(FASTER_PR_CONFIG, { global: DEFAULT_GLOBAL_CONFIG() })
-      return { global: DEFAULT_GLOBAL_CONFIG() }
+      return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
     }
     return appConfig
   } catch (error) {
-    return { global: DEFAULT_GLOBAL_CONFIG() }
+    return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
   }
 }
 
