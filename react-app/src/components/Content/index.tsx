@@ -47,7 +47,7 @@ const getCommonDetails = (global: GlobalConfig, dialogValue: ItemType) => {
       </Typography>
     )
     common.sx = { pointerEvents: 'none', opacity: 0.6 }
-    common.dialogValue.checked = !!global.signature
+    common.dialogValue.checked = false
     common.dialogValue.signature = global.signature
   }
 
