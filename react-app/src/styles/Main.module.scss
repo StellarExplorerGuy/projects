@@ -1,11 +1,8 @@
 .main_component {
 
+    ::selection,
     ::-moz-selection {
-        background: var(--variant-softBg, var(--joy-palette-primary-softBg, var(--joy-palette-primary-100, #E3EFFB)));
-    }
-
-    ::selection {
-        background: var(--variant-softBg, var(--joy-palette-primary-softBg, var(--joy-palette-primary-100, #E3EFFB)));
+        background: var(--variant-softBg, #0b6bcb71);
     }
 
     // For Modal GITLAB specific fix (in GITHUB all good)
