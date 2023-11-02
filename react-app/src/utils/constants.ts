@@ -13,6 +13,9 @@ export const TEXT = {
     INFO: "You can switch profiles, create new ones, or use the default profile. Configurations are stored in your browser storage on a per-page basis (e.g., GitHub and Gitlab have their own configurations). Remember to click 'Save' to apply any changes.",
     USERNAME_PLACEHOLDER: 'John Doe john.doe@email.com',
   },
+  ALERT: {
+    COMMENTS_HIDDEN: `You can't edit the PR template with hidden comments in preview mode. Finish your template changes first, then hide comments to avoid losing them.`,
+  },
   LABEL: {
     DEMO_VIEW: 'Demo view',
   },
@@ -60,4 +63,9 @@ export enum SERVICE {
 export enum ADVANCED {
   INTEGRATIONS,
   GLOBALS,
+}
+
+export const PREVIEW_MD = {
+  ENABLED: { hideToolbar: false, visible: true, editable: false },
+  DISABLED: { hideToolbar: true, visible: true, editable: true },
 }

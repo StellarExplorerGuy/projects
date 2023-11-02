@@ -12,7 +12,7 @@ import NewProfile from 'components/modals/NewProfile'
 import ResetProfile from 'components/modals/ResetProfile'
 import Tip from 'components/modals/Tip'
 import { DIALOG, GlobalConfig, ItemType } from 'types'
-import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, TEXT } from 'utils/constants'
+import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, PREVIEW_MD, TEXT } from 'utils/constants'
 import { clearComments, defaultProfile, getAppConfig, showAlertInfo, updateKey, updateLocalStorage } from 'utils/data'
 
 import { UniqueIdentifier } from '@dnd-kit/core'
@@ -36,22 +36,37 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import * as Accordion from '@radix-ui/react-accordion'
 import ManageIntegrations from 'components/modals/ManageIntegrations'
+import { useEffect, useRef } from 'react'
 
 const getCommonDetails = (global: GlobalConfig, dialogValue: ItemType) => {
-  const common = { title: <Typography>Common</Typography>, sx: {}, dialogValue: { ...dialogValue } }
+  const params = { title: <Typography>Common</Typography>, sx: {}, dialogValue: { ...dialogValue } }
 
   if (global.enabled) {
-    common.title = (
+    params.title = (
       <Typography>
         Common <Typography color="warning">[DISABLED - as your are using top-level configuration 🔧]</Typography>
       </Typography>
     )
-    common.sx = { pointerEvents: 'none', opacity: 0.6 }
-    common.dialogValue.checked = false
-    common.dialogValue.signature = global.signature
+    params.sx = { pointerEvents: 'none', opacity: 0.6 }
+    params.dialogValue.checked = false
+    params.dialogValue.signature = global.signature
   }
 
-  return { ...common }
+  return { ...params }
+}
+
+const getPrTemplate = (dialogValue: ItemType) => {
+  const params = {
+    sx: {},
+    config: PREVIEW_MD.DISABLED,
+    value: dialogValue.pr,
+  }
+  if (dialogValue.slimPrChecked) {
+    params.sx = { opacity: 0.9, cursor: 'not-allowed' }
+    params.config = PREVIEW_MD.ENABLED
+    params.value = clearComments(dialogValue.pr)
+  }
+  return { ...params }
 }
 
 interface ContentProps {
@@ -85,6 +100,23 @@ function Content({
   setDialogValue,
   handleOpen,
 }: ContentProps): JSX.Element {
+  const previousSlimPrChecked = useRef(false)
+
+  useEffect(() => {
+    // PR notification if comments are hidden
+    if (dialogValue.slimPrChecked && previousSlimPrChecked.current !== dialogValue.slimPrChecked) {
+      showAlertInfo(
+        {
+          visible: true,
+          msg: TEXT.ALERT.COMMENTS_HIDDEN,
+          type: 'warning',
+        },
+        setAlertInfo,
+      )
+    }
+    previousSlimPrChecked.current = dialogValue.slimPrChecked
+  }, [dialogValue.slimPrChecked])
+
   const { global } = getAppConfig()
   const handleNewProfileSubmit = (input: string): void => {
     const defaultData = defaultProfile()
@@ -235,6 +267,7 @@ function Content({
 
   const isProfileEnabled = dialogValue.profile === DEFAULT_PROFILE
   const common = getCommonDetails(global, dialogValue)
+  const prTemplate = getPrTemplate(dialogValue)
 
   return (
     <Box
@@ -519,6 +552,7 @@ function Content({
                       </Box>
                       <InfoIconButton text={TEXT.TOOLTIP.COMMIT_TEMPLATE} />
                       <PreviewMD
+                        config={PREVIEW_MD.DISABLED}
                         field="commit"
                         value={dialogValue.commit}
                         dialogValue={dialogValue}
@@ -541,7 +575,7 @@ function Content({
                     </Grid>
                     <Grid xs={11}>
                       <Box sx={{ float: 'left', pt: 0.5, mb: 1 }}>
-                        <FormLabel>Comments visibility</FormLabel>
+                        <FormLabel>Comments hidden</FormLabel>
                       </Box>
                       <InfoIconButton text="If you activate this feature, comments will be hidden in the PR description please toggle to see the changes. Here you can see the preview only." />
                       <FormControl>
@@ -554,12 +588,15 @@ function Content({
                       </FormControl>
                     </Grid>
                     <Grid xs={12}>
-                      <PreviewMD
-                        field="pr"
-                        value={dialogValue.slimPrChecked ? clearComments(dialogValue.pr) : dialogValue.pr}
-                        dialogValue={dialogValue}
-                        setDialogValue={setDialogValue}
-                      />
+                      <Box sx={prTemplate.sx}>
+                        <PreviewMD
+                          config={prTemplate.config}
+                          field="pr"
+                          value={prTemplate.value}
+                          dialogValue={dialogValue}
+                          setDialogValue={setDialogValue}
+                        />
+                      </Box>
                     </Grid>
                   </Grid>
                 </AccordionContent>
