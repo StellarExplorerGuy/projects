@@ -147,7 +147,7 @@ export const showAlertInfo = (
       msg: '',
       type: 'success',
     })
-  }, 5000)
+  }, 6000)
 }
 
 export const updateLocalStorage = (key: string, data: any): void => {

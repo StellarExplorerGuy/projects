@@ -14,7 +14,7 @@ export const TEXT = {
     USERNAME_PLACEHOLDER: 'John Doe john.doe@email.com',
   },
   ALERT: {
-    COMMENTS_HIDDEN: `You can't edit the PR template with hidden comments in preview mode. Finish your template changes first, then hide comments to avoid losing them.`,
+    COMMENTS_HIDDEN: `You can't edit the PR template with hidden comments in preview mode. Finish template changes first, then hide comments to prevent any loss related to comments.`,
   },
   LABEL: {
     DEMO_VIEW: 'Demo view',
