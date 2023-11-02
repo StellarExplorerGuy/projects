@@ -13,6 +13,9 @@ export const TEXT = {
     INFO: "You can switch profiles, create new ones, or use the default profile. Configurations are stored in your browser storage on a per-page basis (e.g., GitHub and Gitlab have their own configurations). Remember to click 'Save' to apply any changes.",
     USERNAME_PLACEHOLDER: 'John Doe john.doe@email.com',
   },
+  LABEL: {
+    DEMO_VIEW: 'Demo view',
+  },
   TOOLTIP: {
     COMMIT_TEMPLATE: templateTooltip('commit'),
     PR_TEMPLATE: templateTooltip('PR'),

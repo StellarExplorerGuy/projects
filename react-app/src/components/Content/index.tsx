@@ -449,7 +449,7 @@ function Content({
                   <Grid container>
                     <Grid xs={3}>
                       <Box sx={{ float: 'left', pt: 0.5 }}>
-                        <FormItem text="Demo view" />
+                        <FormItem text={TEXT.LABEL.DEMO_VIEW} />
                       </Box>
                       <InfoIconButton text="Dynamic preview of the branch that is shown below as example." />
                       <Box sx={{ pt: 1 }}>
@@ -515,7 +515,7 @@ function Content({
                   <Grid container>
                     <Grid xs={12}>
                       <Box sx={{ float: 'left', pt: 0.5 }}>
-                        <FormItem text="Demo view" />
+                        <FormItem text={TEXT.LABEL.DEMO_VIEW} />
                       </Box>
                       <InfoIconButton text={TEXT.TOOLTIP.COMMIT_TEMPLATE} />
                       <PreviewMD
@@ -535,7 +535,7 @@ function Content({
                   <Grid container>
                     <Grid xs={1}>
                       <Box sx={{ float: 'left', pt: 0.5, mb: 1 }}>
-                        <FormItem text="Demo view" />
+                        <FormItem text={TEXT.LABEL.DEMO_VIEW} />
                       </Box>
                       <InfoIconButton text={TEXT.TOOLTIP.PR_TEMPLATE} />
                     </Grid>
