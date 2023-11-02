@@ -1,8 +1,16 @@
 .wrapper {
-    height: fit-content;
     min-height: 500px;
 
     pre>code {
         color: var(--color-fg-default);
+    }
+
+    // style for custom buttons
+    button:nth-of-type(17),
+    button:nth-of-type(18),
+    button:nth-of-type(19),
+    button:nth-of-type(20),
+    button:nth-of-type(21) {
+        width: fit-content;
     }
 }

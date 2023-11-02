@@ -1,6 +1,14 @@
 import { UniqueIdentifier } from '@dnd-kit/core'
 
-import { DEFAULT_PROFILE, BRANCH_PREFIXES, TEMPLATE_KEY, SERVICE, FASTER_PR_CONFIG } from './constants'
+import {
+  DEFAULT_PROFILE,
+  BRANCH_PREFIXES,
+  TEMPLATE_KEY,
+  SERVICE,
+  FASTER_PR_CONFIG,
+  FASTER_PR_PROFILE,
+  FASTER_PR_PROFILE_KEY,
+} from './constants'
 import { AppConfig } from 'types'
 
 type CommitBody = {
@@ -108,7 +116,15 @@ export const defaultProfile = () => {
     slimPrChecked: false,
   }
 }
-export const DEFAULT_INTEGRATIONS = () => [true, true, true, true]
+export const DEFAULT_GLOBAL_CONFIG = () => ({
+  enabled: false,
+  signature: '',
+  checked: false,
+})
+
+export const DEFAULT_PROFILE_CONFIG = () => ({
+  avatar: '🦊',
+})
 
 export const showAlertInfo = (
   data: {
@@ -131,7 +147,7 @@ export const showAlertInfo = (
       msg: '',
       type: 'success',
     })
-  }, 5000)
+  }, 6000)
 }
 
 export const updateLocalStorage = (key: string, data: any): void => {
@@ -146,19 +162,23 @@ export const updateKey = (key: string, data: string): void => {
     localStorage.setItem(key, JSON.stringify(data))
   } catch (error) {}
 }
-// unused for now
+
 export const getAppConfig = (): AppConfig => {
   try {
     const localConfig = localStorage.getItem(FASTER_PR_CONFIG)!
 
     if (!localConfig) {
-      updateLocalStorage(FASTER_PR_CONFIG, { integrations: DEFAULT_INTEGRATIONS() })
-      return { integrations: DEFAULT_INTEGRATIONS() }
+      updateLocalStorage(FASTER_PR_CONFIG, { global: DEFAULT_GLOBAL_CONFIG() })
+      return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
     }
-    const AppConfig = JSON.parse(localConfig) as AppConfig
-    return AppConfig
+    const appConfig = JSON.parse(localConfig) as AppConfig
+    if (!appConfig.global || !appConfig.profile) {
+      updateLocalStorage(FASTER_PR_CONFIG, { global: DEFAULT_GLOBAL_CONFIG() })
+      return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
+    }
+    return appConfig
   } catch (error) {
-    return { integrations: DEFAULT_INTEGRATIONS() }
+    return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
   }
 }
 
@@ -190,8 +210,6 @@ const jiraCompany1Regex = /^https:\/\/jsw(?:[a-zA-Z0-9.-]+)?.com\/[a-zA-Z0-9.-]+
 const mondayDefaultRegex = /^https:\/\/[a-zA-Z0-9.-]+\.monday\.com\/boards\/\d+\/pulses\/\d+/
 
 export const getService = (): SERVICE => {
-  // const { integrations } = getAppConfig()
-  // const [github, gitlab, trello, jira] = integrations
   const url = window.location.href
 
   if (githubRegex.test(url)) {
@@ -222,4 +240,18 @@ export const getConfig = () => {
     config.panelMaxWidth = 520
   }
   return config
+}
+
+export function getProfileData() {
+  try {
+    const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY)
+    const allProfiles = getLocalStorage(FASTER_PR_PROFILE)
+
+    if (allProfiles.profiles) {
+      return { selected: profileKey, list: allProfiles.profiles }
+    }
+    return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] }
+  } catch (error) {
+    return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] }
+  }
 }

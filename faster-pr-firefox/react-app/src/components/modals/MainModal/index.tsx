@@ -1,7 +1,7 @@
 import ModeToggle from 'components/ModeToggle'
 import { DIALOG, ItemType } from 'types'
 import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, HOME_URL } from 'utils/constants'
-import { decodeUrl, defaultProfile, showAlertInfo, updateLocalStorage } from 'utils/data'
+import { decodeUrl, defaultProfile, getAppConfig, showAlertInfo, updateLocalStorage } from 'utils/data'
 
 import { useState } from 'react'
 
@@ -63,8 +63,20 @@ function MainModal({ alertInfo, open, setClose, setAlertInfo }: any): JSX.Elemen
 
     const localProfile = localStorage.getItem(FASTER_PR_PROFILE)!
     let selectedProfile = null
+
+    const { global } = getAppConfig()
+    // handle no config case
     if (!localKey || (!localProfile && !JSON.parse(localProfile)?.profile)) {
       selectedProfile = { ...defaultProfile() }
+
+      const commitConfig = {
+        checked: selectedProfile.checked,
+        signature: selectedProfile.signature,
+      }
+      if (global.enabled) {
+        commitConfig.checked = !!global.signature
+        commitConfig.signature = global.signature
+      }
 
       window.localStorage.setItem(FASTER_PR_PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE))
       window.localStorage.setItem(
@@ -87,10 +99,10 @@ function MainModal({ alertInfo, open, setClose, setAlertInfo }: any): JSX.Elemen
       return {
         profiles: selectedProfile.profiles,
         profile: selectedProfile.profile,
-        signature: selectedProfile.signature,
+        signature: commitConfig.signature,
         branchSeparator: selectedProfile.branchSeparator,
         branchPrefixes: selectedProfile.branchPrefixes,
-        checked: selectedProfile.checked,
+        checked: commitConfig.checked,
         uppercase: selectedProfile.uppercase,
         commit: selectedProfile.commit,
         pr: selectedProfile.pr,
@@ -100,13 +112,23 @@ function MainModal({ alertInfo, open, setClose, setAlertInfo }: any): JSX.Elemen
 
     const allProfiles = JSON.parse(localProfile)
     selectedProfile = allProfiles[profileKey]
+
+    const commitConfig = {
+      checked: selectedProfile.checked,
+      signature: selectedProfile.signature,
+    }
+    if (global.enabled) {
+      commitConfig.checked = !!global.signature
+      commitConfig.signature = global.signature
+    }
+
     return {
       profiles: allProfiles.profiles ? allProfiles.profiles : [DEFAULT_PROFILE],
       profile: selectedProfile.profile,
-      signature: selectedProfile.signature,
+      signature: commitConfig.signature,
       branchSeparator: selectedProfile.branchSeparator,
       branchPrefixes: selectedProfile.branchPrefixes,
-      checked: selectedProfile.checked,
+      checked: commitConfig.checked,
       uppercase: selectedProfile.uppercase,
       commit: selectedProfile.commit,
       pr: selectedProfile.pr,
@@ -147,12 +169,12 @@ function MainModal({ alertInfo, open, setClose, setAlertInfo }: any): JSX.Elemen
           alignItems="flex-end"
           spacing={2}
         >
-          <Grid xs={2}>
+          <Grid xs={3}>
             <Typography id="basic-modal-dialog-title" component="h2" level="inherit" fontSize="1.25em" mb="0.25em">
-              Customization
+              Customization 🎨
             </Typography>
           </Grid>
-          <Grid xs={10}>
+          <Grid xs={9}>
             <Grid container direction="row" justifyContent="flex-end" alignItems="flex-start">
               <IconButton
                 sx={{

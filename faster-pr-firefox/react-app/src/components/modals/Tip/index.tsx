@@ -3,7 +3,7 @@ import Button from '@mui/joy/Button'
 import Modal from '@mui/joy/Modal'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Typography from '@mui/joy/Typography'
-import TabsVertical from 'components/TabsVertical'
+import CustomTabs from 'components/CustomTabs'
 import { TIP_HEADERS, getTips } from './tips-content'
 import styles from '../../../styles/Main.module.scss'
 
@@ -22,14 +22,11 @@ function Tip({ open, handleClose }: TipProps) {
         </Typography>
         <Card variant="soft" sx={{ p: 0, mt: 0.5, mb: 2 }}>
           <CardContent>
-            <TabsVertical tabs={{ headers: TIP_HEADERS, data }} />
+            <CustomTabs tabs={{ headers: TIP_HEADERS, data }} />
           </CardContent>
         </Card>
         <Box
           sx={{
-            display: 'flex',
-            gap: 1,
-            justifyContent: 'flex-end',
             pt: 2,
             bottom: 10,
             right: 10,

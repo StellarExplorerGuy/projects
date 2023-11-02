@@ -9,14 +9,23 @@ import MenuButton from '@mui/joy/MenuButton'
 import Menu from '@mui/joy/Menu'
 import MenuItem from '@mui/joy/MenuItem'
 import Dropdown from '@mui/joy/Dropdown'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Card from '@mui/joy/Card'
 import Tabs, { tabsClasses } from '@mui/material/Tabs'
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles'
 
 import Tab from '@mui/material/Tab'
 
-import { clearComments, getCommit, getConfig, getLocalStorage, getPR, getService, updateKey } from 'utils/data'
+import {
+  clearComments,
+  getAppConfig,
+  getCommit,
+  getConfig,
+  getLocalStorage,
+  getPR,
+  getProfileData,
+  getService,
+  updateKey,
+} from 'utils/data'
 import { Box, Alert, Grid, Typography } from '@mui/joy'
 import {
   FASTER_PR_PROFILE_KEY,
@@ -26,6 +35,8 @@ import {
   SERVICE,
 } from 'utils/constants'
 import { getDetails } from 'utils/service.adapter'
+import { GlobalConfig } from 'types'
+import ProfileAvatar from 'components/ProfileAvatar'
 
 function onButtonClick(event: { target: any }) {
   const button = event.target
@@ -46,20 +57,6 @@ function getPrefixesTabs(): string[] {
     return BRANCH_PREFIXES
   } catch (error) {
     return BRANCH_PREFIXES
-  }
-}
-
-function getProfileData() {
-  try {
-    const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY)
-    const allProfiles = getLocalStorage(FASTER_PR_PROFILE)
-
-    if (allProfiles.profiles) {
-      return { selected: profileKey, list: allProfiles.profiles }
-    }
-    return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] }
-  } catch (error) {
-    return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] }
   }
 }
 
@@ -106,21 +103,32 @@ function formatIssueLink(
   return text
 }
 
+const getSignature = (user: string, profile: any, globalConfig: GlobalConfig): string => {
+  let signature = user
+
+  if (globalConfig.enabled) {
+    signature = globalConfig.signature || user
+  } else if (!profile.checked && profile.signature) {
+    signature = profile.signature
+  }
+
+  return signature
+}
+
 function processCommit(type: any, issue: any, repoDetails: { user: any; repo: any }, user: any) {
   try {
     const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY)
     const allProfiles = getLocalStorage(FASTER_PR_PROFILE)
     const profile = allProfiles[profileKey]
     if (profile) {
-      let signature = user
-
-      if (!profile.checked && profile.signature) {
-        signature = profile.signature
-      }
+      const { global } = getAppConfig()
+      const signature = getSignature(user, profile, global)
 
       const currentService = getService()
       let formattedCommit
-      if ([SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1, SERVICE.MONDAY_DEFAULT].includes(currentService)) {
+      if (
+        [SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1, SERVICE.MONDAY_DEFAULT].includes(currentService)
+      ) {
         formattedCommit = formatIssueLink(repoDetails, profile.commit, type, signature)
       } else {
         formattedCommit = profile.commit
@@ -148,15 +156,14 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
     const allProfiles = getLocalStorage(FASTER_PR_PROFILE)
     const profile = allProfiles[profileKey]
     if (profile) {
-      let signature = user
-
-      if (!profile.checked && profile.signature) {
-        signature = profile.signature
-      }
+      const { global } = getAppConfig()
+      const signature = getSignature(user, profile, global)
 
       const currentService = getService()
       let formattedPR
-      if ([SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1, SERVICE.MONDAY_DEFAULT].includes(currentService)) {
+      if (
+        [SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1, SERVICE.MONDAY_DEFAULT].includes(currentService)
+      ) {
         formattedPR = formatIssueLink(repoDetails, profile.pr, type, signature)
       } else {
         formattedPR = profile.pr
@@ -384,7 +391,9 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               borderTop: '1px solid var(--ButtonGroup-separatorColor)',
               borderBottom: '1px solid var(--ButtonGroup-separatorColor)',
             }}
-            startDecorator={<AccountCircleIcon color="primary" fontSize="small" />}
+            startDecorator={
+              <ProfileAvatar/>
+            }
           >
             <Typography sx={{ width: 80 }} level="body-sm" noWrap>
               {profilesData.selected}
