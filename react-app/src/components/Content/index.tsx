@@ -484,7 +484,7 @@ function Content({
                               type="text"
                               variant="outlined"
                               color="primary"
-                              placeholder="e.g. '/', ':', '#'"
+                              placeholder="e.g. '/', ':', '#', '~', '|'"
                               value={dialogValue.branchSeparator}
                               onChange={(event) =>
                                 setDialogValue({ ...dialogValue, branchSeparator: event.target.value.trim() })
