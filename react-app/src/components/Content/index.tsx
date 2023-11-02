@@ -517,7 +517,7 @@ function Content({
                       <Box sx={{ float: 'left', pt: 0.5 }}>
                         <FormItem text="Demo view" />
                       </Box>
-                      <InfoIconButton text="Commit body where uppercase text is used to be update with actual value. Dynamic keys: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE." />
+                      <InfoIconButton text={TEXT.TOOLTIP.COMMIT_TEMPLATE} />
                       <PreviewMD
                         field="commit"
                         value={dialogValue.commit}
@@ -537,7 +537,7 @@ function Content({
                       <Box sx={{ float: 'left', pt: 0.5, mb: 1 }}>
                         <FormItem text="Demo view" />
                       </Box>
-                      <InfoIconButton text="PR body where uppercase text is used to be update with actual value. Dynamic keys: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE." />
+                      <InfoIconButton text={TEXT.TOOLTIP.PR_TEMPLATE} />
                     </Grid>
                     <Grid xs={11}>
                       <Box sx={{ float: 'left', pt: 0.5, mb: 1 }}>

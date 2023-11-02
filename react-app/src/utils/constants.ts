@@ -5,12 +5,17 @@ export const FASTER_PR_PROFILE_KEY = 'FASTER_PR_KEY'
 export const FASTER_PR_PROFILE = 'FASTER_PR_PROFILE'
 export const DEFAULT_USER = 'Name Surname <name.surname@org.com>'
 
+const templateTooltip = (text: string) =>
+  `The ${text} body where by replacing dynamic keys with their actual values from the template. The dynamic keys you can use are found in the toolbar below: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE.`
+
 export const TEXT = {
   MAIN: {
     INFO: "You can switch profiles, create new ones, or use the default profile. Configurations are stored in your browser storage on a per-page basis (e.g., GitHub and Gitlab have their own configurations). Remember to click 'Save' to apply any changes.",
     USERNAME_PLACEHOLDER: 'John Doe john.doe@email.com',
   },
   TOOLTIP: {
+    COMMIT_TEMPLATE: templateTooltip('commit'),
+    PR_TEMPLATE: templateTooltip('PR'),
     SIGNATURE: 'Define signature for your commit and PR templates.',
   },
   MANAGE_INTEGRATIONS: {
