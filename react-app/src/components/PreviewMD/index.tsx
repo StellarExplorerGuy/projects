@@ -1,4 +1,4 @@
-import { ItemType } from 'types'
+import { ItemType } from '../../types'
 
 import MarkdownEditor from '@uiw/react-markdown-editor'
 

@@ -1,7 +1,7 @@
-import ModeToggle from 'components/ModeToggle'
-import { DIALOG, ItemType } from 'types'
-import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, HOME_URL } from 'utils/constants'
-import { decodeUrl, defaultProfile, getAppConfig, showAlertInfo, updateLocalStorage } from 'utils/data'
+import ModeToggle from '../../ModeToggle'
+import { DIALOG, ItemType } from '../../../types'
+import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, HOME_URL } from '../../../utils/constants'
+import { decodeUrl, defaultProfile, getAppConfig, showAlertInfo, updateLocalStorage } from '../../../utils/data'
 
 import { useState } from 'react'
 
@@ -13,7 +13,7 @@ import Grid from '@mui/joy/Grid'
 import IconButton from '@mui/joy/IconButton'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
-import Content from 'components/Content'
+import Content from '../../Content'
 import styles from '../../../styles/Main.module.scss'
 
 const save = (

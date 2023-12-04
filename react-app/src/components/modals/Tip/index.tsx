@@ -3,7 +3,7 @@ import Button from '@mui/joy/Button'
 import Modal from '@mui/joy/Modal'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Typography from '@mui/joy/Typography'
-import CustomTabs from 'components/CustomTabs'
+import CustomTabs from '../../CustomTabs'
 import { TIP_HEADERS, getTips } from './tips-content'
 import styles from '../../../styles/Main.module.scss'
 

@@ -1,11 +1,11 @@
-import { ItemType } from 'types'
-import { FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from 'utils/constants'
+import { ItemType } from '../../types'
+import { FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY } from '../../utils/constants'
 
 import Chip from '@mui/joy/Chip'
 import Option from '@mui/joy/Option'
 import Select from '@mui/joy/Select'
-import { updateKey } from 'utils/data'
-import ProfileAvatar from 'components/ProfileAvatar'
+import { updateKey } from '../../utils/data'
+import ProfileAvatar from '../ProfileAvatar'
 
 interface ProfilesSelectorProps {
   dialogValue: ItemType

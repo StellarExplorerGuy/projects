@@ -25,7 +25,7 @@ import {
   getProfileData,
   getService,
   updateKey,
-} from 'utils/data'
+} from '../../utils/data'
 import { Box, Alert, Grid, Typography } from '@mui/joy'
 import {
   FASTER_PR_PROFILE_KEY,
@@ -33,10 +33,10 @@ import {
   BRANCH_PREFIXES,
   DEFAULT_LOCAL_STORAGE_ALERT,
   SERVICE,
-} from 'utils/constants'
-import { getDetails } from 'utils/service.adapter'
-import { GlobalConfig } from 'types'
-import ProfileAvatar from 'components/ProfileAvatar'
+} from '../../utils/constants'
+import { getDetails } from '../../utils/service.adapter'
+import { GlobalConfig } from '../../types'
+import ProfileAvatar from '../ProfileAvatar'
 
 function onButtonClick(event: { target: any }) {
   const button = event.target

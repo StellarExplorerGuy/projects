@@ -2,8 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 import App from './App'
-import { SERVICE } from 'utils/constants'
-import { getService } from 'utils/data'
+import { SERVICE } from './utils/constants'
+import { getService } from './utils/data'
 
 const FASTER_PR_SCRIPT_ID = 'faster-pr-1we4'
 

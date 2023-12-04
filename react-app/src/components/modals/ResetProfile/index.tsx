@@ -1,4 +1,4 @@
-import { ItemType } from 'types'
+import { ItemType } from '../../../types'
 
 import Button from '@mui/joy/Button'
 import Modal from '@mui/joy/Modal'

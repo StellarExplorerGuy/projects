@@ -43,12 +43,12 @@ next-env.d.ts
 extension/content.js.LICENSE.txt
 extension/service-worker.js
 extension/service-worker2.js
-extension/onboarding2.js
+extension/*js
 extension/onboarding/onboarding-page.html
 extension/128.png
 extension/assets/*.css
 extension/onboarding-page.html
 firefox/assets/*.css
 firefox/onboarding-page.html
-firefox/service-worker.js
-chrome/service-worker.js
+firefox/*.js
+chrome/*.js
