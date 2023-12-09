@@ -21,22 +21,26 @@ cd react-app && npm run build
 cd ../extension
 
 # Remove existing files in chrome and firefox folders
-rm -f ../chrome/*.js
-# rm -f ../chrome/content.js
-# rm -f ../chrome/service-worker2.js
-rm -f ../firefox/*.js
-# rm -f ../firefox/content.js
-# rm -f ../firefox/service-worker2.js
+rm -f ../chrome/content.js
+rm -f ../chrome/service-worker2.js
+rm -f ../firefox/content.js
+rm -f ../firefox/service-worker2.js
+
+cd ..
+cd react-app
 
 # Copy
-cp *.js ../chrome/
-cp content.js ../chrome/
-cp *.js ../firefox/
-cp content.js ../firefox/
+cp dist/content.js ../chrome/
+cp dist/style.css ../chrome/
+cp dist/content.js ../firefox/
+cp dist/style.css ../firefox/
 
-# mkdir -p ../firefox/assets
-cp *.css ../firefox
-cp ../service/onboarding-page.html ../firefox/
+mkdir -p ../firefox/assets
+
+cd ..
+
+cp extension/assets/*.css firefox/assets
+cp extension/onboarding-page.html firefox/
 
 echo "Completed!"
 

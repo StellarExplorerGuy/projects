@@ -20,9 +20,3 @@ next?
 https://gitlab.com/GoJavaCoding/java/-/issues/2
 bitbucket?
 
-
-TO DO
-- add know issues > refresh the first time
-
-
-React.createElement('div', null)
