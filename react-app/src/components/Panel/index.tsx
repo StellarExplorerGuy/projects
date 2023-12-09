@@ -25,7 +25,7 @@ import {
   getProfileData,
   getService,
   updateKey,
-} from 'utils/data'
+} from '../../utils/data'
 import { Box, Alert, Grid, Typography } from '@mui/joy'
 import {
   FASTER_PR_PROFILE_KEY,
@@ -33,10 +33,10 @@ import {
   BRANCH_PREFIXES,
   DEFAULT_LOCAL_STORAGE_ALERT,
   SERVICE,
-} from 'utils/constants'
-import { getDetails } from 'utils/service.adapter'
-import { GlobalConfig } from 'types'
-import ProfileAvatar from 'components/ProfileAvatar'
+} from '../../utils/constants'
+import { getDetails } from '../../utils/service.adapter'
+import { GlobalConfig } from '../../types'
+import ProfileAvatar from '../ProfileAvatar'
 
 function onButtonClick(event: { target: any }) {
   const button = event.target
@@ -290,7 +290,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               Copy:{' '}
               <button
                 id="wjdkwed1"
-                className={styles['button']}
+                className={styles.button_card}
                 onClick={(event) => {
                   getBranchData(selectedPrefix)
                   onButtonClick(event)
@@ -299,7 +299,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
                 Branch
               </button>
               <button
-                className={styles['button']}
+                className={styles.button_card}
                 onClick={(event) => {
                   getCommitData(selectedPrefix)
                   onButtonClick(event)
@@ -308,7 +308,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
                 Commit
               </button>
               <button
-                className={styles['button']}
+                className={styles.button_card}
                 onClick={(event) => {
                   getPrData(selectedPrefix)
                   onButtonClick(event)
@@ -391,9 +391,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               borderTop: '1px solid var(--ButtonGroup-separatorColor)',
               borderBottom: '1px solid var(--ButtonGroup-separatorColor)',
             }}
-            startDecorator={
-              <ProfileAvatar/>
-            }
+            startDecorator={<ProfileAvatar />}
           >
             <Typography sx={{ width: 80 }} level="body-sm" noWrap>
               {profilesData.selected}

@@ -1,5 +1,5 @@
-import AddInput from 'components/AddInput'
-import RemovableItems from 'components/RemovableItems'
+import AddInput from '../../AddInput'
+import RemovableItems from '../../RemovableItems'
 
 import { useState } from 'react'
 
@@ -13,7 +13,7 @@ import Modal from '@mui/joy/Modal'
 import ModalDialog from '@mui/joy/ModalDialog'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
-import MessageBox from 'components/MessageBox'
+import MessageBox from '../../MessageBox'
 import styles from '../../../styles/Main.module.scss'
 
 interface CustomSeparatorButtonGroupProps {

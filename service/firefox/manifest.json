@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Faster PR",
     "description": "Personalize and copy a branch name, commit message, or pull request description (compatible with GitHub/GitLab/Trello/Jira/Monday).",
-    "version": "0.0.0.8",
+    "version": "0.0.0.9",
     "browser_specific_settings": {
         "gecko": {
             "id": "faster-pull-request-gotestingspace@gmail.com"
@@ -27,7 +27,10 @@
             ],
             "js": [
                 "content.js"
-            ]
+            ],
+            "css": [
+                "style.css"
+              ]
         }
     ]
 }

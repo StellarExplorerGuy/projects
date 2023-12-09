@@ -1,6 +1,6 @@
-/* button */
-.button,
-.button:after {
+/* button_card */
+.button_card,
+.button_card:after {
   margin-left: 8px;
   width: 140px;
   height: 47px;
@@ -18,7 +18,7 @@
   touch-action: manipulation;
 }
 
-.button:after {
+.button_card:after {
   --slice-0: inset(50% 50% 50% 50%);
   --slice-1: inset(80% -6px 0 0);
   --slice-2: inset(50% -6px 30% 0);
@@ -96,8 +96,8 @@
 
 @media (min-width: 768px) {
 
-  .button,
-  .button:after {
+  .button_card,
+  .button_card:after {
     transition: 'transform 0.3s, border 0.3s';
     cursor: pointer;
     width: 140px;
@@ -106,12 +106,12 @@
   }
 }
 
-.button.active:after {
+.button_card.active:after {
   animation: 1s glitch;
   animation-timing-function: steps(2, end);
 }
 
-.button:hover {
+.button_card:hover {
   transform: translateY(-2px);
   background: linear-gradient(45deg, transparent 5%, #2196F3 50%, #00DDEB);
 }
