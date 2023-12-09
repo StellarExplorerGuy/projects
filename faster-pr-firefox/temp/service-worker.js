@@ -1,0 +1,1 @@
+browser.runtime.onInstalled.addListener(async e=>{e.reason=="install"&&(await browser.permissions.getAll().then(r=>r.origins.indexOf("<all_urls>")>-1)||browser.tabs.create({url:"onboarding-page.html"}))});

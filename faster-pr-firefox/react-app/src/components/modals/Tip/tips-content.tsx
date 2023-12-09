@@ -1,6 +1,6 @@
 import { Box, Link, Typography } from '@mui/joy'
-import { GIT_URL } from 'utils/constants'
-import { decodeUrl } from 'utils/data'
+import { GIT_URL } from '../../../utils/constants'
+import { decodeUrl } from '../../../utils/data'
 
 export const TIP_HEADERS = [
   'Good PR',

@@ -1,4 +1,4 @@
-import FormItem from 'components/FormItem'
+import FormItem from '../FormItem'
 import * as React from 'react'
 import { UniqueIdentifier } from '@dnd-kit/core'
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'

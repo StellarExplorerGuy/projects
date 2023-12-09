@@ -4,12 +4,17 @@
 node_modules
 
 # production
-/build
 dist
 extension
-firefox/
-chrome/
+firefox/assets
+firefox/128.png
+firefox/content.js
+firefox/onboarding-page.html
+firefox/service-worker.js
 
+chrome/content.js
+chrome/style.css
+chrome/128.png
 
 # misc
 .DS_Store

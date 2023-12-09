@@ -9,7 +9,7 @@ import {
   FASTER_PR_PROFILE,
   FASTER_PR_PROFILE_KEY,
 } from './constants'
-import { AppConfig } from 'types'
+import { AppConfig } from '../types'
 
 type CommitBody = {
   type: string

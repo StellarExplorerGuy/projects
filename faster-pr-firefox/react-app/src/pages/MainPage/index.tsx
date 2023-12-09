@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Panel from 'components/Panel'
-import MainModal from 'components/modals/MainModal'
+import Panel from '../../components/Panel'
+import MainModal from '../../components/modals/MainModal'
 
 function Main(): JSX.Element {
   const [open, setClose] = useState(false)

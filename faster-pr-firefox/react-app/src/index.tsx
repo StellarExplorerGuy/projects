@@ -1,9 +1,9 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { createRoot } from 'react-dom/client';
 
 import App from './App'
-import { SERVICE } from 'utils/constants'
-import { getService } from 'utils/data'
+import { SERVICE } from './utils/constants'
+import { getService } from './utils/data'
 
 const FASTER_PR_SCRIPT_ID = 'faster-pr-1we4'
 
@@ -53,7 +53,7 @@ function process(headerElement: Element, currentService: SERVICE) {
     }
 
     headerElement.appendChild(rootElement)
-    ReactDOM.createRoot(rootElement).render(
+    createRoot(rootElement).render(
       <React.StrictMode>
         <App />
       </React.StrictMode>,
@@ -108,10 +108,10 @@ observerInit.observe(document.body, {
 ///////////
 // DEV
 // const rootElement = document.createElement('div')
-// rootElement.id = '3e23e23e-root'
+// rootElement.id = FASTER_PR_SCRIPT_ID
 // document.body.appendChild(rootElement)
 
-// const root = ReactDOM.createRoot(rootElement)
+// const root = createRoot(rootElement)
 // root.render(
 //   <React.StrictMode>
 //     <App />

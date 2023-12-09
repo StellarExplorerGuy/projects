@@ -1,9 +1,9 @@
 #!/bin/bash
 
 echo "Starting the installation..."
-cd service && npm ci
+cd service && npm i
 cd ../
-cd react-app && npm ci
+cd react-app && npm i
 
 echo "Done!"
 

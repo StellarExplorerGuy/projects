@@ -1,4 +1,4 @@
-import Main from 'pages/MainPage'
+import Main from './pages/MainPage'
 import { CssVarsProvider } from '@mui/joy/styles'
 import { ScopedCssBaseline } from '@mui/joy'
 

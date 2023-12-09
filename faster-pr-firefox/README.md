@@ -4,8 +4,8 @@ This README provides information about two shell scripts: `install.sh` and `buil
 
 ### Prerequisites:
 ```
-    "node": "18.x",
-    "npm": "8.x"
+    "node": "v20.9.0",
+    "npm": "v10.1.0"
 ```
 
 ## 1. `install.sh`

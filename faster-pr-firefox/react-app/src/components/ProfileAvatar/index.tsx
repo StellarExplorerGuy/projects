@@ -1,5 +1,5 @@
 import { Avatar } from '@mui/joy'
-import { getAppConfig } from 'utils/data'
+import { getAppConfig } from '../../utils/data'
 
 interface ProfileAvatarProps {
   size?: { height: number; width: number; fontSize: number }

@@ -1,5 +1,5 @@
-import FormItem from 'components/FormItem'
-import InfoIconButton from 'components/InfoIcon'
+import FormItem from '../FormItem'
+import InfoIconButton from '../InfoIcon'
 
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
 import { Box } from '@mui/joy'
@@ -7,8 +7,8 @@ import FormControl from '@mui/joy/FormControl'
 import Grid from '@mui/joy/Grid'
 import IconButton from '@mui/joy/IconButton'
 import Input from '@mui/joy/Input'
-import { GlobalConfig } from 'types'
-import { TEXT } from 'utils/constants'
+import { GlobalConfig } from '../../types'
+import { TEXT } from '../../utils/constants'
 
 interface SignatureProps {
   data: GlobalConfig
