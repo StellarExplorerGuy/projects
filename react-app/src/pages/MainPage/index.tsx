@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Panel from '../../components/Panel'
 import MainModal from '../../components/modals/MainModal'
 
@@ -9,6 +9,18 @@ function Main(): JSX.Element {
     msg: '',
     type: 'success',
   })
+
+  useEffect(() => {
+    const openModalHandler = () => {
+      setClose(true)
+    }
+    document.addEventListener('openModalEvent', openModalHandler)
+
+    return () => {
+      window.parent.removeEventListener('openModalEvent', openModalHandler)
+    }
+  }, [])
+
   return (
     <>
       <Panel alertInfo={alertInfo} setClose={setClose} />

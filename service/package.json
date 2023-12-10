@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "build": "npm run build:firefox && npm run build:onboarding",
-    "build:onboarding": "vite build --config onboarding-vite.config.js --emptyOutDir",
-    "build:firefox": "vite build --config firefox-vite.config.js --emptyOutDir"
+    "build:onboarding": "vite build --config onboarding-vite.config.js",
+    "build:firefox": "vite build --config firefox-vite.config.js"
   },
   "devDependencies": {
     "vite": "5.0.7"

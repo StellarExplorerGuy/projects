@@ -5,7 +5,10 @@ cd service && npm run build
 
 # Copy manifest
 cp chrome/manifest.json ../chrome/
+cp chrome/config.js ../chrome/
+cp chrome/service-worker.js ../chrome/
 cp firefox/manifest.json ../firefox/
+cp firefox/config.js ../firefox/
 cp onboarding/onboarding.js ../firefox/
 cp 128.png ../firefox/
 cp 128.png ../chrome/
