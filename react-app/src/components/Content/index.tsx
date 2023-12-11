@@ -13,7 +13,16 @@ import ResetProfile from '../modals/ResetProfile'
 import Tip from '../modals/Tip'
 import { DIALOG, GlobalConfig, ItemType } from '../../types'
 import { DEFAULT_PROFILE, FASTER_PR_PROFILE, FASTER_PR_PROFILE_KEY, PREVIEW_MD, TEXT } from '../../utils/constants'
-import { clearComments, defaultProfile, getAppConfig, showAlertInfo, updateKey, updateLocalStorage } from '../../utils/data'
+import {
+  COMMIT_TEMPLATES,
+  PR_TEMPLATES,
+  clearComments,
+  defaultProfile,
+  getAppConfig,
+  showAlertInfo,
+  updateKey,
+  updateLocalStorage,
+} from '../../utils/data'
 
 import { UniqueIdentifier } from '@dnd-kit/core'
 import AddIcon from '@mui/icons-material/Add'
@@ -22,7 +31,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import ModeIcon from '@mui/icons-material/Mode'
 import ExtensionIcon from '@mui/icons-material/Extension'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
-import { Box, Divider, Tooltip } from '@mui/joy'
+import { Box, Divider, Select, Tooltip } from '@mui/joy'
 import Button from '@mui/joy/Button'
 import FormControl from '@mui/joy/FormControl'
 import FormLabel from '@mui/joy/FormLabel'
@@ -33,6 +42,7 @@ import List from '@mui/joy/List'
 import ListDivider from '@mui/joy/ListDivider'
 import Sheet from '@mui/joy/Sheet'
 import Stack from '@mui/joy/Stack'
+import Option from '@mui/joy/Option'
 import Typography from '@mui/joy/Typography'
 import * as Accordion from '@radix-ui/react-accordion'
 import ManageIntegrations from '../modals/ManageIntegrations'
@@ -558,11 +568,31 @@ function Content({
                 <AccordionHeader>Commit body</AccordionHeader>
                 <AccordionContent>
                   <Grid container>
-                    <Grid xs={12}>
+                    <Grid sx={{ mb: 1 }} xs={12}>
                       <Box sx={{ float: 'left', pt: 0.5 }}>
                         <FormItem text={TEXT.LABEL.DEMO_VIEW} />
                       </Box>
-                      <InfoIconButton text={TEXT.TOOLTIP.COMMIT_TEMPLATE} />
+                      <Box sx={{ float: 'left' }}>
+                        <InfoIconButton text={TEXT.TOOLTIP.COMMIT_TEMPLATE} />
+                      </Box>
+                      <Box sx={{ float: 'left', pl: 5, width: 200 }}>
+                        <Select
+                          defaultValue={COMMIT_TEMPLATES[0]}
+                          size="md"
+                          placeholder="Select a template"
+                          onChange={(_, { template }) => {
+                            setDialogValue({ ...dialogValue, ['commit']: template })
+                          }}
+                        >
+                          {COMMIT_TEMPLATES.map((item) => (
+                            <Option key={item.name} value={item} color="primary">
+                              {item.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Box>
+                    </Grid>
+                    <Grid xs={12}>
                       <PreviewMD
                         config={PREVIEW_MD.DISABLED}
                         field="commit"
@@ -589,18 +619,34 @@ function Content({
                       <Box sx={{ float: 'left', pt: 0.5, mb: 1 }}>
                         <FormLabel>Comments hidden</FormLabel>
                       </Box>
-                      <InfoIconButton text="If you activate this feature, comments will be hidden in the PR description please toggle to see the changes. Here you can see the preview only." />
-                      <FormControl>
-                        <Box sx={{ float: 'left', mt: 0.5, mb: 1 }}>
-                          <SwitchButton
-                            checked={dialogValue.slimPrChecked}
-                            setChecked={(value) => {
-                              isSlimPrCheckedDirty.current = true
-                              setDialogValue({ ...dialogValue, slimPrChecked: value })
-                            }}
-                          />
-                        </Box>
-                      </FormControl>
+                      <Box sx={{ float: 'left' }}>
+                        <InfoIconButton text="If you activate this feature, comments will be hidden in the PR description please toggle to see the changes. Here you can see the preview only." />
+                      </Box>
+                      <Box sx={{ float: 'left', mt: 0.5, mb: 1 }}>
+                        <SwitchButton
+                          checked={dialogValue.slimPrChecked}
+                          setChecked={(value) => {
+                            isSlimPrCheckedDirty.current = true
+                            setDialogValue({ ...dialogValue, slimPrChecked: value })
+                          }}
+                        />
+                      </Box>
+                      <Box sx={{ float: 'left', pl: 5, width: 200 }}>
+                        <Select
+                          defaultValue={PR_TEMPLATES[0]}
+                          size="md"
+                          placeholder="Select a template"
+                          onChange={(_, { template }) => {
+                            setDialogValue({ ...dialogValue, ['pr']: template })
+                          }}
+                        >
+                          {PR_TEMPLATES.map((item) => (
+                            <Option key={item.name} value={item} color="primary">
+                              {item.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Box>
                     </Grid>
                     <Grid xs={12}>
                       <Box sx={prTemplate.sx}>

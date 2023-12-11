@@ -255,3 +255,97 @@ export function getProfileData() {
     return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] }
   }
 }
+
+export const COMMIT_TEMPLATES = [
+  {
+    name: 'Template 1',
+    template: getCommit({
+      type: TEMPLATE_KEY.ISSUE_TYPE,
+      issue: TEMPLATE_KEY.ISSUE,
+      repoOrg: TEMPLATE_KEY.REPO_ORG,
+      repoName: TEMPLATE_KEY.REPO_NAME,
+      user: TEMPLATE_KEY.SIGNATURE,
+    }),
+  },
+  {
+    name: 'Template 2',
+    template: `ISSUE_TYPE(REPO_ORG/REPO_NAME#ISSUE): `,
+  },
+  {
+    name: 'Template 3',
+    template: `ISSUE_TYPE(SIGNATURE): `,
+  },
+]
+
+export const PR_TEMPLATES = [
+  {
+    name: 'Template 1',
+    template: getPR({
+      type: TEMPLATE_KEY.ISSUE_TYPE,
+      issue: TEMPLATE_KEY.ISSUE,
+      repoOrg: TEMPLATE_KEY.REPO_ORG,
+      repoName: TEMPLATE_KEY.REPO_NAME,
+      user: TEMPLATE_KEY.SIGNATURE,
+    }),
+  },
+  {
+    name: 'Template 2',
+    template: `## Status
+**READY**
+
+## Description
+- ISSUE_TYPE: 
+
+
+Contributes:
+- REPO_ORG/REPO_NAME#ISSUE
+
+Signed-off-by: SIGNATURE
+
+## Impacted Areas in Application
+
+
+### Screenshots
+
+
+## Any special notes for your reviewer?
+
+
+`,
+  },
+  {
+    name: 'Template 3',
+    template: `### 🛠 Changes being made
+<!--
+Here give examples of the changes you've made in this pull request. Include an itemized list if you can. It'll help the reviewer
+-->
+
+### ✨ What's the context?
+<!--
+What's the context for the changes? Are there any
+-->
+ISSUE_TYPE:
+- REPO_ORG/REPO_NAME#ISSUE
+
+
+### 🧠 Rationale behind the change
+<!--
+Why did you choose to make these changes? Were there any trade-offs you had to consider? 
+-->
+
+
+### 🧪 Test plan
+<!--
+How do you know the changes are safe to ship to production?
+-->
+
+
+### 📸 Screenshots (optional)
+<!--
+If you made UI changes, what are the before an afters?
+-->
+
+
+`,
+  },
+]
