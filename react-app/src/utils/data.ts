@@ -315,6 +315,27 @@ Signed-off-by: SIGNATURE
   },
   {
     name: 'Template 3',
+    template: `## Status
+**READY**
+
+## 📝 Description
+
+
+
+## 🎯 Impacted Areas in Application
+
+
+### 📸 Screenshots
+
+
+
+## 📌 Any special notes for your reviewer?
+
+
+`,
+  },
+  {
+    name: 'Template 4',
     template: `### 🛠 Changes being made
 <!--
 Here give examples of the changes you've made in this pull request. Include an itemized list if you can. It'll help the reviewer
