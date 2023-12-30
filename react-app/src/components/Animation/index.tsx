@@ -1,13 +1,25 @@
-import { useRive } from '@rive-app/react-canvas-lite'
-import { RESOURCE, getAnimationURL } from '../../utils/animation'
+import { UseRiveParameters, useRive } from '@rive-app/react-canvas-lite'
+import { getAnimationURL } from '../../utils/animation'
+import { Suspense } from 'react'
 
-export const Animation = () => {
-  const riveAnimationURL = getAnimationURL(RESOURCE.VEHICLES)
+type AnimationProps = UseRiveParameters
 
+const Animation = ({ config }: { config: AnimationProps }) => {
+  const riveAnimationURL = getAnimationURL(config!.src!)
   const { RiveComponent } = useRive({
+    ...config,
     src: riveAnimationURL,
-    autoplay: true,
   })
 
   return <RiveComponent />
 }
+
+const RiveAnimation = (config: AnimationProps) => {
+  return config?.src ? (
+    <Suspense fallback={<></>}>
+      <Animation config={config} />
+    </Suspense>
+  ) : null
+}
+
+export default RiveAnimation

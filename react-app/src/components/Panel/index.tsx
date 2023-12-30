@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, useEffect, useState } from 'react'
 
 import styles from './Panel.module.scss'
 
@@ -37,6 +37,9 @@ import {
 import { getDetails } from '../../utils/service.adapter'
 import { GlobalConfig } from '../../types'
 import ProfileAvatar from '../ProfileAvatar'
+import { RESOURCE } from '../../utils/animation'
+
+const RiveAnimation = lazy(() => import('../Animation'))
 
 function onButtonClick(event: { target: any }) {
   const button = event.target
@@ -284,6 +287,9 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
   return (
     <Card sx={{ maxWidth: '100%' }}>
       <div>
+        <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
+          <RiveAnimation src={RESOURCE.VEHICLES} autoplay={true} />
+        </div>
         <Grid container direction="row" justifyContent="space-between" alignItems="flex-end" spacing={0}>
           <Grid xs={9}>
             <Typography level="h4">
