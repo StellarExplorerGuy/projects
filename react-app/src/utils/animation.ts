@@ -14,7 +14,6 @@ export const RESOURCE = {
 
 export const getAnimationURL = (resource: string) => {
   if (base) {
-    console.log('!![TEST]getAnimationURL', new URL(`assets/${resource}`, base).href);
     return new URL(`assets/${resource}`, base).href
   }
   throw new Error('Uncomment line below for URL animation testing locally')
