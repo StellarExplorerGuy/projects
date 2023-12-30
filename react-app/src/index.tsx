@@ -62,7 +62,7 @@ function process(headerElement: Element, currentService: SERVICE) {
 }
 
 //PROD
-let debounceTimeout: NodeJS.Timeout
+let debounceTimeout: number | undefined
 
 function onInitAvailable() {
   clearTimeout(debounceTimeout)

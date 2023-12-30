@@ -6,7 +6,28 @@
   "icons": {
     "128": "128.png"
   },
-  "permissions": [],
+  "permissions": [
+    "declarativeNetRequest"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "rules_1",
+        "enabled": true,
+        "path": "rules_1.json"
+      }
+    ]
+  },
   "host_permissions": [
     "<all_urls>"
   ],

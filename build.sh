@@ -5,6 +5,7 @@ cd service && npm run build
 
 # Copy manifest
 cp chrome/manifest.json ../chrome/
+cp chrome/rules_1.json ../chrome/
 cp chrome/config.js ../chrome/
 cp chrome/service-worker.js ../chrome/
 cp firefox/manifest.json ../firefox/
@@ -44,6 +45,10 @@ cd ..
 
 cp extension/assets/*.css firefox/assets
 cp extension/onboarding-page.html firefox/
+
+echo "Copy Resources"
+cp service/resources/* chrome/assets/
+cp service/resources/* firefox/assets/
 
 echo "Completed!"
 

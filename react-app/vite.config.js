@@ -5,13 +5,15 @@ import react from '@vitejs/plugin-react'
 export default defineConfig(() => {
   process.env.NODE_ENV = 'production'
   return {
+    plugins: [react()],
     define: {
       'process.env': process.env,
     },
-    plugins: [react()],
     build: {
+      // sourcemap: true, // ENABLE to debug code using source code in PROD
       minify: 'terser',
       terserOptions: {
+        parse: { html5_comments: false },
         maxWorkers: 4,
         compress: true,
         ecma: 2020,
@@ -29,6 +31,7 @@ export default defineConfig(() => {
         fileName: () => 'content.js',
       },
       assetsInlineLimit: 0,
+      target: 'esnext',
     },
     resolve: {
       alias: {

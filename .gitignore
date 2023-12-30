@@ -12,9 +12,12 @@ firefox/content.js
 firefox/onboarding-page.html
 firefox/service-worker.js
 
+chrome/assets
 chrome/content.js
 chrome/style.css
 chrome/128.png
+chrome/_metadata
+chrome/rules_1.json
 
 # misc
 .DS_Store
@@ -24,5 +27,6 @@ npm-debug.log*
 
 # local env files
 .env*.local
+
 
 

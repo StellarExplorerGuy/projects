@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react'
 import Panel from '../../components/Panel'
 import MainModal from '../../components/modals/MainModal'
 
+import { RuntimeLoader } from '@rive-app/react-canvas-lite'
+import { RESOURCE, getAnimationURL } from '../../utils/animation'
+
+RuntimeLoader.setWasmUrl(getAnimationURL(RESOURCE.BASE))
+
 function Main(): JSX.Element {
   const [open, setClose] = useState(false)
   const [alertInfo, setAlertInfo] = useState({
