@@ -80,7 +80,7 @@ function onInitAvailable() {
             // resolve the issue if style isn't loaded
             const selectedButton = document.querySelector('button.Mui-selected')
             if (selectedButton) {
-              isStyleLoaded = getComputedStyle(selectedButton).color === 'rgb(25, 118, 210)'
+              isStyleLoaded = !!getComputedStyle(selectedButton).color
             }
             const hasClickEvent = buttonRendered.onclick !== null && isStyleLoaded
             if (hasClickEvent) {
