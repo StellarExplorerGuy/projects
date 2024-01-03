@@ -1,6 +1,7 @@
 import { common } from '@mui/material/colors'
 import { extendTheme } from '@mui/joy/styles'
 import { experimental_extendTheme as extendDefaultTheme } from '@mui/material/styles'
+import { ThemeKey } from '../types'
 
 declare module '@mui/joy/styles' {
   interface TypographySystemOverrides {
@@ -168,7 +169,7 @@ const THEME_PANEL_HOVER = {
 
 // ------------------------------------------------------------------------------
 const THEMES = {
-  default: {
+  [ThemeKey.default]: {
     animation: { src: '', autoplay: true, shouldDisableRiveListeners: false },
     custom: {
       bg: 'inherit',
@@ -176,8 +177,20 @@ const THEMES = {
       mui: mainTheme.mui,
     },
   },
-  truck: {
+  [ThemeKey.truck]: {
     animation: { src: 'truck.riv', autoplay: true, shouldDisableRiveListeners: false },
+    custom: { bg: THEME.TRUCK[1000], joy: truckTheme.joy, mui: truckTheme.mui },
+  },
+  [ThemeKey.cat]: {
+    animation: { src: 'cat.riv', autoplay: true, shouldDisableRiveListeners: false },
+    custom: { bg: THEME.TRUCK[1000], joy: truckTheme.joy, mui: truckTheme.mui },
+  },
+  [ThemeKey.letsGo]: {
+    animation: { src: 'letsGo.riv', autoplay: true, shouldDisableRiveListeners: false },
+    custom: { bg: THEME.TRUCK[1000], joy: truckTheme.joy, mui: truckTheme.mui },
+  },
+  [ThemeKey.tentaclesSmoke]: {
+    animation: { src: 'tentaclesSmoke.riv', autoplay: true, shouldDisableRiveListeners: false },
     custom: { bg: THEME.TRUCK[1000], joy: truckTheme.joy, mui: truckTheme.mui },
   },
 }
