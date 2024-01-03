@@ -3,9 +3,10 @@ import Panel from '../../components/Panel'
 import MainModal from '../../components/modals/MainModal'
 
 import { RuntimeLoader } from '@rive-app/react-canvas-lite'
-import { RESOURCE, getAnimationURL } from '../../utils/animation'
-
-RuntimeLoader.setWasmUrl(getAnimationURL(RESOURCE.BASE))
+import { getAnimationURL } from '../../utils/animation'
+import { useConfigContext } from './ConfigContext'
+import { CssVarsProvider } from '@mui/joy/styles'
+import { ScopedCssBaseline } from '@mui/joy'
 
 function Main(): JSX.Element {
   const [open, setClose] = useState(false)
@@ -16,6 +17,8 @@ function Main(): JSX.Element {
   })
 
   useEffect(() => {
+    // load it once if theme enabled
+    RuntimeLoader.setWasmUrl(getAnimationURL('rive.wasm'))
     const openModalHandler = () => {
       setClose(true)
     }
@@ -26,11 +29,15 @@ function Main(): JSX.Element {
     }
   }, [])
 
+  const data = useConfigContext()
+
   return (
-    <>
-      <Panel alertInfo={alertInfo} setClose={setClose} />
-      <MainModal alertInfo={alertInfo} open={open} setClose={setClose} setAlertInfo={setAlertInfo} />
-    </>
+    <CssVarsProvider defaultMode="light" theme={data.config.theme.config.custom.joy}>
+      <ScopedCssBaseline disableColorScheme>
+        <Panel alertInfo={alertInfo} setClose={setClose} />
+        <MainModal alertInfo={alertInfo} open={open} setClose={setClose} setAlertInfo={setAlertInfo} />
+      </ScopedCssBaseline>
+    </CssVarsProvider>
   )
 }
 

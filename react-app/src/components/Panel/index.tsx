@@ -19,7 +19,7 @@ import {
   clearComments,
   getAppConfig,
   getCommit,
-  getConfig,
+  getServiceConfig,
   getLocalStorage,
   getPR,
   getProfileData,
@@ -35,9 +35,10 @@ import {
   SERVICE,
 } from '../../utils/constants'
 import { getDetails } from '../../utils/service.adapter'
-import { GlobalConfig } from '../../types'
+import { GlobalConfig, ThemeKey } from '../../types'
 import ProfileAvatar from '../ProfileAvatar'
-import { RESOURCE } from '../../utils/animation'
+import { THEME_PANEL_HOVER } from '../../utils/theme'
+import { useConfigContext } from '../../pages/MainPage/ConfigContext'
 
 const RiveAnimation = lazy(() => import('../Animation'))
 
@@ -243,7 +244,7 @@ function getPrData(prefix: string): void {
 }
 
 function Panel({ alertInfo, setClose }: any): JSX.Element {
-  const config = getConfig()
+  const serviceConfig = getServiceConfig()
 
   const [alertDataInfo, setAlertDataInfo] = useState({
     visible: false,
@@ -284,16 +285,38 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
     setSelectedPrefix(newValue)
   }
 
+  const data = useConfigContext()
+
   return (
-    <Card sx={{ maxWidth: '100%' }}>
-      <div>
-        <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
-          <RiveAnimation src={RESOURCE.VEHICLES} autoplay={true} />
+    <Card
+      sx={{
+        borderRadius: 0,
+        maxWidth: '100%',
+        backgroundColor: data.config.theme.config.custom.bg,
+      }}
+    >
+      {data.config.theme.id !== ThemeKey.default && (
+        <div
+          style={{
+            position: 'absolute',
+            zIndex: 1,
+            margin: 0,
+            padding: 0,
+            left: 0,
+            right: 0,
+            top: 0,
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          <RiveAnimation config={data.config.theme} />
         </div>
+      )}
+      <div style={{ zIndex: 2 }}>
         <Grid container direction="row" justifyContent="space-between" alignItems="flex-end" spacing={0}>
           <Grid xs={9}>
             <Typography level="h4">
-              Copy:{' '}
+              <Typography level="kbd">Copy: </Typography>
               <button
                 id="wjdkwed1"
                 className={styles.button_card}
@@ -342,15 +365,16 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
         variant="outlined"
         aria-label="flex button group"
         sx={{
+          zIndex: 2,
           p: 0,
           '--ButtonGroup-radius': '40px',
         }}
       >
-        <CssVarsProvider>
+        <CssVarsProvider theme={data.config.theme.config.custom.mui}>
           <Box
             sx={{
               flexGrow: 1,
-              maxWidth: config.panelMaxWidth,
+              maxWidth: serviceConfig.panelMaxWidth,
               border: 'none !important',
             }}
           >
@@ -359,9 +383,9 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               onChange={handleChange}
               variant="scrollable"
               scrollButtons
+              aria-label="tabs"
               textColor="primary"
               indicatorColor="primary"
-              aria-label="tabs"
               sx={{
                 border: '1px solid var(--ButtonGroup-separatorColor)',
                 borderTopLeftRadius: ' 40px !important',
@@ -373,12 +397,12 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
             >
               {prefixes.map((prefix: string) => (
                 <Tab
+                  key={prefix}
                   sx={{
                     textTransform: 'none',
                     fontSize: 14,
-                    color: prefix === selectedPrefix ? 'common.white' : 'inherit',
+                    ':hover': THEME_PANEL_HOVER,
                   }}
-                  key={prefix}
                   label={
                     <Typography sx={{ width: 60 }} level="body-sm" noWrap>
                       {prefix}
@@ -396,10 +420,11 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
               maxWidth: 120,
               borderTop: '1px solid var(--ButtonGroup-separatorColor)',
               borderBottom: '1px solid var(--ButtonGroup-separatorColor)',
+              ':hover': THEME_PANEL_HOVER,
             }}
             startDecorator={<ProfileAvatar />}
           >
-            <Typography sx={{ width: 80 }} level="body-sm" noWrap>
+            <Typography level="kbd" sx={{ width: 80 }} noWrap>
               {profilesData.selected}
             </Typography>
           </MenuButton>
@@ -415,8 +440,14 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
             ))}
           </Menu>
         </Dropdown>
-        <IconButton onClick={() => setClose(true)}>
-          <Settings color="primary" />
+        <IconButton
+          sx={{
+            color: THEME_PANEL_HOVER.bgcolor,
+            ':hover': THEME_PANEL_HOVER,
+          }}
+          onClick={() => setClose(true)}
+        >
+          <Settings />
         </IconButton>
       </ButtonGroup>
     </Card>

@@ -9,7 +9,7 @@ import {
   FASTER_PR_PROFILE,
   FASTER_PR_PROFILE_KEY,
 } from './constants'
-import { AppConfig } from '../types'
+import { AppConfig, ThemeKey } from '../types'
 
 type CommitBody = {
   type: string
@@ -126,6 +126,22 @@ export const DEFAULT_PROFILE_CONFIG = () => ({
   avatar: '🦊',
 })
 
+export const DEFAULT_THEME_CONFIG = () => ({
+  id: ThemeKey.default,
+  config: {
+    animation: {
+      autoplay: false,
+      shouldDisableRiveListeners: false,
+      src: '',
+    },
+    custom: {
+        bg: '',
+        joy: null,
+        mui: null,
+    },
+  },
+})
+
 export const showAlertInfo = (
   data: {
     visible: boolean
@@ -169,16 +185,20 @@ export const getAppConfig = (): AppConfig => {
 
     if (!localConfig) {
       updateLocalStorage(FASTER_PR_CONFIG, { global: DEFAULT_GLOBAL_CONFIG() })
-      return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
+      return {
+        profile: DEFAULT_PROFILE_CONFIG(),
+        global: DEFAULT_GLOBAL_CONFIG(),
+        theme: DEFAULT_THEME_CONFIG(),
+      }
     }
     const appConfig = JSON.parse(localConfig) as AppConfig
     if (!appConfig.global || !appConfig.profile) {
       updateLocalStorage(FASTER_PR_CONFIG, { global: DEFAULT_GLOBAL_CONFIG() })
-      return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
+      return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG(), theme: DEFAULT_THEME_CONFIG() }
     }
     return appConfig
   } catch (error) {
-    return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
+    return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG(), theme: DEFAULT_THEME_CONFIG() }
   }
 }
 
@@ -229,7 +249,7 @@ export const getService = (): SERVICE => {
   return SERVICE.GITHUB
 }
 
-export const getConfig = () => {
+export const getServiceConfig = () => {
   const currentService = getService()
   const config = {
     panelMaxWidth: 818,

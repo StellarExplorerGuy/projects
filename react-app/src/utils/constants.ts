@@ -29,7 +29,8 @@ export const TEXT = {
       'Your contributions make a significant impact, fueling my projects and boosting my confidence to create more!🚀',
     GLOBALS:
       'You have the option to adjust extension behavior by establishing global configuration settings at the top to supersede profile-specific configurations. This is particularly useful if you desire a consistent configuration that applies to all profiles.',
-    PROFILE: 'You can customize your profile. Maximum two characters are allowed.',
+    PROFILE: 'Customize your profile with a max of two characters permitted for initials e.g. AS, TS.',
+    THEMES: 'Customize your theme.',
   },
 }
 
@@ -58,6 +59,7 @@ export enum SERVICE {
   TRELLO = 'TRELLO',
   JIRA_DEFAULT = 'JIRA_DEFAULT',
   JIRA_COMPANY_1 = 'JIRA_COMPANY_1',
+  // JIRA_COMPANY_2 = 'JIRA_COMPANY_2',
   MONDAY_DEFAULT = 'MONDAY_DEFAULT',
 }
 
@@ -65,6 +67,7 @@ export enum ADVANCED {
   INTEGRATIONS,
   PROFILE,
   GLOBALS,
+  THEMES,
 }
 
 export const PREVIEW_MD = {

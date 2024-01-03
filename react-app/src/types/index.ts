@@ -1,4 +1,5 @@
 import { UniqueIdentifier } from '@dnd-kit/core'
+import { UseRiveParameters } from '@rive-app/react-canvas-lite/dist/types/types'
 
 export type ItemType = {
   slimPrChecked: boolean
@@ -39,7 +40,28 @@ export type GlobalConfig = {
   signature: string
 }
 
+export enum ThemeKey {
+  default = 'default',
+  truck = 'truck',
+  cat = 'cat',
+  letsGo = 'letsGo',
+  tentaclesSmoke = 'tentaclesSmoke',
+}
+
+export type ThemeConfig = {
+  id: ThemeKey
+  config: {
+    animation: UseRiveParameters
+    custom: {
+      bg: string
+      joy: any
+      mui: any
+    }
+  }
+}
+
 export type AppConfig = {
   global: GlobalConfig
   profile: ProfileConfig
+  theme: ThemeConfig
 }

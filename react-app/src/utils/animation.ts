@@ -7,11 +7,7 @@ if (typeof browser !== 'undefined' && browser?.runtime?.getURL) {
   base = chrome.runtime.getURL('')
 }
 
-export const RESOURCE = {
-  BASE: 'rive.wasm',
-  VEHICLES: 'vehicles.riv',
-}
-
+// TODO
 export const getAnimationURL = (resource: string) => {
   if (base) {
     return new URL(`assets/${resource}`, base).href

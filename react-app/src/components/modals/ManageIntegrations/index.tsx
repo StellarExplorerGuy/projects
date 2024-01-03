@@ -32,7 +32,7 @@ import { GlobalConfig, ProfileConfig } from '../../../types'
 import SwitchButton from '../../SwitchButton'
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
 
-const HEADERS = ['Integrations 😎', 'Profile 👤', 'Globals 🔧']
+const HEADERS = ['Integrations 😎', 'Themes 🎨', 'Profile 👤', 'Globals 🔧']
 const dataList = [
   {
     index: 0,
@@ -56,7 +56,7 @@ const dataList = [
     index: 3,
     checked: true,
     avatar: Jira,
-    label: 'Jira [jsw.any-name.com]',
+    label: 'Jira [jsw.any-name.com, jira.any-name.net]',
   },
   {
     index: 4,
@@ -230,6 +230,45 @@ function getDetails(
         </Grid>
       </Grid>
     </Box>,
+    ,
+    <Box fontWeight="sm">
+      <Box sx={{ pt: 1, pb: 1 }}>
+        <MessageBox message={<div>{TEXT.MANAGE_INTEGRATIONS.THEMES}</div>} />
+      </Box>
+      <Sheet
+        variant="outlined"
+        sx={{
+          p: 2,
+          borderRadius: 'sm',
+          maxWidth: '100%',
+        }}
+      >
+        <Grid container direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+          <Grid xs={9}>
+            <Typography
+              sx={{
+                textTransform: 'uppercase',
+                fontSize: 'xs',
+                letterSpacing: 'lg',
+                fontWeight: 'lg',
+                color: 'text.secondary',
+              }}
+            >
+              Global configuration{' '}
+              <Typography color={global.enabled ? 'success' : 'danger'}>
+                {global.enabled ? 'enabled' : 'disabled'}
+              </Typography>
+            </Typography>
+          </Grid>
+          <Grid xs={1.5}>
+            <Box sx={{ float: 'right' }}>
+              <SwitchButton checked={global.enabled} setChecked={(value) => setGlobal({ ...global, enabled: value })} />
+            </Box>
+          </Grid>
+        </Grid>
+        <Signature data={global} setValue={setGlobal} />
+      </Sheet>
+    </Box>,
     <Box fontWeight="sm">
       <Box sx={{ pt: 1, pb: 1 }}>
         <MessageBox message={<div>{TEXT.MANAGE_INTEGRATIONS.PROFILE}</div>} />
@@ -269,7 +308,7 @@ function getDetails(
           </Grid>
           <Divider sx={{ ml: 2, mr: 2 }} orientation="vertical" />
           <Grid xs={3}>
-            <FormLabel sx={{pb: 0.8}}>Select from the list</FormLabel>
+            <FormLabel sx={{ pb: 0.8 }}>Select from the list</FormLabel>
             <ButtonGroup
               variant="solid"
               color="primary"
@@ -483,7 +522,7 @@ function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
                 [esc]
               </Typography>
             </Button>
-            {(currentTab === ADVANCED.GLOBALS || currentTab === ADVANCED.PROFILE) && (
+            {(currentTab === ADVANCED.GLOBALS || currentTab === ADVANCED.PROFILE || currentTab === ADVANCED.THEMES) && (
               <Button onClick={() => handleSave(currentTab)}>Save</Button>
             )}
           </Stack>
