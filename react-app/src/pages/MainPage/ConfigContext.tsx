@@ -1,24 +1,33 @@
 import { createContext, Dispatch, PropsWithChildren, SetStateAction, useContext, useMemo, useState } from 'react'
-import { AppConfig } from '../../types'
+import { AppConfig, GlobalConfig, ProfileConfig, SelectedThemeConfig, ThemeKey } from '../../types'
 import { getAnimationURL } from '../../utils/animation'
 import { getAppConfig } from '../../utils/data'
 import { THEMES } from '../../utils/theme'
 
 function getThemeConfig(): AppConfig {
   const appConfig = getAppConfig()
-  const currentTheme = THEMES[appConfig.theme.id]
+  const currentTheme = THEMES[appConfig.theme.id] || THEMES[ThemeKey.default]
 
-  const updatedTheme = {
-    id: appConfig.theme.id,
-    config: {
-      animation: {
-        autoplay: currentTheme.animation.autoplay || false,
-        shouldDisableRiveListeners: currentTheme.animation.shouldDisableRiveListeners || false,
-        src: currentTheme.animation.src ? getAnimationURL(currentTheme.animation.src) : '',
+  let updatedTheme
+  if (appConfig.theme.id === ThemeKey.default) {
+    updatedTheme = {
+      id: ThemeKey.default,
+      config: currentTheme,
+    }
+  } else {
+    updatedTheme = {
+      id: appConfig.theme.id,
+      config: {
+        animation: {
+          autoplay: currentTheme.animation.autoplay || false,
+          shouldDisableRiveListeners: currentTheme.animation.shouldDisableRiveListeners || false,
+          src: currentTheme.animation.src ? getAnimationURL(currentTheme.animation.src) : '',
+        },
+        custom: currentTheme.custom,
       },
-      custom: currentTheme.custom
-    },
+    }
   }
+
   return {
     profile: appConfig.profile,
     global: appConfig.global,
@@ -27,8 +36,18 @@ function getThemeConfig(): AppConfig {
 }
 
 type ConfigContextReturnType = {
-  config: AppConfig
-  setConfig: Dispatch<SetStateAction<AppConfig>>
+  config: {
+    global: GlobalConfig
+    profile: ProfileConfig
+    theme: SelectedThemeConfig
+  }
+  setConfig: Dispatch<
+    SetStateAction<{
+      global: GlobalConfig
+      profile: ProfileConfig
+      theme: SelectedThemeConfig
+    }>
+  >
 }
 
 const ConfigContext = createContext<ConfigContextReturnType>(null!)

@@ -50,10 +50,16 @@ export enum ThemeKey {
 
 export type ThemeConfig = {
   id: ThemeKey
+  config: any
+}
+
+export type SelectedThemeConfig = {
+  id: ThemeKey
   config: {
     animation: UseRiveParameters
     custom: {
       bg: string
+      style?: any
       joy: any
       mui: any
     }

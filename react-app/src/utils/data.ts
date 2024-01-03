@@ -128,18 +128,7 @@ export const DEFAULT_PROFILE_CONFIG = () => ({
 
 export const DEFAULT_THEME_CONFIG = () => ({
   id: ThemeKey.default,
-  config: {
-    animation: {
-      autoplay: false,
-      shouldDisableRiveListeners: false,
-      src: '',
-    },
-    custom: {
-        bg: '',
-        joy: null,
-        mui: null,
-    },
-  },
+  config: null
 })
 
 export const showAlertInfo = (
@@ -184,7 +173,11 @@ export const getAppConfig = (): AppConfig => {
     const localConfig = localStorage.getItem(FASTER_PR_CONFIG)!
 
     if (!localConfig) {
-      updateLocalStorage(FASTER_PR_CONFIG, { global: DEFAULT_GLOBAL_CONFIG() })
+      updateLocalStorage(FASTER_PR_CONFIG,  {
+        profile: DEFAULT_PROFILE_CONFIG(),
+        global: DEFAULT_GLOBAL_CONFIG(),
+        theme: DEFAULT_THEME_CONFIG(),
+      })
       return {
         profile: DEFAULT_PROFILE_CONFIG(),
         global: DEFAULT_GLOBAL_CONFIG(),
@@ -192,8 +185,12 @@ export const getAppConfig = (): AppConfig => {
       }
     }
     const appConfig = JSON.parse(localConfig) as AppConfig
-    if (!appConfig.global || !appConfig.profile) {
-      updateLocalStorage(FASTER_PR_CONFIG, { global: DEFAULT_GLOBAL_CONFIG() })
+    if (!appConfig.global || !appConfig.profile || !appConfig.theme) {
+      updateLocalStorage(FASTER_PR_CONFIG,  {
+        profile: DEFAULT_PROFILE_CONFIG(),
+        global: DEFAULT_GLOBAL_CONFIG(),
+        theme: DEFAULT_THEME_CONFIG(),
+      })
       return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG(), theme: DEFAULT_THEME_CONFIG() }
     }
     return appConfig
