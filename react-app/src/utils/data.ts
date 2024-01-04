@@ -224,6 +224,7 @@ const gitlabRegex = /^https:\/\/gitlab\.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/-\/
 const trelloRegex = /^https:\/\/trello\.com\/[A-Za-z0-9-]\/[A-Za-z0-9]+\/\d+-[A-Za-z0-9-]+/
 // const jiraDefaultRegex = /^https:\/\/(?:[a-zA-Z0-9.-]+\.)?atlassian.net\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
 const jiraCompany1Regex = /^https:\/\/jsw(?:[a-zA-Z0-9.-]+)?.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
+const jiraCompany2Regex = /^https:\/\/jira(?:[a-zA-Z0-9.-]+)?.net\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
 const mondayDefaultRegex = /^https:\/\/[a-zA-Z0-9.-]+\.monday\.com\/boards\/\d+\/pulses\/\d+/
 
 export const getService = (): SERVICE => {
@@ -239,6 +240,8 @@ export const getService = (): SERVICE => {
     //   return SERVICE.JIRA_DEFAULT
   } else if (jiraCompany1Regex.test(url)) {
     return SERVICE.JIRA_COMPANY_1
+  } else if (jiraCompany2Regex.test(url)) {
+    return SERVICE.JIRA_COMPANY_2
   } else if (mondayDefaultRegex.test(url)) {
     return SERVICE.MONDAY_DEFAULT
   }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { createRoot } from 'react-dom/client';
+import { createRoot } from 'react-dom/client'
 
 import App from './App'
 import { SERVICE } from './utils/constants'
@@ -24,6 +24,9 @@ const getHeader = (service: SERVICE) => {
   } else if (service === SERVICE.JIRA_DEFAULT) {
     headerElement = document.getElementById('jira-issue-header')
   } else if (service === SERVICE.JIRA_COMPANY_1) {
+    headerElement = document.getElementsByClassName('issue-header-content')
+    headerElement = headerElement?.length > 0 ? headerElement[0] : null
+  } else if (service === SERVICE.JIRA_COMPANY_2) {
     headerElement = document.getElementsByClassName('issue-header-content')
     headerElement = headerElement?.length > 0 ? headerElement[0] : null
   } else if (service === SERVICE.MONDAY_DEFAULT) {

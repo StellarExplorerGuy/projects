@@ -131,7 +131,7 @@ function processCommit(type: any, issue: any, repoDetails: { user: any; repo: an
       const currentService = getService()
       let formattedCommit
       if (
-        [SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1, SERVICE.MONDAY_DEFAULT].includes(currentService)
+        [SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1,SERVICE.JIRA_COMPANY_2, SERVICE.MONDAY_DEFAULT].includes(currentService)
       ) {
         formattedCommit = formatIssueLink(repoDetails, profile.commit, type, signature)
       } else {
@@ -166,7 +166,7 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
       const currentService = getService()
       let formattedPR
       if (
-        [SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1, SERVICE.MONDAY_DEFAULT].includes(currentService)
+        [SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1, SERVICE.JIRA_COMPANY_2, SERVICE.MONDAY_DEFAULT].includes(currentService)
       ) {
         formattedPR = formatIssueLink(repoDetails, profile.pr, type, signature)
       } else {

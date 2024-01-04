@@ -30,7 +30,7 @@ export const TEXT = {
     GLOBALS:
       'You have the option to adjust extension behavior by establishing global configuration settings at the top to supersede profile-specific configurations. This is particularly useful if you desire a consistent configuration that applies to all profiles.',
     PROFILE: 'Customize your profile with a max of two characters permitted for initials e.g. AS, TS.',
-    THEMES: 'Customize your theme.',
+    THEMES: 'You can personalize your theme by activating both the color mode and animation features. Animation is visible on your quick panel only.',
   },
 }
 
@@ -59,15 +59,15 @@ export enum SERVICE {
   TRELLO = 'TRELLO',
   JIRA_DEFAULT = 'JIRA_DEFAULT',
   JIRA_COMPANY_1 = 'JIRA_COMPANY_1',
-  // JIRA_COMPANY_2 = 'JIRA_COMPANY_2',
+  JIRA_COMPANY_2 = 'JIRA_COMPANY_2',
   MONDAY_DEFAULT = 'MONDAY_DEFAULT',
 }
 
 export enum ADVANCED {
   INTEGRATIONS,
+  THEMES,
   PROFILE,
   GLOBALS,
-  THEMES,
 }
 
 export const PREVIEW_MD = {
