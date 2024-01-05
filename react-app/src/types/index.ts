@@ -68,7 +68,7 @@ export type ThemeKey = keyof typeof ThemeKey
 export type LocalThemeConfig = {
   id: ThemeKey
   config: {
-    slim?: boolean
+    fat?: boolean
   }
 }
 

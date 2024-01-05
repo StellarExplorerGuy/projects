@@ -14,16 +14,16 @@ function SwitchOption({ theme, setTheme }: SwitchProps) {
       color={'primary'}
       slotProps={{ input: { 'aria-label': 'dark mode' } }}
       startDecorator={
-        <Typography sx={{ color: theme.config.slim ? 'text.tertiary' : 'primary.500' }}>Small</Typography>
+        <Typography sx={{ color: theme.config.fat ? 'text.tertiary' : 'primary.500' }}>Small</Typography>
       }
-      endDecorator={<Typography sx={{ color: theme.config.slim ? 'primary.500' : 'text.tertiary' }}>Large</Typography>}
-      checked={theme.config.slim}
+      endDecorator={<Typography sx={{ color: theme.config.fat ? 'primary.500' : 'text.tertiary' }}>Large</Typography>}
+      checked={theme.config.fat}
       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
         setTheme({
           ...theme,
           config: {
             ...theme.config,
-            slim: event.target.checked,
+            fat: event.target.checked,
           },
         })
       }}
