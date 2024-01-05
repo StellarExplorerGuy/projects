@@ -57,16 +57,16 @@ const THEME = {
     '900': '#4393E4',
   },
   SKY: {
-    "50": "#e1f5fe",
-    "100": "#b3e5fc",
-    "200": "#81d4fa",
-    "300": "#4fc3f7",
-    "400": "#29b6f6",
-    "500": "#03a9f4",
-    "600": "#039be5",
-    "700": "#0288d1",
-    "800": "#0277bd",
-    "900": "#039be5"
+    '50': '#e1f5fe',
+    '100': '#b3e5fc',
+    '200': '#81d4fa',
+    '300': '#4fc3f7',
+    '400': '#29b6f6',
+    '500': '#03a9f4',
+    '600': '#039be5',
+    '700': '#0288d1',
+    '800': '#0277bd',
+    '900': '#01579b',
   },
   INDIGO: {
     '50': '#eef2ff',
@@ -78,19 +78,19 @@ const THEME = {
     '600': '#4f46e5',
     '700': '#4338ca',
     '800': '#3730a3',
-    '900': '#4f46e5',
+    '900': '#312e81',
   },
   AMBER: {
-    '50': '#fbe9e7',
-    '100': '#ffccbc',
-    '200': '#ffab91',
-    '300': '#ff8a65',
-    '400': '#ff7043',
-    '500': '#ff5722',
-    '600': '#f4511e',
-    '700': '#e64a19',
-    '800': '#d84315',
-    '900': '#f4511e',
+    '50': '#fffbeb',
+    '100': '#fef3c7',
+    '200': '#fde68a',
+    '300': '#fcd34d',
+    '400': '#fbbf24',
+    '500': '#f59e0b',
+    '600': '#d97706',
+    '700': '#b45309',
+    '800': '#92400e',
+    '900': '#78350f',
   },
   ROSE: {
     '50': '#fff1f2',
@@ -102,10 +102,22 @@ const THEME = {
     '600': '#e11d48',
     '700': '#be123c',
     '800': '#9f1239',
-    '900': '#fda4af',
+    '900': '#881337',
     '1000': '#eb3a60',
   },
   SUMMER: {
+    '50': '#f0fdf4',
+    '100': '#dcfce7',
+    '200': '#bbf7d0',
+    '300': '#86efac',
+    '400': '#4ade80',
+    '500': '#22c55e',
+    '600': '#16a34a',
+    '700': '#15803d',
+    '800': '#166534',
+    '900': '#14532d',
+  },
+  CYAN: {
     '50': '#e0f2f1',
     '100': '#b2dfdb',
     '200': '#80cbc4',
@@ -115,20 +127,13 @@ const THEME = {
     '600': '#00897b',
     '700': '#00796b',
     '800': '#00695c',
-    '900': '#00897b',
+    '900': '#004d40',
   },
-  CYAN: {
-    '50': '#ecfeff',
-    '100': '#cffafe',
-    '200': '#a5f3fc',
-    '300': '#67e8f9',
-    '400': '#22d3ee',
-    '500': '#06b6d4',
-    '600': '#0891b2',
-    '700': '#0e7490',
-    '800': '#155e75',
-    '900': '#0891b2',
-  },
+}
+
+const THEME_PANEL_HOVER = {
+  color: 'var(--joy-palette-primary-mainChannel) / 1',
+  bgcolor: 'var(--joy-palette-primary-plainActiveBg)',
 }
 
 // ------------------------------------------------------------
@@ -160,6 +165,86 @@ const ROSE_THEME_MODES = {
     palette: {
       primary: {
         main: THEME.ROSE[900],
+      },
+    },
+  },
+}
+
+const SKY_THEME_MODES = {
+  APP: {
+    palette: {
+      focusVisible: THEME.SKY[900],
+      primary: THEME.SKY,
+    },
+  },
+  TABS: {
+    palette: {
+      primary: {
+        main: THEME.SKY[900],
+      },
+    },
+  },
+}
+
+const INDIGO_THEME_MODES = {
+  APP: {
+    palette: {
+      focusVisible: THEME.INDIGO[900],
+      primary: THEME.INDIGO,
+    },
+  },
+  TABS: {
+    palette: {
+      primary: {
+        main: THEME.INDIGO[900],
+      },
+    },
+  },
+}
+
+const AMBER_THEME_MODES = {
+  APP: {
+    palette: {
+      focusVisible: THEME.AMBER[900],
+      primary: THEME.AMBER,
+    },
+  },
+  TABS: {
+    palette: {
+      primary: {
+        main: THEME.AMBER[900],
+      },
+    },
+  },
+}
+
+const SUMMER_THEME_MODES = {
+  APP: {
+    palette: {
+      focusVisible: THEME.SUMMER[900],
+      primary: THEME.SUMMER,
+    },
+  },
+  TABS: {
+    palette: {
+      primary: {
+        main: THEME.SUMMER[900],
+      },
+    },
+  },
+}
+
+const CYAN_THEME_MODES = {
+  APP: {
+    palette: {
+      focusVisible: THEME.CYAN[900],
+      primary: THEME.CYAN,
+    },
+  },
+  TABS: {
+    palette: {
+      primary: {
+        main: THEME.CYAN[900],
       },
     },
   },
@@ -222,23 +307,6 @@ const mainTheme = {
   }),
 }
 
-const truckTheme = {
-  joy: extendTheme({
-    ...DEFAULT_TYPOGRAPHY,
-    ...DEFAULT_STYLES,
-    colorSchemes: {
-      light: TRUCK_THEME_MODES.APP,
-      dark: TRUCK_THEME_MODES.APP,
-    },
-  }),
-  mui: extendDefaultTheme({
-    colorSchemes: {
-      light: TRUCK_THEME_MODES.TABS,
-      dark: TRUCK_THEME_MODES.TABS,
-    },
-  }),
-}
-
 const roseTheme = {
   joy: extendTheme({
     ...DEFAULT_TYPOGRAPHY,
@@ -256,37 +324,201 @@ const roseTheme = {
   }),
 }
 
-const THEME_PANEL_HOVER = {
-  color: 'var(--joy-palette-primary-mainChannel) / 1',
-  bgcolor: 'var(--joy-palette-primary-plainActiveBg)',
+const skyTheme = {
+  joy: extendTheme({
+    ...DEFAULT_TYPOGRAPHY,
+    ...DEFAULT_STYLES,
+    colorSchemes: {
+      light: SKY_THEME_MODES.APP,
+      dark: SKY_THEME_MODES.APP,
+    },
+  }),
+  mui: extendDefaultTheme({
+    colorSchemes: {
+      light: SKY_THEME_MODES.TABS,
+      dark: SKY_THEME_MODES.TABS,
+    },
+  }),
 }
 
+const indigoTheme = {
+  joy: extendTheme({
+    ...DEFAULT_TYPOGRAPHY,
+    ...DEFAULT_STYLES,
+    colorSchemes: {
+      light: INDIGO_THEME_MODES.APP,
+      dark: INDIGO_THEME_MODES.APP,
+    },
+  }),
+  mui: extendDefaultTheme({
+    colorSchemes: {
+      light: INDIGO_THEME_MODES.TABS,
+      dark: INDIGO_THEME_MODES.TABS,
+    },
+  }),
+}
+
+const amberTheme = {
+  joy: extendTheme({
+    ...DEFAULT_TYPOGRAPHY,
+    ...DEFAULT_STYLES,
+    colorSchemes: {
+      light: AMBER_THEME_MODES.APP,
+      dark: AMBER_THEME_MODES.APP,
+    },
+  }),
+  mui: extendDefaultTheme({
+    colorSchemes: {
+      light: AMBER_THEME_MODES.TABS,
+      dark: AMBER_THEME_MODES.TABS,
+    },
+  }),
+}
+
+const summerTheme = {
+  joy: extendTheme({
+    ...DEFAULT_TYPOGRAPHY,
+    ...DEFAULT_STYLES,
+    colorSchemes: {
+      light: SUMMER_THEME_MODES.APP,
+      dark: SUMMER_THEME_MODES.APP,
+    },
+  }),
+  mui: extendDefaultTheme({
+    colorSchemes: {
+      light: SUMMER_THEME_MODES.TABS,
+      dark: SUMMER_THEME_MODES.TABS,
+    },
+  }),
+}
+
+const cyanTheme = {
+  joy: extendTheme({
+    ...DEFAULT_TYPOGRAPHY,
+    ...DEFAULT_STYLES,
+    colorSchemes: {
+      light: CYAN_THEME_MODES.APP,
+      dark: CYAN_THEME_MODES.APP,
+    },
+  }),
+  mui: extendDefaultTheme({
+    colorSchemes: {
+      light: CYAN_THEME_MODES.TABS,
+      dark: CYAN_THEME_MODES.TABS,
+    },
+  }),
+}
+
+const truckTheme = {
+  joy: extendTheme({
+    ...DEFAULT_TYPOGRAPHY,
+    ...DEFAULT_STYLES,
+    colorSchemes: {
+      light: TRUCK_THEME_MODES.APP,
+      dark: TRUCK_THEME_MODES.APP,
+    },
+  }),
+  mui: extendDefaultTheme({
+    colorSchemes: {
+      light: TRUCK_THEME_MODES.TABS,
+      dark: TRUCK_THEME_MODES.TABS,
+    },
+  }),
+}
+
+const DEFAULT_CONFIG = {
+  ANIMATION: { src: '', autoplay: true, shouldDisableRiveListeners: false },
+  CUSTOM: {
+    bg: 'inherit',
+    style: {
+      width: '',
+      float: '',
+    },
+  },
+}
 // ------------------------------------------------------------------------------
 const THEMES = {
   [ThemeKey.default]: {
-    animation: { src: '', autoplay: true, shouldDisableRiveListeners: false },
+    animation: DEFAULT_CONFIG.ANIMATION,
     custom: {
-      bg: 'inherit',
-      style: {
-        width: '500px',
-        float: 'right',
-      },
+      ...DEFAULT_CONFIG,
       joy: mainTheme.joy,
       mui: mainTheme.mui,
     },
   },
   [ThemeKey.rose]: {
-    animation: { src: '', autoplay: true, shouldDisableRiveListeners: false },
+    animation: DEFAULT_CONFIG.ANIMATION,
     custom: {
-      bg:THEME.ROSE[1000],
+      bg: 'primary.plainColor',
       style: {
-        width: '500px',
-        float: 'right',
+        width: '',
+        float: '',
       },
       joy: roseTheme.joy,
       mui: roseTheme.mui,
     },
   },
+  [ThemeKey.sky]: {
+    animation: DEFAULT_CONFIG.ANIMATION,
+    custom: {
+      bg: 'primary.softColor',
+      style: {
+        width: '',
+        float: '',
+      },
+      joy: skyTheme.joy,
+      mui: skyTheme.mui,
+    },
+  },
+  [ThemeKey.cyan]: {
+    animation: DEFAULT_CONFIG.ANIMATION,
+    custom: {
+      bg: 'primary.plainColor',
+      style: {
+        width: '',
+        float: '',
+      },
+      joy: cyanTheme.joy,
+      mui: cyanTheme.mui,
+    },
+  },
+  [ThemeKey.indigo]: {
+    animation: DEFAULT_CONFIG.ANIMATION,
+    custom: {
+      bg: 'primary.plainColor',
+      style: {
+        width: '',
+        float: '',
+      },
+      joy: indigoTheme.joy,
+      mui: indigoTheme.mui,
+    },
+  },
+  [ThemeKey.amber]: {
+    animation: DEFAULT_CONFIG.ANIMATION,
+    custom: {
+      bg: 'primary.plainColor',
+      style: {
+        width: '',
+        float: '',
+      },
+      joy: amberTheme.joy,
+      mui: amberTheme.mui,
+    },
+  },
+  [ThemeKey.summer]: {
+    animation: DEFAULT_CONFIG.ANIMATION,
+    custom: {
+      bg: 'primary.plainColor',
+      style: {
+        width: '',
+        float: '',
+      },
+      joy: summerTheme.joy,
+      mui: summerTheme.mui,
+    },
+  },
+  ///
   [ThemeKey.truck]: {
     animation: {
       src: 'truck.riv',
