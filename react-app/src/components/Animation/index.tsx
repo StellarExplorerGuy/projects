@@ -5,9 +5,7 @@ import { ThemeConfig } from 'src/types'
 type AnimationProps = { config: ThemeConfig }
 
 const Animation = (prop: AnimationProps) => {
-  const { RiveComponent } = useRive({
-    ...prop.config.config.animation,
-  })
+  const { RiveComponent } = useRive(prop.config.config.animation)
   return <RiveComponent style={prop.config.config.custom.style} />
 }
 

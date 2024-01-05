@@ -499,8 +499,8 @@ const THEMES = {
     custom: {
       bg: 'primary.plainColor',
       style: {
-        width: '',
-        float: '',
+        width: '500px',
+        float: 'right',
       },
       joy: amberTheme.joy,
       mui: amberTheme.mui,
@@ -523,14 +523,17 @@ const THEMES = {
     animation: {
       src: 'truck.riv',
       autoplay: true,
-      shouldDisableRiveListeners: false,
-      layout: new Layout({
-        // fit: Fit.FitWidth,
-        fit: Fit.ScaleDown,
-        // alignment: Alignment.Center,
-      }),
+      shouldDisableRiveListeners: true,
     },
-    custom: { bg: THEME.ROSE[1000], joy: truckTheme.joy, mui: truckTheme.mui },
+    custom: {
+      bg: THEME.ROSE[1000],
+      style: {
+        width: '',
+        float: '',
+      },
+      joy: truckTheme.joy,
+      mui: truckTheme.mui,
+    },
   },
   [ThemeKey.cat]: {
     animation: { src: 'cat.riv', autoplay: true, shouldDisableRiveListeners: false },

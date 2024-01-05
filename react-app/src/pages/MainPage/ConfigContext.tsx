@@ -3,8 +3,9 @@ import { AppConfig, GlobalConfig, ProfileConfig, SelectedThemeConfig, ThemeKey }
 import { getAnimationURL } from '../../utils/animation'
 import { getAppConfig } from '../../utils/data'
 import { THEMES } from '../../utils/theme'
+import { Fit, Layout } from '@rive-app/react-canvas-lite'
 
- function getThemeConfig(): AppConfig {
+function getThemeConfig(): AppConfig {
   const appConfig = getAppConfig()
   const currentTheme = THEMES[appConfig.theme.id] || THEMES[ThemeKey.default]
 
@@ -15,6 +16,7 @@ import { THEMES } from '../../utils/theme'
       config: currentTheme,
     }
   } else {
+    console.log('!![TEST]appConfig.theme.config.slim', appConfig.theme.config.slim);
     updatedTheme = {
       id: appConfig.theme.id,
       config: {
@@ -22,6 +24,10 @@ import { THEMES } from '../../utils/theme'
           autoplay: currentTheme.animation.autoplay || false,
           shouldDisableRiveListeners: currentTheme.animation.shouldDisableRiveListeners || false,
           src: currentTheme.animation.src ? getAnimationURL(currentTheme.animation.src) : '',
+          layout: new Layout({
+            fit: !appConfig.theme.config.slim ? Fit.ScaleDown : Fit.FitWidth,
+            // alignment: Alignment.Center,
+          }),
         },
         custom: currentTheme.custom,
       },
