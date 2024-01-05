@@ -1,25 +1,22 @@
-import { UseRiveParameters, useRive } from '@rive-app/react-canvas-lite'
-import { getAnimationURL } from '../../utils/animation'
-import { Suspense } from 'react'
+import { useRive } from '@rive-app/react-canvas-lite'
+import { Suspense, memo } from 'react'
+import { ThemeConfig } from 'src/types'
 
-type AnimationProps = UseRiveParameters
+type AnimationProps = { config: ThemeConfig }
 
-const Animation = ({ config }: { config: AnimationProps }) => {
-  const riveAnimationURL = getAnimationURL(config!.src!)
+const Animation = (prop: AnimationProps) => {
   const { RiveComponent } = useRive({
-    ...config,
-    src: riveAnimationURL,
+    ...prop.config.config.animation,
   })
-
-  return <RiveComponent />
+  return <RiveComponent style={prop.config.config.custom.style} />
 }
 
-const RiveAnimation = (config: AnimationProps) => {
-  return config?.src ? (
+const RiveAnimation = memo((prop: AnimationProps) => {
+  return prop?.config?.config?.animation?.src ? (
     <Suspense fallback={<></>}>
-      <Animation config={config} />
+      <Animation config={prop.config} />
     </Suspense>
   ) : null
-}
+})
 
 export default RiveAnimation
