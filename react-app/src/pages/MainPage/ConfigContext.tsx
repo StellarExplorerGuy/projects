@@ -16,7 +16,6 @@ function getThemeConfig(): AppConfig {
       config: currentTheme,
     }
   } else {
-    console.log('!![TEST]appConfig.theme.config.slim', appConfig.theme.config.slim);
     updatedTheme = {
       id: appConfig.theme.id,
       config: {
@@ -25,8 +24,7 @@ function getThemeConfig(): AppConfig {
           shouldDisableRiveListeners: currentTheme.animation.shouldDisableRiveListeners || false,
           src: currentTheme.animation.src ? getAnimationURL(currentTheme.animation.src) : '',
           layout: new Layout({
-            fit: !appConfig.theme.config.slim ? Fit.ScaleDown : Fit.FitWidth,
-            // alignment: Alignment.Center,
+            fit: !appConfig.theme.config.fat ? Fit.ScaleDown : Fit.FitWidth,
           }),
         },
         custom: currentTheme.custom,
