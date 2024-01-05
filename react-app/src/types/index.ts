@@ -40,12 +40,36 @@ export type GlobalConfig = {
   signature: string
 }
 
-export enum ThemeKey {
-  default = 'default',
-  truck = 'truck',
-  cat = 'cat',
-  letsGo = 'letsGo',
-  tentaclesSmoke = 'tentaclesSmoke',
+export const BasicThemeKey = {
+  default: 'Default',
+  sky: 'Sky',
+  indigo: 'Indigo',
+  amber: 'Amber',
+  rose: 'Rose',
+  summer: 'Summer',
+  cyan: 'Cyan',
+}
+
+export const AnimationThemeKey = {
+  truck : 'Truck',
+  cat : 'Cat',
+  letsGo : 'Lets Go',
+  tentacles : 'Tentacles',
+}
+
+export const ThemeKey = {
+  ...BasicThemeKey,
+  ...AnimationThemeKey,
+}
+
+export type ThemeKey = keyof typeof ThemeKey
+
+
+export type LocalThemeConfig = {
+  id: ThemeKey
+  config: {
+    slim?: boolean
+  }
 }
 
 export type ThemeConfig = {

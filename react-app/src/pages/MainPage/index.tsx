@@ -29,12 +29,12 @@ function Main(): JSX.Element {
     }
   }, [])
 
-  const data = useConfigContext()
+  const themeConfig= useConfigContext()
 
   return (
-    <CssVarsProvider defaultMode="light" theme={data.config.theme.config.custom.joy}>
+    <CssVarsProvider defaultMode="light" theme={themeConfig.config.theme.config.custom.joy}>
       <ScopedCssBaseline disableColorScheme>
-        <Panel alertInfo={alertInfo} setClose={setClose} />
+        <Panel themeConfig={themeConfig} alertInfo={alertInfo} setClose={setClose} />
         <MainModal alertInfo={alertInfo} open={open} setClose={setClose} setAlertInfo={setAlertInfo} />
       </ScopedCssBaseline>
     </CssVarsProvider>

@@ -243,7 +243,7 @@ function getPrData(prefix: string): void {
   copyTextToClipboard(processPR(prefix, issueNumber, { user: org, repo }, user))
 }
 
-function Panel({ alertInfo, setClose }: any): JSX.Element {
+function Panel({ themeConfig, alertInfo, setClose }: any): JSX.Element {
   const serviceConfig = getServiceConfig()
 
   const [alertDataInfo, setAlertDataInfo] = useState({
@@ -285,17 +285,15 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
     setSelectedPrefix(newValue)
   }
 
-  const data = useConfigContext()
-
   return (
     <Card
       sx={{
         borderRadius: 0,
         maxWidth: '100%',
-        backgroundColor: data.config.theme.config.custom.bg,
+        backgroundColor: themeConfig.config.theme.config.custom.bg,
       }}
     >
-      {data.config.theme.id !== ThemeKey.default && (
+      {themeConfig.config.theme.id !== ThemeKey.default && (
         <div
           style={{
             position: 'absolute',
@@ -309,7 +307,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
             height: '100%',
           }}
         >
-          <RiveAnimation config={data.config.theme} />
+          <RiveAnimation config={themeConfig.config.theme} />
         </div>
       )}
       <div style={{ zIndex: 2 }}>
@@ -370,7 +368,7 @@ function Panel({ alertInfo, setClose }: any): JSX.Element {
           '--ButtonGroup-radius': '40px',
         }}
       >
-        <CssVarsProvider theme={data.config.theme.config.custom.mui}>
+        <CssVarsProvider theme={themeConfig.config.theme.config.custom.mui}>
           <Box
             sx={{
               flexGrow: 1,

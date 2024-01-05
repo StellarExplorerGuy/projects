@@ -1,10 +1,10 @@
-import { createContext, Dispatch, PropsWithChildren, SetStateAction, useContext, useMemo, useState } from 'react'
+import { createContext, PropsWithChildren, useContext, useMemo, useState } from 'react'
 import { AppConfig, GlobalConfig, ProfileConfig, SelectedThemeConfig, ThemeKey } from '../../types'
 import { getAnimationURL } from '../../utils/animation'
 import { getAppConfig } from '../../utils/data'
 import { THEMES } from '../../utils/theme'
 
-function getThemeConfig(): AppConfig {
+ function getThemeConfig(): AppConfig {
   const appConfig = getAppConfig()
   const currentTheme = THEMES[appConfig.theme.id] || THEMES[ThemeKey.default]
 
@@ -41,13 +41,7 @@ type ConfigContextReturnType = {
     profile: ProfileConfig
     theme: SelectedThemeConfig
   }
-  setConfig: Dispatch<
-    SetStateAction<{
-      global: GlobalConfig
-      profile: ProfileConfig
-      theme: SelectedThemeConfig
-    }>
-  >
+  setAppConfig: (config: { global: GlobalConfig; profile: ProfileConfig; theme: SelectedThemeConfig }) => void
 }
 
 const ConfigContext = createContext<ConfigContextReturnType>(null!)
@@ -55,12 +49,18 @@ const ConfigContext = createContext<ConfigContextReturnType>(null!)
 export const ConfigContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [config, setConfig] = useState(() => getThemeConfig())
 
+  const setAppConfig = useMemo(() => {
+    return () => {
+      setConfig(getThemeConfig())
+    }
+  }, [config, setConfig])
+
   const ctx = useMemo(() => {
     return {
       config,
-      setConfig,
+      setAppConfig,
     }
-  }, [config, setConfig])
+  }, [config, setAppConfig])
 
   return <ConfigContext.Provider value={ctx}>{children}</ConfigContext.Provider>
 }

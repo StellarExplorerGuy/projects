@@ -127,8 +127,10 @@ export const DEFAULT_PROFILE_CONFIG = () => ({
 })
 
 export const DEFAULT_THEME_CONFIG = () => ({
-  id: ThemeKey.default,
-  config: null
+  id: ThemeKey.default as ThemeKey,
+  config: {
+    slim: false
+  }
 })
 
 export const showAlertInfo = (
