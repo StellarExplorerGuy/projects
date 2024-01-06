@@ -297,6 +297,21 @@ const TENTACLES_THEME_MODES = {
   },
 }
 
+const SQUATS_THEME_MODES = {
+  APP: {
+    palette: {
+      primary: THEME.SUMMER,
+    },
+  },
+  TABS: {
+    palette: {
+      primary: {
+        main: THEME.SUMMER[900],
+      },
+    },
+  },
+}
+
 // Globally used by app [Joy UI]
 const mainTheme = {
   joy: extendTheme({
@@ -490,6 +505,23 @@ const truckTheme = {
   }),
 }
 
+const squatsTheme = {
+  joy: extendTheme({
+    ...DEFAULT_TYPOGRAPHY,
+    ...DEFAULT_STYLES,
+    colorSchemes: {
+      light: SQUATS_THEME_MODES.APP,
+      dark: SQUATS_THEME_MODES.APP,
+    },
+  }),
+  mui: extendDefaultTheme({
+    colorSchemes: {
+      light: SQUATS_THEME_MODES.TABS,
+      dark: SQUATS_THEME_MODES.TABS,
+    },
+  }),
+}
+
 const DEFAULT_CONFIG = {
   ANIMATION: { src: '', autoplay: true, shouldDisableRiveListeners: false },
   CUSTOM: {
@@ -603,13 +635,13 @@ const THEMES = {
       mui: skyTheme.mui,
     },
   },
-  [ThemeKey.letsGo]: {
-    animation: { src: 'letsGo.riv', autoplay: true, shouldDisableRiveListeners: true },
-    custom: { bg: 'primary.plainColor', joy: truckTheme.joy, mui: truckTheme.mui },
-  },
   [ThemeKey.tentacles]: {
     animation: { src: 'tentaclesSmoke.riv', autoplay: true, shouldDisableRiveListeners: true },
     custom: { bg: THEME.GRAY_1[1000], joy: tentaclesTheme.joy, mui: tentaclesTheme.mui },
+  },
+  [ThemeKey.squats]: {
+    animation: { src: 'squats.riv', autoplay: true, shouldDisableRiveListeners: true },
+    custom: {  bg: "#b9f08e", joy: squatsTheme.joy, mui: squatsTheme.mui },
   },
 }
 
