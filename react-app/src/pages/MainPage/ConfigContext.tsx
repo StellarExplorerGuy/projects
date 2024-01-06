@@ -53,6 +53,24 @@ function processAnimationConfig(appConfig: AppConfig, currentTheme: any) {
         float: 'right',
       }
     }
+  } else if (appConfig.theme.id === ThemeKey.cup) {
+    if (appConfig.theme.config.fat) {
+      layout = new Layout({
+        fit: Fit.FitWidth,
+      })
+      custom.style = {
+        width: '300px',
+        float: 'right',
+      }
+    } else {
+      layout = new Layout({
+        fit: Fit.FitWidth,
+      })
+      custom.style = {
+        width: '150px',
+        float: 'right',
+      }
+    }
   }
 
   return { layout, custom }

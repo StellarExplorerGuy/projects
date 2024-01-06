@@ -643,6 +643,10 @@ const THEMES = {
     animation: { src: 'squats.riv', autoplay: true, shouldDisableRiveListeners: true },
     custom: {  bg: "#b9f08e", joy: squatsTheme.joy, mui: squatsTheme.mui },
   },
+  [ThemeKey.cup]: {
+    animation: { src: 'cup.riv', autoplay: true, shouldDisableRiveListeners: true },
+    custom: {  bg: "#85a24e", joy: squatsTheme.joy, mui: squatsTheme.mui },
+  },
 }
 
 export { THEMES, THEME_PANEL_HOVER }
