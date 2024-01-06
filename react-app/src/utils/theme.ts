@@ -2,7 +2,6 @@ import { common } from '@mui/material/colors'
 import { extendTheme } from '@mui/joy/styles'
 import { experimental_extendTheme as extendDefaultTheme } from '@mui/material/styles'
 import { ThemeKey } from '../types'
-import { Fit, Layout } from '@rive-app/react-canvas-lite'
 
 declare module '@mui/joy/styles' {
   interface TypographySystemOverrides {
@@ -128,6 +127,19 @@ const THEME = {
     '700': '#00796b',
     '800': '#00695c',
     '900': '#004d40',
+  },
+  GRAY_1: {
+    '50': '#EDF5FD',
+    '100': '#E3EFFB',
+    '200': '#C7DFF7',
+    '300': '#97C3F0',
+    '400': '#2d7494',
+    '500': '#1a6d93',
+    '600': '#1a668b',
+    '700': '#1a5d81',
+    '800': '#1a5477',
+    '900': '#194466',
+    '1000': '#313131',
   },
 }
 
@@ -265,6 +277,21 @@ const TRUCK_THEME_MODES = {
       text: {
         primary: common.white,
         secondary: common.white,
+      },
+    },
+  },
+}
+
+const TENTACLES_THEME_MODES = {
+  APP: {
+    palette: {
+      primary: THEME.GRAY_1,
+    },
+  },
+  TABS: {
+    palette: {
+      primary: {
+        main: THEME.GRAY_1[900],
       },
     },
   },
@@ -409,6 +436,43 @@ const cyanTheme = {
   }),
 }
 
+const tentaclesTheme = {
+  joy: extendTheme({
+    ...DEFAULT_TYPOGRAPHY,
+    ...DEFAULT_STYLES,
+    colorSchemes: {
+      light: TENTACLES_THEME_MODES.APP,
+      dark: TENTACLES_THEME_MODES.APP,
+    },
+  }),
+  mui: extendDefaultTheme({
+    colorSchemes: {
+      light: {
+        palette: {
+          primary: {
+            main: THEME.DEFAULT[900],
+          },
+          text: {
+            primary: THEME.DEFAULT[600],
+            secondary: THEME.GRAY_1[600],
+          },
+        },
+      },
+      dark: {
+        palette: {
+          primary: {
+            main: THEME.DEFAULT[900],
+          },
+          text: {
+            primary: THEME.DEFAULT[200],
+            secondary: THEME.GRAY_1[200],
+          },
+        },
+      },
+    },
+  }),
+}
+
 const truckTheme = {
   joy: extendTheme({
     ...DEFAULT_TYPOGRAPHY,
@@ -527,25 +591,25 @@ const THEMES = {
     },
     custom: {
       bg: THEME.ROSE[1000],
-      style: {
-        width: '',
-        float: '',
-      },
       joy: truckTheme.joy,
       mui: truckTheme.mui,
     },
   },
   [ThemeKey.cat]: {
-    animation: { src: 'cat.riv', autoplay: true, shouldDisableRiveListeners: false },
-    custom: { bg: THEME.ROSE[1000], joy: truckTheme.joy, mui: truckTheme.mui },
+    animation: { src: 'cat.riv', autoplay: true, shouldDisableRiveListeners: true },
+    custom: {
+      bg: 'primary.plainColor',
+      joy: skyTheme.joy,
+      mui: skyTheme.mui,
+    },
   },
   [ThemeKey.letsGo]: {
-    animation: { src: 'letsGo.riv', autoplay: true, shouldDisableRiveListeners: false },
-    custom: { bg: THEME.ROSE[1000], joy: truckTheme.joy, mui: truckTheme.mui },
+    animation: { src: 'letsGo.riv', autoplay: true, shouldDisableRiveListeners: true },
+    custom: { bg: 'primary.plainColor', joy: truckTheme.joy, mui: truckTheme.mui },
   },
   [ThemeKey.tentacles]: {
-    animation: { src: 'tentaclesSmoke.riv', autoplay: true, shouldDisableRiveListeners: false },
-    custom: { bg: THEME.ROSE[1000], joy: truckTheme.joy, mui: truckTheme.mui },
+    animation: { src: 'tentaclesSmoke.riv', autoplay: true, shouldDisableRiveListeners: true },
+    custom: { bg: THEME.GRAY_1[1000], joy: tentaclesTheme.joy, mui: tentaclesTheme.mui },
   },
 }
 

@@ -5,6 +5,41 @@ import { getAppConfig } from '../../utils/data'
 import { THEMES } from '../../utils/theme'
 import { Fit, Layout } from '@rive-app/react-canvas-lite'
 
+function processAnimationConfig(appConfig: AppConfig, currentTheme: any) {
+  let layout = new Layout({
+    fit: appConfig.theme.config.fat ? Fit.FitWidth : Fit.ScaleDown,
+  })
+  let custom = { ...currentTheme.custom }
+
+  if (appConfig.theme.id === ThemeKey.cat && appConfig.theme.config.fat) {
+    custom.style = {
+      width: '350px',
+      float: 'right',
+    }
+  } else if (appConfig.theme.id === ThemeKey.tentacles) {
+    if (appConfig.theme.config.fat) {
+      layout = new Layout({
+        fit: Fit.FitWidth,
+      })
+      custom.style = {
+        width: '650px',
+        'margin-left': 'auto',
+        'margin-right': 'auto',
+      }
+    } else {
+      layout = new Layout({
+        fit: Fit.FitWidth,
+      })
+      custom.style = {
+        width: '450px',
+        float: 'right',
+      }
+    }
+  }
+
+  return { layout, custom }
+}
+
 function getThemeConfig(): AppConfig {
   const appConfig = getAppConfig()
   const currentTheme = THEMES[appConfig.theme.id] || THEMES[ThemeKey.default]
@@ -16,6 +51,7 @@ function getThemeConfig(): AppConfig {
       config: currentTheme,
     }
   } else {
+    const { layout, custom } = processAnimationConfig(appConfig, currentTheme)
     updatedTheme = {
       id: appConfig.theme.id,
       config: {
@@ -23,11 +59,9 @@ function getThemeConfig(): AppConfig {
           autoplay: currentTheme.animation.autoplay || false,
           shouldDisableRiveListeners: currentTheme.animation.shouldDisableRiveListeners || false,
           src: currentTheme.animation.src ? getAnimationURL(currentTheme.animation.src) : '',
-          layout: new Layout({
-            fit: !appConfig.theme.config.fat ? Fit.ScaleDown : Fit.FitWidth,
-          }),
+          layout,
         },
-        custom: currentTheme.custom,
+        custom,
       },
     }
   }
