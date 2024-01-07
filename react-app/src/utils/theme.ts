@@ -526,10 +526,7 @@ const DEFAULT_CONFIG = {
   ANIMATION: { src: '', autoplay: true, shouldDisableRiveListeners: false },
   CUSTOM: {
     bg: 'inherit',
-    style: {
-      width: '',
-      float: '',
-    },
+    style: '',
   },
 }
 // ------------------------------------------------------------------------------
@@ -546,10 +543,7 @@ const THEMES = {
     animation: DEFAULT_CONFIG.ANIMATION,
     custom: {
       bg: 'primary.plainColor',
-      style: {
-        width: '',
-        float: '',
-      },
+      style: '',
       joy: roseTheme.joy,
       mui: roseTheme.mui,
     },
@@ -558,10 +552,7 @@ const THEMES = {
     animation: DEFAULT_CONFIG.ANIMATION,
     custom: {
       bg: 'primary.softColor',
-      style: {
-        width: '',
-        float: '',
-      },
+      style: '',
       joy: skyTheme.joy,
       mui: skyTheme.mui,
     },
@@ -570,10 +561,7 @@ const THEMES = {
     animation: DEFAULT_CONFIG.ANIMATION,
     custom: {
       bg: 'primary.plainColor',
-      style: {
-        width: '',
-        float: '',
-      },
+      style: '',
       joy: cyanTheme.joy,
       mui: cyanTheme.mui,
     },
@@ -582,10 +570,7 @@ const THEMES = {
     animation: DEFAULT_CONFIG.ANIMATION,
     custom: {
       bg: 'primary.plainColor',
-      style: {
-        width: '',
-        float: '',
-      },
+      style: '',
       joy: indigoTheme.joy,
       mui: indigoTheme.mui,
     },
@@ -594,10 +579,7 @@ const THEMES = {
     animation: DEFAULT_CONFIG.ANIMATION,
     custom: {
       bg: 'primary.plainColor',
-      style: {
-        width: '500px',
-        float: 'right',
-      },
+      style: '',
       joy: amberTheme.joy,
       mui: amberTheme.mui,
     },
@@ -606,15 +588,16 @@ const THEMES = {
     animation: DEFAULT_CONFIG.ANIMATION,
     custom: {
       bg: 'primary.plainColor',
-      style: {
-        width: '',
-        float: '',
-      },
+      style: '',
       joy: summerTheme.joy,
       mui: summerTheme.mui,
     },
   },
   ///
+  [ThemeKey.fire]: {
+    animation: { src: 'fire.gif', autoplay: true, shouldDisableRiveListeners: true },
+    custom: { bg: 'inherit', joy: mainTheme.joy, mui: mainTheme.mui },
+  },
   [ThemeKey.truck]: {
     animation: {
       src: 'truck.riv',
@@ -641,11 +624,11 @@ const THEMES = {
   },
   [ThemeKey.squats]: {
     animation: { src: 'squats.riv', autoplay: true, shouldDisableRiveListeners: true },
-    custom: {  bg: "#b9f08e", joy: squatsTheme.joy, mui: squatsTheme.mui },
+    custom: { bg: '#b9f08e', joy: squatsTheme.joy, mui: squatsTheme.mui },
   },
   [ThemeKey.cup]: {
     animation: { src: 'cup.riv', autoplay: true, shouldDisableRiveListeners: true },
-    custom: {  bg: "#85a24e", joy: squatsTheme.joy, mui: squatsTheme.mui },
+    custom: { bg: '#85a24e', joy: squatsTheme.joy, mui: squatsTheme.mui },
   },
 }
 

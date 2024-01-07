@@ -10,7 +10,10 @@ function processAnimationConfig(appConfig: AppConfig, currentTheme: any) {
     fit: appConfig.theme.config.fat ? Fit.FitWidth : Fit.ScaleDown,
   })
   let custom = { ...currentTheme.custom }
-
+  custom.style = {
+    width: '150px',
+    float: 'right',
+  }
   if (appConfig.theme.id === ThemeKey.cat && appConfig.theme.config.fat) {
     custom.style = {
       width: '350px',

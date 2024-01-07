@@ -35,10 +35,9 @@ import {
   SERVICE,
 } from '../../utils/constants'
 import { getDetails } from '../../utils/service.adapter'
-import { GlobalConfig, ThemeKey } from '../../types'
+import { GlobalConfig } from '../../types'
 import ProfileAvatar from '../ProfileAvatar'
 import { THEME_PANEL_HOVER } from '../../utils/theme'
-import { useConfigContext } from '../../pages/MainPage/ConfigContext'
 
 const RiveAnimation = lazy(() => import('../Animation'))
 
@@ -131,7 +130,13 @@ function processCommit(type: any, issue: any, repoDetails: { user: any; repo: an
       const currentService = getService()
       let formattedCommit
       if (
-        [SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1,SERVICE.JIRA_COMPANY_2, SERVICE.MONDAY_DEFAULT].includes(currentService)
+        [
+          SERVICE.TRELLO,
+          SERVICE.JIRA_DEFAULT,
+          SERVICE.JIRA_COMPANY_1,
+          SERVICE.JIRA_COMPANY_2,
+          SERVICE.MONDAY_DEFAULT,
+        ].includes(currentService)
       ) {
         formattedCommit = formatIssueLink(repoDetails, profile.commit, type, signature)
       } else {
@@ -166,7 +171,13 @@ function processPR(type: string, issue: string, repoDetails: { user: string; rep
       const currentService = getService()
       let formattedPR
       if (
-        [SERVICE.TRELLO, SERVICE.JIRA_DEFAULT, SERVICE.JIRA_COMPANY_1, SERVICE.JIRA_COMPANY_2, SERVICE.MONDAY_DEFAULT].includes(currentService)
+        [
+          SERVICE.TRELLO,
+          SERVICE.JIRA_DEFAULT,
+          SERVICE.JIRA_COMPANY_1,
+          SERVICE.JIRA_COMPANY_2,
+          SERVICE.MONDAY_DEFAULT,
+        ].includes(currentService)
       ) {
         formattedPR = formatIssueLink(repoDetails, profile.pr, type, signature)
       } else {
@@ -290,26 +301,33 @@ function Panel({ themeConfig, alertInfo, setClose }: any): JSX.Element {
       sx={{
         borderRadius: 0,
         maxWidth: '100%',
-        backgroundColor: themeConfig.config.theme.config.custom.bg,
+        backgroundColor: themeConfig?.config?.theme?.config?.custom?.bg,
       }}
     >
-      {themeConfig.config.theme.id !== ThemeKey.default && (
-        <div
-          style={{
-            position: 'absolute',
-            zIndex: 1,
-            margin: 0,
-            padding: 0,
-            left: 0,
-            right: 0,
-            top: 0,
-            width: '100%',
-            height: '100%',
-          }}
-        >
+      <div
+        style={{
+          position: 'absolute',
+          zIndex: 1,
+          margin: 0,
+          padding: 0,
+          left: 0,
+          right: 0,
+          top: 0,
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        {themeConfig?.config?.theme?.config?.animation?.src?.includes('.gif') ? (
+          <img
+            style={{ float: 'right', marginRight: 100 }}
+            src={themeConfig?.config?.theme?.config?.animation?.src}
+            alt=""
+          />
+        ) : null}
+        {themeConfig?.config?.theme?.config?.animation?.src?.includes('.riv') ? (
           <RiveAnimation config={themeConfig.config.theme} />
-        </div>
-      )}
+        ) : null}
+      </div>
       <div style={{ zIndex: 2 }}>
         <Grid container direction="row" justifyContent="space-between" alignItems="flex-end" spacing={0}>
           <Grid xs={9}>
