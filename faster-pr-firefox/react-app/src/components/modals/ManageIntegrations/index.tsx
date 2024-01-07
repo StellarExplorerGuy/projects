@@ -81,10 +81,6 @@ function Item({ integration }: ItemProps) {
       sx={{
         pointerEvents: 'none',
       }}
-      // {...(integration.checked && {
-      //   variant: 'soft',
-      //   color: 'primary',
-      // })}
     >
       <Avatar aria-hidden="true" src={integration.avatar} />
       <Checkbox
@@ -400,6 +396,7 @@ function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
           },
           setAlertInfo,
         )
+
         break
       }
       case ADVANCED.GLOBALS: {

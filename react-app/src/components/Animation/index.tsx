@@ -12,7 +12,7 @@ const Animation = (prop: AnimationProps) => {
 const RiveAnimation = memo((prop: AnimationProps) => {
   return prop?.config?.config?.animation?.src ? (
     <Suspense fallback={<></>}>
-      <Animation config={prop.config} />
+      <Animation key={`${prop.config.id}${prop.config.config.animation.layout.fit}`} config={prop.config} />
     </Suspense>
   ) : null
 })
