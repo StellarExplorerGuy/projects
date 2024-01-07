@@ -129,8 +129,8 @@ export const DEFAULT_PROFILE_CONFIG = () => ({
 export const DEFAULT_THEME_CONFIG = () => ({
   id: ThemeKey.default as ThemeKey,
   config: {
-    fat: false
-  }
+    fat: false,
+  },
 })
 
 export const showAlertInfo = (
@@ -175,7 +175,7 @@ export const getAppConfig = (): AppConfig => {
     const localConfig = localStorage.getItem(FASTER_PR_CONFIG)!
 
     if (!localConfig) {
-      updateLocalStorage(FASTER_PR_CONFIG,  {
+      updateLocalStorage(FASTER_PR_CONFIG, {
         profile: DEFAULT_PROFILE_CONFIG(),
         global: DEFAULT_GLOBAL_CONFIG(),
         theme: DEFAULT_THEME_CONFIG(),
@@ -188,7 +188,7 @@ export const getAppConfig = (): AppConfig => {
     }
     const appConfig = JSON.parse(localConfig) as AppConfig
     if (!appConfig.global || !appConfig.profile || !appConfig.theme) {
-      updateLocalStorage(FASTER_PR_CONFIG,  {
+      updateLocalStorage(FASTER_PR_CONFIG, {
         profile: DEFAULT_PROFILE_CONFIG(),
         global: DEFAULT_GLOBAL_CONFIG(),
         theme: DEFAULT_THEME_CONFIG(),
@@ -280,7 +280,19 @@ export function getProfileData() {
 
 export const COMMIT_TEMPLATES = [
   {
-    name: 'Template 1',
+    name: '⭐',
+    template: `ISSUE_TYPE: `,
+  },
+  {
+    name: '⭐⭐',
+    template: `ISSUE_TYPE(SIGNATURE): `,
+  },
+  {
+    name: '⭐⭐⭐',
+    template: `ISSUE_TYPE(REPO_ORG/REPO_NAME#ISSUE): `,
+  },
+  {
+    name: '⭐⭐⭐⭐',
     template: getCommit({
       type: TEMPLATE_KEY.ISSUE_TYPE,
       issue: TEMPLATE_KEY.ISSUE,
@@ -289,29 +301,11 @@ export const COMMIT_TEMPLATES = [
       user: TEMPLATE_KEY.SIGNATURE,
     }),
   },
-  {
-    name: 'Template 2',
-    template: `ISSUE_TYPE(REPO_ORG/REPO_NAME#ISSUE): `,
-  },
-  {
-    name: 'Template 3',
-    template: `ISSUE_TYPE(SIGNATURE): `,
-  },
 ]
 
 export const PR_TEMPLATES = [
   {
-    name: 'Template 1',
-    template: getPR({
-      type: TEMPLATE_KEY.ISSUE_TYPE,
-      issue: TEMPLATE_KEY.ISSUE,
-      repoOrg: TEMPLATE_KEY.REPO_ORG,
-      repoName: TEMPLATE_KEY.REPO_NAME,
-      user: TEMPLATE_KEY.SIGNATURE,
-    }),
-  },
-  {
-    name: 'Template 2',
+    name: '⭐',
     template: `## Status
 **READY**
 
@@ -336,7 +330,7 @@ Signed-off-by: SIGNATURE
 `,
   },
   {
-    name: 'Template 3',
+    name: '⭐⭐',
     template: `## Status
 **READY**
 
@@ -357,7 +351,7 @@ Signed-off-by: SIGNATURE
 `,
   },
   {
-    name: 'Template 4',
+    name: '⭐⭐⭐',
     template: `### 🛠 Changes being made
 <!--
 Here give examples of the changes you've made in this pull request. Include an itemized list if you can. It'll help the reviewer
@@ -390,5 +384,15 @@ If you made UI changes, what are the before an afters?
 
 
 `,
+  },
+  {
+    name: '⭐⭐⭐⭐',
+    template: getPR({
+      type: TEMPLATE_KEY.ISSUE_TYPE,
+      issue: TEMPLATE_KEY.ISSUE,
+      repoOrg: TEMPLATE_KEY.REPO_ORG,
+      repoName: TEMPLATE_KEY.REPO_NAME,
+      user: TEMPLATE_KEY.SIGNATURE,
+    }),
   },
 ]

@@ -48,6 +48,14 @@ import * as Accordion from '@radix-ui/react-accordion'
 import ManageIntegrations from '../modals/ManageIntegrations'
 import { SetStateAction, useEffect, useRef } from 'react'
 
+function RankLabel() {
+  return (
+    <FormLabel id="select-field" htmlFor="select-field">
+      Templates by rank
+    </FormLabel>
+  )
+}
+
 const getCommonDetails = (global: GlobalConfig, dialogValue: ItemType) => {
   const params = { title: <Typography>Common</Typography>, sx: {}, dialogValue: { ...dialogValue } }
 
@@ -576,6 +584,7 @@ function Content({
                         <InfoIconButton text={TEXT.TOOLTIP.COMMIT_TEMPLATE} />
                       </Box>
                       <Box sx={{ float: 'left', pl: 5, width: 200 }}>
+                        <RankLabel />
                         <Select
                           defaultValue={COMMIT_TEMPLATES[0]}
                           size="md"
@@ -632,6 +641,7 @@ function Content({
                         />
                       </Box>
                       <Box sx={{ float: 'left', pl: 5, width: 200 }}>
+                        <RankLabel />
                         <Select
                           defaultValue={PR_TEMPLATES[0]}
                           size="md"

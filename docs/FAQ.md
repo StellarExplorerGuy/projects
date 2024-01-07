@@ -106,3 +106,24 @@ const RiveAnimation = () => {
 }
 
 export default RiveAnimation
+
+
+// GIF
+// <img style={{ float: 'right', marginRight: 100 }} src={Fire} alt="GIF Example" />
+
+
+docker run --rm -e HEIGHT=256 -e WIDTH=256 -e FPS=30 -v /home/ed/Downloads/lottie-animations:/source edasriyan/lottie-to-gif
+
+docker run --rm -v /Users/strela/Downloads/000:/source edasriyan/lottie-to-gif
+
+
+const DotLottie = memo((prop: any) => {
+  console.log('!![TEST]DotLottie')
+  return (
+    <div style={{ float: 'right', marginRight: 10, width: '100px', height: '100px' }}>
+      <DotLottiePlayer src={prop.config.config.animation.src} autoplay loop></DotLottiePlayer>
+    </div>
+  )
+})
+
+export default DotLottie
