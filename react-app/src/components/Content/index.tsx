@@ -627,11 +627,6 @@ function Content({
                     <Grid xs={11}>
                       <Box sx={{ float: 'left', pt: 0.5, mb: 1 }}>
                         <FormLabel>Comments hidden</FormLabel>
-                      </Box>
-                      <Box sx={{ float: 'left' }}>
-                        <InfoIconButton text="If you activate this feature, comments will be hidden in the PR description please toggle to see the changes. Here you can see the preview only." />
-                      </Box>
-                      <Box sx={{ float: 'left', mt: 0.5, mb: 1 }}>
                         <SwitchButton
                           checked={dialogValue.slimPrChecked}
                           setChecked={(value) => {
@@ -639,6 +634,9 @@ function Content({
                             setDialogValue({ ...dialogValue, slimPrChecked: value })
                           }}
                         />
+                      </Box>
+                      <Box sx={{ float: 'left' }}>
+                        <InfoIconButton text="If you activate this feature, comments will be hidden in the PR description please toggle to see the changes. Here you can see the preview only." />
                       </Box>
                       <Box sx={{ float: 'left', pl: 5, width: 200 }}>
                         <RankLabel />
