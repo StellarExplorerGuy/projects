@@ -18,7 +18,7 @@ function Main(): JSX.Element {
 
   useEffect(() => {
     // load it once if theme enabled
-    RuntimeLoader.setWasmUrl(getAnimationURL('rive.wasm'))
+    RuntimeLoader.setWasmUrl(getAnimationURL('r.wasm'))
     const openModalHandler = () => {
       setClose(true)
     }
