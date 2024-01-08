@@ -386,7 +386,7 @@ function Panel({ themeConfig, alertInfo, setClose }: any): JSX.Element {
           '--ButtonGroup-radius': '40px',
         }}
       >
-        <CssVarsProvider theme={themeConfig.config.theme.config.custom.mui}>
+        <CssVarsProvider theme={themeConfig?.config?.theme?.config?.custom?.mui}>
           <Box
             sx={{
               flexGrow: 1,
