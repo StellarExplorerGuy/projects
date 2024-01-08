@@ -726,7 +726,7 @@ const THEMES = {
     },
   },
   [ThemeKey.tentacles]: {
-    animation: { src: 'tentaclesSmoke.riv', autoplay: true, shouldDisableRiveListeners: true },
+    animation: { src: 'tentacles.riv', autoplay: true, shouldDisableRiveListeners: true },
     custom: { bg: THEME.GRAY_1[1000], joy: tentaclesTheme.joy, mui: tentaclesTheme.mui },
   },
   [ThemeKey.squats]: {
