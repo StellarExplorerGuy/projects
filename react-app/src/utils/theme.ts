@@ -312,6 +312,21 @@ const SQUATS_THEME_MODES = {
   },
 }
 
+const JODA_THEME_MODES = {
+  APP: {
+    palette: {
+      primary: THEME.CYAN,
+    },
+  },
+  TABS: {
+    palette: {
+      primary: {
+        main: THEME.CYAN[900],
+      },
+    },
+  },
+}
+
 // Globally used by app [Joy UI]
 const mainTheme = {
   joy: extendTheme({
@@ -488,6 +503,43 @@ const tentaclesTheme = {
   }),
 }
 
+const yodaTheme = {
+  joy: extendTheme({
+    ...DEFAULT_TYPOGRAPHY,
+    ...DEFAULT_STYLES,
+    colorSchemes: {
+      light: JODA_THEME_MODES.APP,
+      dark: JODA_THEME_MODES.APP,
+    },
+  }),
+  mui: extendDefaultTheme({
+    colorSchemes: {
+      light: {
+        palette: {
+          primary: {
+            main: THEME.CYAN[200]
+          },
+          text: {
+            primary: THEME.CYAN[200],
+            secondary: THEME.CYAN[200],
+          },
+        },
+      },
+      dark: {
+        palette: {
+          primary: {
+            main: THEME.CYAN[200]
+          },
+          text: {
+            primary: THEME.CYAN[200],
+            secondary: THEME.CYAN[200],
+          },
+        },
+      },
+    },
+  }),
+}
+
 const truckTheme = {
   joy: extendTheme({
     ...DEFAULT_TYPOGRAPHY,
@@ -629,6 +681,10 @@ const THEMES = {
   [ThemeKey.cup]: {
     animation: { src: 'cup.riv', autoplay: true, shouldDisableRiveListeners: true },
     custom: { bg: '#85a24e', joy: squatsTheme.joy, mui: squatsTheme.mui },
+  },
+  [ThemeKey.joda]: {
+    animation: { src: 'joda.riv', autoplay: true, shouldDisableRiveListeners: true },
+    custom: { bg: '#313131', joy: yodaTheme.joy, mui: yodaTheme.mui },
   },
 }
 

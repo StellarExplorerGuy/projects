@@ -54,6 +54,13 @@ function processAnimationConfig(appConfig: AppConfig, currentTheme: any) {
         customStyle.width = '300px'
       }
       break
+    case ThemeKey.joda:
+      customStyle = {
+        width: '250px',
+        'margin-right': '50px',
+        float: 'right',
+      }
+      break
     default:
       break
   }

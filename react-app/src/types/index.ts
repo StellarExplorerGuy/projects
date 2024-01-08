@@ -55,8 +55,9 @@ export const AnimationThemeKey = {
   truck : 'Truck',
   cat : 'Cat',
   squats : 'Squats',
-  tentacles : 'Tentacles',
   cup : 'Cup',
+  joda: 'Joda',
+  tentacles : 'Tentacles',
 }
 
 export const ThemeKey = {
