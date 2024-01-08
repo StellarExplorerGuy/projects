@@ -323,7 +323,7 @@ function ThemeConfigItem({
         </Grid>
         <Divider sx={{ ml: 2, mr: 2 }} orientation="vertical" />
         <Grid xs={3}>
-          {isLiveMode && (
+          {isLiveMode && (theme.id !== ThemeKey.fire) && (
             <>
               <FormLabel sx={{ pb: 0.8 }}>Select animation size</FormLabel>
               <SwitchOption theme={theme} setTheme={setTheme} />
