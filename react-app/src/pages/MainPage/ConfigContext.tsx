@@ -6,74 +6,65 @@ import { THEMES } from '../../utils/theme'
 import { Fit, Layout } from '@rive-app/react-canvas-lite'
 
 function processAnimationConfig(appConfig: AppConfig, currentTheme: any) {
-  let layout = new Layout({
-    fit: appConfig.theme.config.fat ? Fit.FitWidth : Fit.ScaleDown,
-  })
-  let custom = { ...currentTheme.custom }
-  custom.style = {
-    width: '150px',
+  let layoutFit = Fit.ScaleDown
+
+  if (appConfig.theme.config.fat) {
+    layoutFit = Fit.FitWidth
+  }
+
+  let customStyle = {
+    width: '250px',
     float: 'right',
   }
-  if (appConfig.theme.id === ThemeKey.cat && appConfig.theme.config.fat) {
-    custom.style = {
-      width: '350px',
-      float: 'right',
-    }
-  } else if (appConfig.theme.id === ThemeKey.tentacles) {
-    if (appConfig.theme.config.fat) {
-      layout = new Layout({
-        fit: Fit.FitWidth,
-      })
-      custom.style = {
-        width: '650px',
-        'margin-left': 'auto',
-        'margin-right': 'auto',
+
+  switch (appConfig.theme.id) {
+    case ThemeKey.cat:
+      if (appConfig.theme.config.fat) {
+        customStyle.width = '350px'
       }
-    } else {
-      layout = new Layout({
-        fit: Fit.FitWidth,
-      })
-      custom.style = {
-        width: '450px',
-        float: 'right',
+      break
+    case ThemeKey.truck:
+      if (appConfig.theme.config.fat) {
+        customStyle = {
+          width: '650px',
+          'margin-left': 'auto',
+          'margin-right': 'auto',
+        }
       }
-    }
-  } else if (appConfig.theme.id === ThemeKey.squats) {
-    if (appConfig.theme.config.fat) {
-      layout = new Layout({
-        fit: Fit.FitWidth,
-      })
-      custom.style = {
-        width: '250px',
-        float: 'right',
+      break
+    case ThemeKey.tentacles:
+      if (appConfig.theme.config.fat) {
+        layoutFit = Fit.FitWidth
+        customStyle = {
+          width: '650px',
+          'margin-left': 'auto',
+          'margin-right': 'auto',
+        }
+      } else {
+        customStyle.width = '450px'
       }
-    } else {
-      layout = new Layout({
-        fit: Fit.FitWidth,
-      })
-      custom.style = {
-        width: '150px',
-        float: 'right',
+      break
+    case ThemeKey.squats:
+      if (appConfig.theme.config.fat) {
+        customStyle.width = '250px'
       }
-    }
-  } else if (appConfig.theme.id === ThemeKey.cup) {
-    if (appConfig.theme.config.fat) {
-      layout = new Layout({
-        fit: Fit.FitWidth,
-      })
-      custom.style = {
-        width: '300px',
-        float: 'right',
+      break
+    case ThemeKey.cup:
+      if (appConfig.theme.config.fat) {
+        customStyle.width = '300px'
       }
-    } else {
-      layout = new Layout({
-        fit: Fit.FitWidth,
-      })
-      custom.style = {
-        width: '150px',
-        float: 'right',
-      }
-    }
+      break
+    default:
+      break
+  }
+
+  const layout = new Layout({
+    fit: layoutFit,
+  })
+
+  const custom = {
+    ...currentTheme.custom,
+    style: customStyle,
   }
 
   return { layout, custom }
