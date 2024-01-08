@@ -44,6 +44,7 @@ export const BasicThemeKey = {
   default: 'Default',
   sky: 'Sky',
   indigo: 'Indigo',
+  purple: 'Purple',
   amber: 'Amber',
   rose: 'Rose',
   summer: 'Summer',

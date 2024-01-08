@@ -104,6 +104,18 @@ const THEME = {
     '900': '#881337',
     '1000': '#eb3a60',
   },
+  PURPLE: {
+    "50": "#fdf4ff",
+    "100": "#fae8ff",
+    "200": "#f5d0fe",
+    "300": "#f0abfc",
+    "400": "#e879f9",
+    "500": "#d946ef",
+    "600": "#c026d3",
+    "700": "#a21caf",
+    "800": "#86198f",
+    "900": "#701a75"
+  },
   SUMMER: {
     '50': '#f0fdf4',
     '100': '#dcfce7',
@@ -177,6 +189,22 @@ const ROSE_THEME_MODES = {
     palette: {
       primary: {
         main: THEME.ROSE[900],
+      },
+    },
+  },
+}
+
+const PURPLE_THEME_MODES = {
+  APP: {
+    palette: {
+      focusVisible: THEME.PURPLE[900],
+      primary: THEME.PURPLE,
+    },
+  },
+  TABS: {
+    palette: {
+      primary: {
+        main: THEME.PURPLE[900],
       },
     },
   },
@@ -449,6 +477,23 @@ const summerTheme = {
   }),
 }
 
+const purpleTheme = {
+  joy: extendTheme({
+    ...DEFAULT_TYPOGRAPHY,
+    ...DEFAULT_STYLES,
+    colorSchemes: {
+      light: PURPLE_THEME_MODES.APP,
+      dark: PURPLE_THEME_MODES.APP,
+    },
+  }),
+  mui: extendDefaultTheme({
+    colorSchemes: {
+      light: PURPLE_THEME_MODES.TABS,
+      dark: PURPLE_THEME_MODES.TABS,
+    },
+  }),
+}
+
 const cyanTheme = {
   joy: extendTheme({
     ...DEFAULT_TYPOGRAPHY,
@@ -600,6 +645,7 @@ const THEMES = {
       mui: roseTheme.mui,
     },
   },
+
   [ThemeKey.sky]: {
     animation: DEFAULT_CONFIG.ANIMATION,
     custom: {
@@ -643,6 +689,15 @@ const THEMES = {
       style: '',
       joy: summerTheme.joy,
       mui: summerTheme.mui,
+    },
+  },
+  [ThemeKey.purple]: {
+    animation: DEFAULT_CONFIG.ANIMATION,
+    custom: {
+      bg: 'primary.plainColor',
+      style: '',
+      joy: purpleTheme.joy,
+      mui: purpleTheme.mui,
     },
   },
   ///
