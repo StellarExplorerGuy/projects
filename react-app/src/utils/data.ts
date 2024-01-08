@@ -100,22 +100,6 @@ Contributes:
 `
 }
 
-export const defaultProfile = () => {
-  const { ISSUE_TYPE: TYPE, ISSUE, REPO_ORG, REPO_NAME, SIGNATURE } = TEMPLATE_KEY
-
-  return {
-    profiles: [DEFAULT_PROFILE],
-    profile: DEFAULT_PROFILE,
-    signature: '',
-    branchSeparator: '',
-    branchPrefixes: BRANCH_PREFIXES ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
-    checked: true,
-    uppercase: false,
-    commit: getCommit({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
-    pr: getPR({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
-    slimPrChecked: false,
-  }
-}
 export const DEFAULT_GLOBAL_CONFIG = () => ({
   enabled: false,
   signature: '',
@@ -281,15 +265,15 @@ export function getProfileData() {
 export const COMMIT_TEMPLATES = [
   {
     name: '⭐',
-    template: `ISSUE_TYPE: `,
+    template: 'ISSUE_TYPE: ',
   },
   {
     name: '⭐⭐',
-    template: `ISSUE_TYPE(SIGNATURE): `,
+    template: 'ISSUE_TYPE(SIGNATURE): ',
   },
   {
     name: '⭐⭐⭐',
-    template: `ISSUE_TYPE(REPO_ORG/REPO_NAME#ISSUE): `,
+    template: 'ISSUE_TYPE(REPO_ORG/REPO_NAME#ISSUE): ',
   },
   {
     name: '⭐⭐⭐⭐',
@@ -396,3 +380,18 @@ If you made UI changes, what are the before an afters?
     }),
   },
 ]
+
+export const defaultProfile = () => {
+  return {
+    profiles: [DEFAULT_PROFILE],
+    profile: DEFAULT_PROFILE,
+    signature: '',
+    branchSeparator: '',
+    branchPrefixes: BRANCH_PREFIXES ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
+    checked: true,
+    uppercase: false,
+    commit: COMMIT_TEMPLATES[0].template,
+    pr: PR_TEMPLATES[0].template,
+    slimPrChecked: false,
+  }
+}
