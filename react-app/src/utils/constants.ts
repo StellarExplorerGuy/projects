@@ -30,7 +30,7 @@ export const TEXT = {
     GLOBALS:
       'You have the option to adjust extension behavior by establishing global configuration settings at the top to supersede profile-specific configurations. This is particularly useful if you desire a consistent configuration that applies to all profiles.',
     PROFILE: 'Customize your profile with a max of two characters permitted for initials e.g. AS, TS.',
-    THEMES: 'You can personalize your theme by activating both the color mode and animation features. Animation is visible on your quick panel only.',
+    THEMES: 'You have the option to customize your theme by enabling either the theme color(tagged as basic) or animation feature(tagged as live). The animation will be visible solely on your quick panel and can be slightly customized to your preferences. Basic and live types have dark and light themes.',
   },
 }
 
