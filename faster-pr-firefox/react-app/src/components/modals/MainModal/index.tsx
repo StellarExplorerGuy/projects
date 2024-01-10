@@ -175,10 +175,9 @@ function MainModal({ alertInfo, open, setClose, setAlertInfo }: any): JSX.Elemen
             </Typography>
           </Grid>
           <Grid xs={9}>
-            <Grid container direction="row" justifyContent="flex-end" alignItems="flex-start">
+            <Grid container direction="row" gap={2} justifyContent="flex-end" alignItems="flex-start">
               <IconButton
                 sx={{
-                  mr: 2,
                   borderRadius: 8,
                 }}
                 variant="outlined"

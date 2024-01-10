@@ -1,4 +1,20 @@
-import { Alert, Box, ButtonGroup, Divider, FormControl, FormLabel, IconButton, Input, Link, Tooltip } from '@mui/joy'
+import {
+  Alert,
+  Box,
+  ButtonGroup,
+  Chip,
+  Divider,
+  FormControl,
+  FormLabel,
+  IconButton,
+  Input,
+  Link,
+  ListDivider,
+  ListItemDecorator,
+  Select,
+  Tooltip,
+  listItemDecoratorClasses,
+} from '@mui/joy'
 import Button from '@mui/joy/Button'
 import Grid from '@mui/joy/Grid'
 import Modal from '@mui/joy/Modal'
@@ -28,11 +44,23 @@ import { ADVANCED, FASTER_PR_CONFIG, KO_FI_URL, TEXT } from '../../../utils/cons
 import Signature from '../../Signature'
 import { decodeUrl, getAppConfig, showAlertInfo } from '../../../utils/data'
 import { useState } from 'react'
-import { GlobalConfig, ProfileConfig } from '../../../types'
+import {
+  GlobalConfig,
+  ProfileConfig,
+  BasicThemeKey,
+  AnimationThemeKey,
+  ThemeKey,
+  LocalThemeConfig,
+} from '../../../types'
 import SwitchButton from '../../SwitchButton'
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
+import { SwitchOption } from '../../../components/SwitchDecorators'
+import Option, { optionClasses } from '@mui/joy/Option'
+import { useConfigContext } from '../../../pages/MainPage/ConfigContext'
+import React from 'react'
+import { Check } from '@mui/icons-material'
 
-const HEADERS = ['Integrations 😎', 'Profile 👤', 'Globals 🔧']
+const HEADERS = ['Integrations 😎', 'Themes 🎨', 'Profile 👤', 'Globals 🔧']
 const dataList = [
   {
     index: 0,
@@ -56,7 +84,7 @@ const dataList = [
     index: 3,
     checked: true,
     avatar: Jira,
-    label: 'Jira [jsw.any-name.com]',
+    label: 'Jira [jsw.any-name.com, jira.any-name.net]',
   },
   {
     index: 4,
@@ -81,6 +109,10 @@ function Item({ integration }: ItemProps) {
       sx={{
         pointerEvents: 'none',
       }}
+      // {...(integration.checked && {
+      //   variant: 'soft',
+      //   color: 'primary',
+      // })}
     >
       <Avatar aria-hidden="true" src={integration.avatar} />
       <Checkbox
@@ -198,11 +230,119 @@ function IntegrationsCheckbox() {
   )
 }
 
+const themeGroup = {
+  basic: Object.values(BasicThemeKey),
+  live: Object.values(AnimationThemeKey),
+}
+
+function ThemeConfigItem({
+  theme,
+  setTheme,
+}: {
+  theme: LocalThemeConfig
+  setTheme: React.Dispatch<React.SetStateAction<LocalThemeConfig>>
+}) {
+  const { theme: themeOriginal } = getAppConfig()
+  const isLiveMode = !themeGroup.basic.some((basicTheme) => basicTheme === theme.id)
+
+  return (
+    <>
+      <Grid container direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+        <Grid xs={10.5}>
+          <Typography
+            sx={{
+              textTransform: 'uppercase',
+              fontSize: 'xs',
+              letterSpacing: 'lg',
+              fontWeight: 'lg',
+              color: 'text.secondary',
+            }}
+          >
+            Current theme <Typography color="primary">[{themeOriginal.id}]</Typography>
+          </Typography>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2}>
+        <Grid xs={5}>
+          <Select
+            placeholder=""
+            defaultValue={theme.id}
+            slotProps={{
+              listbox: {
+                component: 'div',
+                sx: {
+                  maxHeight: 240,
+                  overflow: 'auto',
+                  '--List-padding': '0px',
+                  '--ListItem-radius': '0px',
+                },
+              },
+            }}
+            onChange={(_, item) => {
+              setTheme({ ...theme, id: item as ThemeKey })
+            }}
+          >
+            {Object.entries(themeGroup).map(([name, themes], index) => (
+              <React.Fragment key={name}>
+                {index !== 0 && <ListDivider role="none" />}
+                <List aria-labelledby={`select-group-${name}`} sx={{ '--ListItemDecorator-size': '28px' }}>
+                  <ListItem id={`select-group-${name}`} sticky>
+                    <Typography level="body-xs" textTransform="uppercase">
+                      {name} ({themes.length})
+                    </Typography>
+                  </ListItem>
+                  {themes.map((item) => (
+                    <Option
+                      key={item}
+                      value={item}
+                      label={
+                        <React.Fragment>
+                          <Chip size="sm" color={'primary'} sx={{ borderRadius: 'xs', mr: 1 }}>
+                            {name}
+                          </Chip>{' '}
+                          {item}
+                        </React.Fragment>
+                      }
+                      sx={{
+                        [`&.${optionClasses.selected} .${listItemDecoratorClasses.root}`]: {
+                          opacity: 1,
+                        },
+                      }}
+                    >
+                      <ListItemDecorator sx={{ opacity: 0 }}>
+                        <Check />
+                      </ListItemDecorator>
+                      {item}
+                    </Option>
+                  ))}
+                </List>
+              </React.Fragment>
+            ))}
+          </Select>
+        </Grid>
+        <Divider sx={{ ml: 2, mr: 2 }} orientation="vertical" />
+        <Grid xs={3}>
+          {isLiveMode &&
+            ![ThemeKey.fire, ThemeKey.iceFire, ThemeKey.ghostFire, ThemeKey.darkFire].includes(theme.id) && (
+              <>
+                <FormLabel sx={{ pb: 0.8 }}>Select animation size</FormLabel>
+                <SwitchOption theme={theme} setTheme={setTheme} />
+              </>
+            )}
+        </Grid>
+      </Grid>
+    </>
+  )
+}
+
 function getDetails(
   global: GlobalConfig,
   profile: ProfileConfig,
+  theme: LocalThemeConfig,
   setGlobal: React.Dispatch<React.SetStateAction<GlobalConfig>>,
   setProfile: React.Dispatch<React.SetStateAction<ProfileConfig>>,
+  setTheme: React.Dispatch<React.SetStateAction<LocalThemeConfig>>,
 ) {
   return [
     <Box fontWeight="sm">
@@ -225,6 +365,22 @@ function getDetails(
           <IntegrationsCheckbox />
         </Grid>
       </Grid>
+    </Box>,
+    <Box fontWeight="sm">
+      <Box sx={{ pt: 1, pb: 1 }}>
+        <MessageBox message={<div>{TEXT.MANAGE_INTEGRATIONS.THEMES}</div>} />
+        <Sheet
+          variant="outlined"
+          sx={{
+            p: 2,
+            my: 2,
+            borderRadius: 'sm',
+            maxWidth: '100%',
+          }}
+        >
+          <ThemeConfigItem theme={theme} setTheme={setTheme} />
+        </Sheet>
+      </Box>
     </Box>,
     <Box fontWeight="sm">
       <Box sx={{ pt: 1, pb: 1 }}>
@@ -265,7 +421,7 @@ function getDetails(
           </Grid>
           <Divider sx={{ ml: 2, mr: 2 }} orientation="vertical" />
           <Grid xs={3}>
-            <FormLabel sx={{pb: 0.8}}>Select from the list</FormLabel>
+            <FormLabel sx={{ pb: 0.8 }}>Select from the list</FormLabel>
             <ButtonGroup
               variant="solid"
               color="primary"
@@ -291,8 +447,6 @@ function getDetails(
               <Button onClick={() => setProfile({ ...profile, avatar: '🙀' })}>🙀</Button>
               <Divider />
               <Button onClick={() => setProfile({ ...profile, avatar: '🐔' })}>🐔</Button>
-              <Divider />
-              <Button onClick={() => setProfile({ ...profile, avatar: '🐮' })}>🐮</Button>
             </ButtonGroup>
           </Grid>
         </Grid>
@@ -345,6 +499,8 @@ interface ManageIntegrationsProps {
 }
 
 function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
+  const { setAppConfig } = useConfigContext()
+
   const [alertInfo, setAlertInfo] = useState({
     visible: false,
     msg: '',
@@ -353,18 +509,15 @@ function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
   const [currentTab, setCurrentTab] = useState<number>(0)
   const [global, setGlobal] = useState<GlobalConfig>(() => {
     const { global } = getAppConfig()
-    // const profileKey = getLocalStorage(FASTER_PR_PROFILE_KEY)
-    // const allProfiles = getLocalStorage(FASTER_PR_PROFILE)
-    // const profile = allProfiles[profileKey]
-
-    // if (!global.enabled) {
-    //   global.signature = profile.signature
-    // }
     return global
   })
   const [profile, setProfile] = useState<ProfileConfig>(() => {
     const { profile } = getAppConfig()
     return profile
+  })
+  const [theme, setTheme] = useState(() => {
+    const { theme } = getAppConfig()
+    return theme
   })
 
   const onTabClick = (tabIndex: number): void => {
@@ -377,7 +530,7 @@ function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
           showAlertInfo(
             {
               visible: true,
-              msg: `It can't be empty!`,
+              msg: "It can't be empty!",
               type: 'warning',
             },
             setAlertInfo,
@@ -396,7 +549,22 @@ function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
           },
           setAlertInfo,
         )
+        break
+      }
+      case ADVANCED.THEMES: {
+        const appConfig = getAppConfig()
+        const updatedConfig = { ...appConfig, theme }
+        localStorage.setItem(FASTER_PR_CONFIG, JSON.stringify(updatedConfig))
+        setAppConfig(updatedConfig)
 
+        showAlertInfo(
+          {
+            visible: true,
+            msg: 'Saved!',
+            type: 'success',
+          },
+          setAlertInfo,
+        )
         break
       }
       case ADVANCED.GLOBALS: {
@@ -404,7 +572,7 @@ function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
           showAlertInfo(
             {
               visible: true,
-              msg: `Signature can't be empty as top-level configuration if it is enabled.`,
+              msg: "Signature can't be empty as top-level configuration if it is enabled.",
               type: 'warning',
             },
             setAlertInfo,
@@ -427,7 +595,7 @@ function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
       }
     }
   }
-  const data = getDetails(global, profile, setGlobal, setProfile)
+  const data = getDetails(global, profile, theme, setGlobal, setProfile, setTheme)
 
   return (
     <Modal keepMounted className={styles.main_component} open={open} onClose={handleClose}>
@@ -480,7 +648,7 @@ function ManageIntegrations({ open, handleClose }: ManageIntegrationsProps) {
                 [esc]
               </Typography>
             </Button>
-            {(currentTab === ADVANCED.GLOBALS || currentTab === ADVANCED.PROFILE) && (
+            {(currentTab === ADVANCED.GLOBALS || currentTab === ADVANCED.PROFILE || currentTab === ADVANCED.THEMES) && (
               <Button onClick={() => handleSave(currentTab)}>Save</Button>
             )}
           </Stack>

@@ -1,14 +1,12 @@
 import Main from './pages/MainPage'
-import { CssVarsProvider } from '@mui/joy/styles'
-import { ScopedCssBaseline } from '@mui/joy'
+
+import { ConfigContextProvider } from './pages/MainPage/ConfigContext'
 
 function App() {
   return (
-    <CssVarsProvider defaultMode="light">
-      <ScopedCssBaseline disableColorScheme>
-        <Main />
-      </ScopedCssBaseline>
-    </CssVarsProvider>
+    <ConfigContextProvider>
+      <Main />
+    </ConfigContextProvider>
   )
 }
 

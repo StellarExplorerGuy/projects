@@ -257,6 +257,40 @@ export const getDetails = (service: SERVICE) => {
       },
     }
   }
+  if (service === SERVICE.JIRA_COMPANY_2) {
+    return {
+      getHeaderElement: (): string => {
+        let headerElement = document.getElementById('summary-val') as any
+        return headerElement ? headerElement.textContent! : ''
+      },
+      getBranchName: (text: string, number: string): string => {
+        return getBranchName(text, number, false)
+      },
+      getUsername: (): string => {
+        const avatarInfo = document?.getElementById('header-details-user-fullname')?.getAttribute('title')
+
+        // header-details-user-fullname
+        if (avatarInfo) {
+          return avatarInfo.replace('User profile for ','')
+        }
+        return DEFAULT_USER
+      },
+      getRepoDetails: () => {
+        const url = window.location.href
+        const matchResult = url.match(/-([0-9]+)$/)
+        let issueNumber = ''
+        if (matchResult?.length) {
+          issueNumber = matchResult[1]
+        }
+
+        return {
+          user: '',
+          repo: url,
+          issueNumber: issueNumber || '',
+        }
+      },
+    }
+  }
   if (service === SERVICE.MONDAY_DEFAULT) {
     return {
       getHeaderElement: (): string => {

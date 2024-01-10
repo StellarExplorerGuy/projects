@@ -9,7 +9,7 @@ import {
   FASTER_PR_PROFILE,
   FASTER_PR_PROFILE_KEY,
 } from './constants'
-import { AppConfig } from '../types'
+import { AppConfig, ThemeKey } from '../types'
 
 type CommitBody = {
   type: string
@@ -100,22 +100,6 @@ Contributes:
 `
 }
 
-export const defaultProfile = () => {
-  const { ISSUE_TYPE: TYPE, ISSUE, REPO_ORG, REPO_NAME, SIGNATURE } = TEMPLATE_KEY
-
-  return {
-    profiles: [DEFAULT_PROFILE],
-    profile: DEFAULT_PROFILE,
-    signature: '',
-    branchSeparator: '',
-    branchPrefixes: BRANCH_PREFIXES ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
-    checked: true,
-    uppercase: false,
-    commit: getCommit({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
-    pr: getPR({ type: TYPE, issue: ISSUE, repoOrg: REPO_ORG, repoName: REPO_NAME, user: SIGNATURE }),
-    slimPrChecked: false,
-  }
-}
 export const DEFAULT_GLOBAL_CONFIG = () => ({
   enabled: false,
   signature: '',
@@ -124,6 +108,13 @@ export const DEFAULT_GLOBAL_CONFIG = () => ({
 
 export const DEFAULT_PROFILE_CONFIG = () => ({
   avatar: '🦊',
+})
+
+export const DEFAULT_THEME_CONFIG = () => ({
+  id: ThemeKey.iceFire as ThemeKey,
+  config: {
+    fat: false,
+  },
 })
 
 export const showAlertInfo = (
@@ -168,17 +159,29 @@ export const getAppConfig = (): AppConfig => {
     const localConfig = localStorage.getItem(FASTER_PR_CONFIG)!
 
     if (!localConfig) {
-      updateLocalStorage(FASTER_PR_CONFIG, { global: DEFAULT_GLOBAL_CONFIG() })
-      return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
+      updateLocalStorage(FASTER_PR_CONFIG, {
+        profile: DEFAULT_PROFILE_CONFIG(),
+        global: DEFAULT_GLOBAL_CONFIG(),
+        theme: DEFAULT_THEME_CONFIG(),
+      })
+      return {
+        profile: DEFAULT_PROFILE_CONFIG(),
+        global: DEFAULT_GLOBAL_CONFIG(),
+        theme: DEFAULT_THEME_CONFIG(),
+      }
     }
     const appConfig = JSON.parse(localConfig) as AppConfig
-    if (!appConfig.global || !appConfig.profile) {
-      updateLocalStorage(FASTER_PR_CONFIG, { global: DEFAULT_GLOBAL_CONFIG() })
-      return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
+    if (!appConfig.global || !appConfig.profile || !appConfig.theme) {
+      updateLocalStorage(FASTER_PR_CONFIG, {
+        profile: DEFAULT_PROFILE_CONFIG(),
+        global: DEFAULT_GLOBAL_CONFIG(),
+        theme: DEFAULT_THEME_CONFIG(),
+      })
+      return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG(), theme: DEFAULT_THEME_CONFIG() }
     }
     return appConfig
   } catch (error) {
-    return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG() }
+    return { profile: DEFAULT_PROFILE_CONFIG(), global: DEFAULT_GLOBAL_CONFIG(), theme: DEFAULT_THEME_CONFIG() }
   }
 }
 
@@ -207,6 +210,7 @@ const gitlabRegex = /^https:\/\/gitlab\.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+\/-\/
 const trelloRegex = /^https:\/\/trello\.com\/[A-Za-z0-9-]\/[A-Za-z0-9]+\/\d+-[A-Za-z0-9-]+/
 // const jiraDefaultRegex = /^https:\/\/(?:[a-zA-Z0-9.-]+\.)?atlassian.net\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
 const jiraCompany1Regex = /^https:\/\/jsw(?:[a-zA-Z0-9.-]+)?.com\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
+const jiraCompany2Regex = /^https:\/\/jira(?:[a-zA-Z0-9.-]+)?.net\/[a-zA-Z0-9.-]+\/[a-zA-Z0-9.-]+/
 const mondayDefaultRegex = /^https:\/\/[a-zA-Z0-9.-]+\.monday\.com\/boards\/\d+\/pulses\/\d+/
 
 export const getService = (): SERVICE => {
@@ -222,6 +226,8 @@ export const getService = (): SERVICE => {
     //   return SERVICE.JIRA_DEFAULT
   } else if (jiraCompany1Regex.test(url)) {
     return SERVICE.JIRA_COMPANY_1
+  } else if (jiraCompany2Regex.test(url)) {
+    return SERVICE.JIRA_COMPANY_2
   } else if (mondayDefaultRegex.test(url)) {
     return SERVICE.MONDAY_DEFAULT
   }
@@ -229,7 +235,7 @@ export const getService = (): SERVICE => {
   return SERVICE.GITHUB
 }
 
-export const getConfig = () => {
+export const getServiceConfig = () => {
   const currentService = getService()
   const config = {
     panelMaxWidth: 818,
@@ -253,5 +259,139 @@ export function getProfileData() {
     return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] }
   } catch (error) {
     return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] }
+  }
+}
+
+export const COMMIT_TEMPLATES = [
+  {
+    name: '⭐',
+    template: 'ISSUE_TYPE: ',
+  },
+  {
+    name: '⭐⭐',
+    template: 'ISSUE_TYPE(SIGNATURE): ',
+  },
+  {
+    name: '⭐⭐⭐',
+    template: 'ISSUE_TYPE(REPO_ORG/REPO_NAME#ISSUE): ',
+  },
+  {
+    name: '⭐⭐⭐⭐',
+    template: getCommit({
+      type: TEMPLATE_KEY.ISSUE_TYPE,
+      issue: TEMPLATE_KEY.ISSUE,
+      repoOrg: TEMPLATE_KEY.REPO_ORG,
+      repoName: TEMPLATE_KEY.REPO_NAME,
+      user: TEMPLATE_KEY.SIGNATURE,
+    }),
+  },
+]
+
+export const PR_TEMPLATES = [
+  {
+    name: '⭐',
+    template: `## Status
+**READY**
+
+## Description
+- ISSUE_TYPE: 
+
+
+Contributes:
+- REPO_ORG/REPO_NAME#ISSUE
+
+Signed-off-by: SIGNATURE
+
+## Impacted Areas in Application
+
+
+### Screenshots
+
+
+## Any special notes for your reviewer?
+
+
+`,
+  },
+  {
+    name: '⭐⭐',
+    template: `## Status
+**READY**
+
+## 📝 Description
+
+
+
+## 🎯 Impacted Areas in Application
+
+
+### 📸 Screenshots
+
+
+
+## 📌 Any special notes for your reviewer?
+
+
+`,
+  },
+  {
+    name: '⭐⭐⭐',
+    template: `### 🛠 Changes being made
+<!--
+Here give examples of the changes you've made in this pull request. Include an itemized list if you can. It'll help the reviewer
+-->
+
+### ✨ What's the context?
+<!--
+What's the context for the changes? Are there any
+-->
+ISSUE_TYPE:
+- REPO_ORG/REPO_NAME#ISSUE
+
+
+### 🧠 Rationale behind the change
+<!--
+Why did you choose to make these changes? Were there any trade-offs you had to consider? 
+-->
+
+
+### 🧪 Test plan
+<!--
+How do you know the changes are safe to ship to production?
+-->
+
+
+### 📸 Screenshots (optional)
+<!--
+If you made UI changes, what are the before an afters?
+-->
+
+
+`,
+  },
+  {
+    name: '⭐⭐⭐⭐',
+    template: getPR({
+      type: TEMPLATE_KEY.ISSUE_TYPE,
+      issue: TEMPLATE_KEY.ISSUE,
+      repoOrg: TEMPLATE_KEY.REPO_ORG,
+      repoName: TEMPLATE_KEY.REPO_NAME,
+      user: TEMPLATE_KEY.SIGNATURE,
+    }),
+  },
+]
+
+export const defaultProfile = () => {
+  return {
+    profiles: [DEFAULT_PROFILE],
+    profile: DEFAULT_PROFILE,
+    signature: '',
+    branchSeparator: '',
+    branchPrefixes: BRANCH_PREFIXES ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
+    checked: true,
+    uppercase: false,
+    commit: COMMIT_TEMPLATES[0].template,
+    pr: PR_TEMPLATES[0].template,
+    slimPrChecked: false,
   }
 }
