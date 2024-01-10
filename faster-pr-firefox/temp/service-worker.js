@@ -1,1 +1,1 @@
-browser.runtime.onInstalled.addListener(async e=>{e.reason=="install"&&(await browser.permissions.getAll().then(r=>r.origins.indexOf("<all_urls>")>-1)||browser.tabs.create({url:"onboarding-page.html"}))});
+browser.runtime.onInstalled.addListener(async e=>{e.reason=="install"&&(await browser.permissions.getAll().then(r=>r.origins.indexOf("<all_urls>")>-1)||browser.tabs.create({url:"onboarding-page.html"}))});try{let e=function(s){browser.tabs.sendMessage(s.id,{message:"CONFIGURATION"})};var n=e;browser.action.onClicked.addListener(e)}catch(e){console.log(e)}

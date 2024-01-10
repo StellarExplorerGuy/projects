@@ -29,6 +29,8 @@ cd ../service && npm run build:firefox
 
 # Copy 'service-worker.js' from 'temp' to 'extension'
 cp ../temp/service-worker.js ../extension/
+cp ../service/resources/* ../extension/assets/
+
 echo "Building service-worker files...Done"
 
 # Create extra files needed for the extension

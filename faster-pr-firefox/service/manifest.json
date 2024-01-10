@@ -12,6 +12,16 @@
         "128": "128.png"
     },
     "permissions": [],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "assets/*"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
     "background": {
         "scripts": [
             "service-worker.js"
@@ -20,17 +30,22 @@
     "host_permissions": [
         "<all_urls>"
     ],
+    "action": {
+        "default_title": "View settings on enabled page of plugin",
+        "default_area": "navbar"
+    },
     "content_scripts": [
         {
             "matches": [
                 "<all_urls>"
             ],
             "js": [
-                "content.js"
+                "content.js",
+                "config.js"
             ],
             "css": [
                 "style.css"
-              ]
+            ]
         }
     ]
 }

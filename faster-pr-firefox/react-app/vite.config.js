@@ -9,8 +9,10 @@ export default defineConfig(() => {
     define: {
       'process.env': process.env,
     },
+
     build: {
       // sourcemap: true, // ENABLE to debug code using source code in PROD
+      outDir: '../extension',
       minify: 'terser',
       terserOptions: {
         parse: { html5_comments: false },
