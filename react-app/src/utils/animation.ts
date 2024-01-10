@@ -14,5 +14,5 @@ export const getAnimationURL = (resource: string) => {
   }
   // throw new Error('Uncomment line below for URL animation testing locally')
   // disabled to decrease build size done by vite
-  return new URL(`../../../service/resources/${resource}`, import.meta.url).href
+  // return new URL(`../../../service/resources/${resource}`, import.meta.url).href
 }
