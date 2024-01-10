@@ -105,16 +105,16 @@ const THEME = {
     '1000': '#eb3a60',
   },
   PURPLE: {
-    "50": "#fdf4ff",
-    "100": "#fae8ff",
-    "200": "#f5d0fe",
-    "300": "#f0abfc",
-    "400": "#e879f9",
-    "500": "#d946ef",
-    "600": "#c026d3",
-    "700": "#a21caf",
-    "800": "#86198f",
-    "900": "#701a75"
+    '50': '#fdf4ff',
+    '100': '#fae8ff',
+    '200': '#f5d0fe',
+    '300': '#f0abfc',
+    '400': '#e879f9',
+    '500': '#d946ef',
+    '600': '#c026d3',
+    '700': '#a21caf',
+    '800': '#86198f',
+    '900': '#701a75',
   },
   SUMMER: {
     '50': '#f0fdf4',
@@ -562,7 +562,7 @@ const yodaTheme = {
       light: {
         palette: {
           primary: {
-            main: THEME.CYAN[200]
+            main: THEME.CYAN[200],
           },
           text: {
             primary: THEME.CYAN[200],
@@ -573,7 +573,7 @@ const yodaTheme = {
       dark: {
         palette: {
           primary: {
-            main: THEME.CYAN[200]
+            main: THEME.CYAN[200],
           },
           text: {
             primary: THEME.CYAN[200],
@@ -703,6 +703,18 @@ const THEMES = {
   ///
   [ThemeKey.fire]: {
     animation: { src: 'fire.gif', autoplay: true, shouldDisableRiveListeners: true },
+    custom: { bg: 'inherit', joy: mainTheme.joy, mui: mainTheme.mui },
+  },
+  [ThemeKey.iceFire]: {
+    animation: { src: 'iceFire.gif' },
+    custom: { bg: 'inherit', joy: mainTheme.joy, mui: mainTheme.mui },
+  },
+  [ThemeKey.ghostFire]: {
+    animation: { src: 'ghostFire.gif' },
+    custom: { bg: 'inherit', joy: mainTheme.joy, mui: mainTheme.mui },
+  },
+  [ThemeKey.darkFire]: {
+    animation: { src: 'darkFire.gif' },
     custom: { bg: 'inherit', joy: mainTheme.joy, mui: mainTheme.mui },
   },
   [ThemeKey.truck]: {

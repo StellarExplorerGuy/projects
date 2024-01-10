@@ -319,7 +319,7 @@ function Panel({ themeConfig, alertInfo, setClose }: any): JSX.Element {
       >
         {themeConfig?.config?.theme?.config?.animation?.src?.includes('.gif') ? (
           <img
-            style={{ float: 'right', marginRight: 100 }}
+            style={{ float: 'right', marginTop: 10, marginRight: 110, width: 110, height: 110, pointerEvents: 'none' }}
             src={themeConfig?.config?.theme?.config?.animation?.src}
             alt=""
           />

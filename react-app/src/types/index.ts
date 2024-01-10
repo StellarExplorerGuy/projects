@@ -53,6 +53,9 @@ export const BasicThemeKey = {
 
 export const AnimationThemeKey = {
   fire : 'Fire',
+  iceFire: 'Ice fire',
+  ghostFire: 'Ghost fire',
+  darkFire: 'Dark fire',
   truck : 'Truck',
   cat : 'Cat',
   squats : 'Squats',

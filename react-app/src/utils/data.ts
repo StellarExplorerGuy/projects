@@ -111,7 +111,7 @@ export const DEFAULT_PROFILE_CONFIG = () => ({
 })
 
 export const DEFAULT_THEME_CONFIG = () => ({
-  id: ThemeKey.fire as ThemeKey,
+  id: ThemeKey.iceFire as ThemeKey,
   config: {
     fat: false,
   },
