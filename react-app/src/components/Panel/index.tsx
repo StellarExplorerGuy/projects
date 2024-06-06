@@ -12,9 +12,9 @@ import Dropdown from '@mui/joy/Dropdown'
 import Card from '@mui/joy/Card'
 import Tabs, { tabsClasses } from '@mui/material/Tabs'
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 import Tab from '@mui/material/Tab'
-
 import {
   clearComments,
   getAppConfig,
@@ -26,13 +26,14 @@ import {
   getService,
   updateKey,
 } from '../../utils/data'
-import { Box, Alert, Grid, Typography } from '@mui/joy'
+import { Box, Alert, Grid, Typography, Tooltip } from '@mui/joy'
 import {
   FASTER_PR_PROFILE_KEY,
   FASTER_PR_PROFILE,
   BRANCH_PREFIXES,
   DEFAULT_LOCAL_STORAGE_ALERT,
   SERVICE,
+  ACTIVE_STYLE_ID,
 } from '../../utils/constants'
 import { getDetails } from '../../utils/service.adapter'
 import { GlobalConfig } from '../../types'
@@ -254,7 +255,7 @@ function getPrData(prefix: string): void {
   copyTextToClipboard(processPR(prefix, issueNumber, { user: org, repo }, user))
 }
 
-function Panel({ themeConfig, alertInfo, setClose }: any): JSX.Element {
+function Panel({ themeConfig, alertInfo, setPanelVisibility, setClose }: any): JSX.Element {
   const serviceConfig = getServiceConfig()
 
   const [alertDataInfo, setAlertDataInfo] = useState({
@@ -334,7 +335,7 @@ function Panel({ themeConfig, alertInfo, setClose }: any): JSX.Element {
             <Typography level="h4">
               <Typography level="kbd">Copy: </Typography>
               <button
-                id="wjdkwed1"
+                id={ACTIVE_STYLE_ID}
                 className={styles.button_card}
                 onClick={(event) => {
                   getBranchData(selectedPrefix)
@@ -370,6 +371,11 @@ function Panel({ themeConfig, alertInfo, setClose }: any): JSX.Element {
                   {alertDataInfo.msg}
                 </Alert>
               )}
+              <Tooltip arrow title="Hide Panel" variant="solid" placement="right" color="neutral" size="lg">
+                <IconButton color="primary" onClick={() => setPanelVisibility()}>
+                  <VisibilityOff color="primary" />
+                </IconButton>
+              </Tooltip>
             </Grid>
           </Grid>
         </Grid>
