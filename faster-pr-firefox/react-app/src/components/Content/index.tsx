@@ -46,7 +46,7 @@ import Option from '@mui/joy/Option'
 import Typography from '@mui/joy/Typography'
 import * as Accordion from '@radix-ui/react-accordion'
 import ManageIntegrations from '../modals/ManageIntegrations'
-import { SetStateAction, useEffect, useRef } from 'react'
+import { SetStateAction, useEffect, useMemo, useRef } from 'react'
 
 function RankLabel() {
   return (
@@ -291,6 +291,13 @@ function Content({
   const isProfileEnabled = dialogValue.profile === DEFAULT_PROFILE
   const common = getCommonDetails(global, dialogValue)
   const prTemplate = getPrTemplate(dialogValue)
+
+  const selectedCommitTemplate = useMemo(() => {
+    return COMMIT_TEMPLATES.find((template) => template.template === dialogValue.commit)
+  }, [dialogValue.commit])
+  const selectedPRTemplate = useMemo(() => {
+    return PR_TEMPLATES.find((template) => template.template === dialogValue.pr)
+  }, [dialogValue.commit])
 
   return (
     <Box
@@ -586,7 +593,7 @@ function Content({
                       <Box sx={{ float: 'left', pl: 5, width: 200 }}>
                         <RankLabel />
                         <Select
-                          defaultValue={COMMIT_TEMPLATES[0]}
+                          defaultValue={selectedCommitTemplate}
                           size="md"
                           placeholder="Select a template"
                           onChange={(_, { template }) => {
@@ -641,7 +648,7 @@ function Content({
                       <Box sx={{ float: 'left', pl: 5, width: 200 }}>
                         <RankLabel />
                         <Select
-                          defaultValue={PR_TEMPLATES[0]}
+                          defaultValue={selectedPRTemplate}
                           size="md"
                           placeholder="Select a template"
                           onChange={(_, { template }) => {

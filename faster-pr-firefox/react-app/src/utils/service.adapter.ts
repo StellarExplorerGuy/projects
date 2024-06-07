@@ -46,6 +46,7 @@ const getBranchName = (text: string, number: string, isVersionControl = true): s
     number +
     '-' +
     textWithDashes
+      .replace(/[\]\[\)\(||]+/g, '-') // case from ][ to -
       .replace(/\s+/g, '-') // Replacing spaces with dashes
       .replace(/[^\w-]/g, '') // Removing non-alphanumeric characters except dashes
       .replace(/_/g, '-') // replace underscore
@@ -243,7 +244,8 @@ export const getDetails = (service: SERVICE) => {
       },
       getRepoDetails: () => {
         const url = window.location.href
-        const matchResult = url.match(/-([0-9]+)$/)
+        const matchResult = url.match(/\/[A-Z]+-(\d+)\b/)
+
         let issueNumber = ''
         if (matchResult?.length) {
           issueNumber = matchResult[1]
@@ -271,13 +273,14 @@ export const getDetails = (service: SERVICE) => {
 
         // header-details-user-fullname
         if (avatarInfo) {
-          return avatarInfo.replace('User profile for ','')
+          return avatarInfo.replace('User profile for ', '')
         }
         return DEFAULT_USER
       },
       getRepoDetails: () => {
         const url = window.location.href
-        const matchResult = url.match(/-([0-9]+)$/)
+        const matchResult = url.match(/\/[A-Z]+-(\d+)\b/)
+
         let issueNumber = ''
         if (matchResult?.length) {
           issueNumber = matchResult[1]

@@ -3,7 +3,10 @@ export const BRANCH_PREFIXES = ['feat', 'fix', 'docs', 'style', 'refactor', 'tes
 export const FASTER_PR_CONFIG = 'FASTER_PR_CONFIG'
 export const FASTER_PR_PROFILE_KEY = 'FASTER_PR_KEY'
 export const FASTER_PR_PROFILE = 'FASTER_PR_PROFILE'
+export const FASTER_PR_PANEL = 'FASTER_PR_PANEL'
 export const DEFAULT_USER = 'Name Surname <name.surname@org.com>'
+
+export const ACTIVE_STYLE_ID = 'wjdkwed1'
 
 const templateTooltip = (text: string) =>
   `The ${text} body where by replacing dynamic keys with their actual values from the template. The dynamic keys you can use are found in the toolbar below: ISSUE_TYPE, REPO_ORG, REPO_NAME, ISSUE, SIGNATURE.`
@@ -30,7 +33,8 @@ export const TEXT = {
     GLOBALS:
       'You have the option to adjust extension behavior by establishing global configuration settings at the top to supersede profile-specific configurations. This is particularly useful if you desire a consistent configuration that applies to all profiles.',
     PROFILE: 'Customize your profile with a max of two characters permitted for initials e.g. AS, TS.',
-    THEMES: 'You have the option to customize your theme by enabling either the theme color(tagged as basic) or animation feature(tagged as live). The animation will be visible solely on your quick panel and can be slightly customized to your preferences. Basic and live types have dark and light themes.',
+    THEMES:
+      'You have the option to customize your theme by enabling either the theme color(tagged as basic) or animation feature(tagged as live). The animation will be visible solely on your quick panel and can be slightly customized to your preferences. Basic and live types have dark and light themes.',
   },
 }
 

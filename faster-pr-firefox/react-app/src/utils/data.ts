@@ -8,6 +8,7 @@ import {
   FASTER_PR_CONFIG,
   FASTER_PR_PROFILE,
   FASTER_PR_PROFILE_KEY,
+  FASTER_PR_PANEL,
 } from './constants'
 import { AppConfig, ThemeKey } from '../types'
 
@@ -148,7 +149,7 @@ export const updateLocalStorage = (key: string, data: any): void => {
   } catch (error) {}
 }
 
-export const updateKey = (key: string, data: string): void => {
+export const updateKey = (key: string, data: string | boolean): void => {
   try {
     localStorage.setItem(key, JSON.stringify(data))
   } catch (error) {}
@@ -259,6 +260,14 @@ export function getProfileData() {
     return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] }
   } catch (error) {
     return { selected: FASTER_PR_PROFILE, list: [FASTER_PR_PROFILE] }
+  }
+}
+
+export function isPanelHidden() {
+  try {
+    return JSON.parse(localStorage.getItem(FASTER_PR_PANEL)!)
+  } catch (error) {
+    return true
   }
 }
 
@@ -390,7 +399,7 @@ export const defaultProfile = () => {
     branchPrefixes: BRANCH_PREFIXES ?? createRange<UniqueIdentifier>(16, (index) => index + 1),
     checked: true,
     uppercase: false,
-    commit: COMMIT_TEMPLATES[0].template,
+    commit: COMMIT_TEMPLATES[2].template,
     pr: PR_TEMPLATES[0].template,
     slimPrChecked: false,
   }

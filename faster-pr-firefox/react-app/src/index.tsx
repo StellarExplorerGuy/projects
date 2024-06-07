@@ -2,7 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 
 import App from './App'
-import { SERVICE } from './utils/constants'
+import { ACTIVE_STYLE_ID, SERVICE } from './utils/constants'
 import { getService } from './utils/data'
 
 const FASTER_PR_SCRIPT_ID = 'faster-pr-1we4'
@@ -35,7 +35,7 @@ const getHeader = (service: SERVICE) => {
   return headerElement
 }
 
-function process(headerElement: Element, currentService: SERVICE) {
+function addApp(headerElement: Element, currentService: SERVICE) {
   const fasterPRScripts = document.querySelectorAll(`#${FASTER_PR_SCRIPT_ID}`)
   fasterPRScripts.forEach((fasterPRScript) => {
     fasterPRScript.remove()
@@ -65,58 +65,60 @@ function process(headerElement: Element, currentService: SERVICE) {
 }
 
 //PROD
-let debounceTimeout: number | undefined
+const executePROD = () => {
+  let debounceTimeout: number | undefined
 
-function onInitAvailable() {
-  clearTimeout(debounceTimeout)
-  const url = window.location.href
-  const currentService = getService()
+  function onInitAvailable() {
+    clearTimeout(debounceTimeout)
+    const url = window.location.href
+    const currentService = getService()
 
-  if (url) {
-    try {
-      const headerElement = getHeader(currentService)
-      debounceTimeout = setTimeout(() => {
-        if (currentService && headerElement) {
-          let isStyleLoaded = false
-          const buttonRendered = document.getElementById('wjdkwed1')
-          if (buttonRendered) {
-            // resolve the issue if style isn't loaded
-            const selectedButton = document.querySelector('button.Mui-selected')
-            if (selectedButton) {
-              isStyleLoaded = !!getComputedStyle(selectedButton).color
-            }
-            const hasClickEvent = buttonRendered.onclick !== null && isStyleLoaded
-            if (hasClickEvent) {
-              // observerInit.disconnect()
+    if (url) {
+      try {
+        const headerElement = getHeader(currentService)
+        debounceTimeout = setTimeout(() => {
+          if (currentService && headerElement) {
+            let isStyleLoaded = false
+            const buttonRendered = document.getElementById(ACTIVE_STYLE_ID)
+            if (buttonRendered) {
+              // resolve the issue if style isn't loaded
+              isStyleLoaded = !!getComputedStyle(buttonRendered)?.color
+              const hasClickEvent = buttonRendered.onclick !== null && isStyleLoaded
+              if (hasClickEvent) {
+                // observerInit.disconnect()
+              } else {
+                addApp(headerElement, currentService)
+              }
             } else {
-              process(headerElement, currentService)
+              addApp(headerElement, currentService)
             }
-          } else {
-            process(headerElement, currentService)
           }
-        }
-      }, 200)
-    } catch (error) {
-      console.error('[error]', error)
+        }, 200)
+      } catch (error) {
+        console.error('[error]', error)
+      }
     }
   }
+
+  const observerInit = new MutationObserver(onInitAvailable)
+  observerInit.observe(document.body, {
+    childList: true,
+    subtree: true,
+  })
 }
 
-const observerInit = new MutationObserver(onInitAvailable)
-observerInit.observe(document.body, {
-  childList: true,
-  subtree: true,
-})
-
-///////////
 // DEV
-// const rootElement = document.createElement('div')
-// rootElement.id = FASTER_PR_SCRIPT_ID
-// document.body.appendChild(rootElement)
+const executeDEV = () => {
+  const rootElement = document.createElement('div')
+  rootElement.id = FASTER_PR_SCRIPT_ID
+  document.body.appendChild(rootElement)
 
-// const root = createRoot(rootElement)
-// root.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>,
-// )
+  const root = createRoot(rootElement)
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  )
+}
+
+import.meta.env.MODE === 'development' ? executeDEV() : executePROD()
