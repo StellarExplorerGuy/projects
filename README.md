@@ -8,10 +8,7 @@ Free projects:
 </br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chromewebstore.google.com/detail/faster-ocr/plfdgbnhcplcnagbfbcognmkofbogbnc), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-US/firefox/addon/faster-ocr/).
 
 - <img src="assets/projects/faster_pr/pr.png" alt="faster_pr_icon" width="20" height="20" /> `Faster PR`:  extension aimed at speeding up the Pull Request process of developers for GitHub/GitLab/Trello/Jira/Monday.
-</br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chrome.google.com/webstore/detail/faster-pr/lcenjlelbnlooigocboklccingbhiajh/), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-US/firefox/addon/faster-pr/).
-<details>
-  <summary>About</summary>
-
+</br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chrome.google.com/webstore/detail/faster-pr/lcenjlelbnlooigocboklccingbhiajh/), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-US/firefox/addon/faster-pr/).<details><summary>Details</summary>
  Speed up the process of creating pull requests from issues that can be found on `Github [github.com, github.any-name.com]`, `GitLab [gitlab.com]`, `Trello [trello.com]`, `Jira [jsw.any-name.com, jira.any-name.net]`, `Monday [monday.com, any-name.monday.com]` with a plugin that automatically generates branch names, commits, and PR descriptions in just one or two clicks. Additionally, this plugin can be customized to use your own templates. The plugin is shown in issue and pull request pages.
 </details>
 - TBC 📝
