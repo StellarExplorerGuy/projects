@@ -19,7 +19,7 @@ Free projects:
 
 [Is there something that should be improved/fixed or have a question?](https://github.com/StellarExplorerGuy/projects/issues/new/choose)
 
-## <a href="https://ko-fi.com/stellarexplorerguy">Become a Sponsor <img src="assets/projects/common/ko_fi.gif" alt="faster_pr_icon" width="40" height="40" /></a>
+## <a href="https://ko-fi.com/stellarexplorerguy">Become a Sponsor</a> <img src="assets/projects/common/ko_fi.gif" alt="faster_pr_icon" width="40" height="40" />
 
 
 > https://ko-fi.com/stellarexplorerguy
