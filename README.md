@@ -4,10 +4,10 @@
 
 Free projects:
 
-- <img src="assets/projects/faster_ocr/ocr.png" alt="faster_ocr_icon" width="20" height="20" /> `Faster OCR`: Image to text - if you need to get text from Image/PDF.
+- <img src="assets/projects/faster_ocr/ocr.png" alt="faster_ocr_icon" width="20" height="20" /> `Faster OCR`: image to text - if you need to get text from Image/PDF.
 </br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chromewebstore.google.com/detail/faster-ocr/plfdgbnhcplcnagbfbcognmkofbogbnc), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-US/firefox/addon/faster-ocr/).
 
-- <img src="assets/projects/maskify_text/maskify_text.png" alt="maskify_text_icon" width="20" height="20" /> `Maskify Text`: Maskify text - if you need to mask(hide) text in Image.
+- <img src="assets/projects/maskify_text/maskify_text.png" alt="maskify_text_icon" width="20" height="20" /> `Maskify Text`: maskify text - if you need to mask(hide) text in Image.
 </br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chromewebstore.google.com/detail/maskify-text/ojamfonkpampipgldjepfmbidljogdoj), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-US/firefox/addon/maskify-text/).
 
 - <img src="assets/projects/faster_pr/pr.png" alt="faster_pr_icon" width="20" height="20" /> `Faster PR`:  extension aimed at speeding up the Pull Request process of developers for GitHub/GitLab/Trello/Jira/Monday.
