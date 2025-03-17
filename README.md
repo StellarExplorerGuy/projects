@@ -25,7 +25,7 @@ My goal is to craft valuable tools: transparent, intuitive, and handy. Technolog
 
 - TBC 📝
 
-💡 These plugins are also supported in the Brave browser [<img src="assets/projects/common/brave_icon.svg" alt="brave_icon" width="20" height="20" />](https://brave.com/)! Simply open the Chrome Web Store in Brave and install them as usual 😎.
+💡 These plugins are also supported in the Brave browser [<img src="assets/projects/common/brave_icon.svg" alt="brave_icon" width="20" height="20" />](https://brave.com)! Simply open the [Chrome Web Store](https://chromewebstore.google.com) in Brave and install them as usual 😎.
 
 </details>
 
