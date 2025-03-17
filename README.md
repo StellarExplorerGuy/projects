@@ -42,7 +42,5 @@ Whenever I receive a tip, it creates an impact! It's not just about the financia
   <img src="assets/projects/appreciated.gif" alt="appreciated_icon" width="500" height="209" />
 </details>
 
-<br>
-
 🛠 Want to suggest an improvement or report a bug? [Submit an issue here.](https://github.com/StellarExplorerGuy/projects/issues/new/choose)
 
