@@ -15,31 +15,3 @@ labels: Feature
 As a ...
 I want ...
 so that ...
-
-- _screenshot here_
-- [link to designs]()
-
-## Test Cases
-
-<!-- Describe the test cases required for this feature -->
-
-- Given ... then ... should ...
-- Given ... then ... should ...
-- ...
-
-## Implementation Details
-
-<!-- Describe any relevant implementation details for this feature -->
-
-- Written as ... in ...
-- Tested using ...
-
-## Acceptance Criteria
-
-<!-- Include the minimum requirements for the issue to be marked as completed. -->
-
-- [ ] Code reviewed by \_\_\_.
-- [ ] Automated tests exist.
-- [ ] Manually tested in \_\_\_.
-- [ ] Documentation written here:
-- [ ] ...
