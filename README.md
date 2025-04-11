@@ -34,7 +34,7 @@ My goal is to craft valuable tools: transparent, intuitive, and handy. Technolog
 
 > https://ko-fi.com/stellarexplorerguy
 
-Whenever I receive a tip, it creates an impact! It's not just about the financial support, it also boosts my confidence to share more projects! 🌱
+Your tips make a big difference - they boost the quality of tools and give me the confidence to keep current projects going and take on new ones! 🌱
 
 <details>
 
