@@ -10,11 +10,13 @@ My goal is to craft valuable tools: transparent, intuitive, and handy. Technolog
 - <img src="assets/projects/faster_ocr/ocr.png" alt="faster_ocr_icon" width="20" height="20" /> `Faster OCR`: image to text - get text from image/PDF.
 </br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chromewebstore.google.com/detail/faster-ocr/plfdgbnhcplcnagbfbcognmkofbogbnc), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-US/firefox/addon/faster-ocr/).
 
-- <img src="assets/projects/text-maskifier/text-maskifier.png" alt="text-maskifier_icon" width="20" height="20" /> `Text Maskifier`: hides text in image.
+- <img src="assets/projects/true_paper/true_paper.png" alt="true_paper_icon" width="20" height="20" /> `True Paper`: turns your image into something that looks like real paper by eliminating shadows, distortions and blur - better for printing!.
+</br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chromewebstore.google.com/detail/true-paper/cpppcdaefpkgjeclcjnnhhobjbblecnd), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-US/firefox/addon/true-paper/).
+
+- <img src="assets/projects/text_maskifier/text_maskifier.png" alt="text-maskifier_icon" width="20" height="20" /> `Text Maskifier`: hides text in image.
 </br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chromewebstore.google.com/detail/maskify-text/ojamfonkpampipgldjepfmbidljogdoj), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-US/firefox/addon/maskify-text/).
 
-
-- <img src="assets/projects/face-maskifier/face-maskifier.png" alt="face-maskifier_icon" width="20" height="20" /> `Face Maskifier`: hides faces in image.
+- <img src="assets/projects/face_maskifier/face_maskifier.png" alt="face-maskifier_icon" width="20" height="20" /> `Face Maskifier`: hides faces in image.
 </br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chromewebstore.google.com/detail/face-maskifier/gmepdcgolmkhcdclknaipeeoigolammj), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-GB/firefox/addon/face-maskifier/).
 
 - <img src="assets/projects/faster_pr/pr.png" alt="faster_pr_icon" width="20" height="20" /> `Faster PR`:  extension aimed at speeding up the Pull Request process of developers for GitHub/GitLab/Trello/Jira/Monday.
