@@ -4,6 +4,8 @@
 
 My goal is to craft valuable tools: transparent, intuitive, and handy. Technology for good! 🚀
 
+<img src="assets/projects/demo_bg.png" alt="demo_bg" />
+
 <details>
   <summary>Free projects:</summary>
 
