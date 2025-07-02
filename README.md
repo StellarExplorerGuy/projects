@@ -4,7 +4,7 @@
 
 My goal is to craft valuable tools: transparent, intuitive, and handy. Technology for good! 🚀
 
-<img src="assets/projects/demo_bg.png" alt="demo_bg" />
+[![demo_bg](assets/projects/demo_bg.png)](https://ko-fi.com/stellarexplorerguy)
 
 <details>
   <summary>Free projects:</summary>
@@ -44,7 +44,7 @@ Your tips make a big difference - they boost the quality of tools and give me th
 <details>
 
 <summary>Much appreciated! 🙌</summary>
-  <img src="assets/projects/appreciated.gif" alt="appreciated_icon" width="500" height="209" />
+  <img src="assets/projects/appreciated.gif" alt="appreciated_icon" width="500" height="210" />
 </details>
 
 🛠 Want to suggest an improvement or report a bug? [Submit an issue here.](https://github.com/StellarExplorerGuy/projects/issues/new/choose)
