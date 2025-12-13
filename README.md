@@ -21,6 +21,9 @@ My goal is to craft valuable tools: transparent, intuitive, and handy. Technolog
 - <img src="assets/projects/face_maskifier/face_maskifier.png" alt="face-maskifier_icon" width="20" height="20" /> `Face Maskifier`: hides faces in image.
 </br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chromewebstore.google.com/detail/face-maskifier/gmepdcgolmkhcdclknaipeeoigolammj), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-GB/firefox/addon/face-maskifier/).
 
+- <img src="assets/projects/no_bg/no_bg.png" alt="no_bg_icon" width="20" height="20" /> `No BG`: removes background from image.
+</br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chromewebstore.google.com/detail/face-maskifier/gmepdcgolmkhcdclknaipeeoigolammj), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-GB/firefox/addon/face-maskifier/).
+
 - <img src="assets/projects/faster_pr/pr.png" alt="faster_pr_icon" width="20" height="20" /> `Faster PR`:  extension aimed at speeding up the Pull Request process of developers for GitHub/GitLab/Trello/Jira/Monday.
 </br>Published: [<img src="assets/projects/common/chrome_icon.svg" alt="chrome_icon" width="20" height="20" />](https://chrome.google.com/webstore/detail/faster-pr/lcenjlelbnlooigocboklccingbhiajh/), [<img src="assets/projects/common/firefox_icon.svg" alt="firefox_icon" width="20" height="20" />](https://addons.mozilla.org/en-US/firefox/addon/faster-pr/).
 
